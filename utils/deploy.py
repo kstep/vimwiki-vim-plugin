@@ -24,7 +24,7 @@ import mkvimball as vba
 VERSION = "0_9_3"
 VIMF_DIR = os.path.expanduser("~/vimfiles/")
 DEPLOY_DIR = os.path.expanduser("~/work/vimwiki/deploy/")
-TRUNK_DIR = os.path.expanduser("~/work/vimwiki/trunk/")
+TRUNK_DIR = os.path.expanduser("~/work/vimwiki/src/")
 
 
 def get_vimwiki_files(vw_from, vw_to, process_file=None):
