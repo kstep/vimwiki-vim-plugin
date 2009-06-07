@@ -63,6 +63,7 @@ function! s:setup_buffer_enter() "{{{
   endif
 endfunction "}}}
 " }}}
+
 " DEFAULT wiki {{{
 let s:vimwiki_defaults = {}
 let s:vimwiki_defaults.path = '~/vimwiki/'
@@ -77,9 +78,15 @@ let s:vimwiki_defaults.gohome = 'split'
 let s:vimwiki_defaults.html_header = ''
 let s:vimwiki_defaults.html_footer = ''
 "}}}
+
 " DEFAULT options {{{
-call s:default('upper', 'A-Z\u0410-\u042f')
-call s:default('lower', 'a-z\u0430-\u044f')
+if &encoding == 'utf-8'
+  call s:default('upper', 'A-Z\u0410-\u042f')
+  call s:default('lower', 'a-z\u0430-\u044f')
+else
+  call s:default('upper', 'A-Z')
+  call s:default('lower', 'a-z')
+endif
 call s:default('other', '0-9')
 call s:default('stripsym', '_')
 call s:default('auto_listitem', 1)
@@ -102,6 +109,7 @@ let g:vimwiki_word1 = '\C\<['.upp.']['.nlo.']*['.
 let g:vimwiki_word2 = '\[\[[^\]]\+\]\]'
 let g:vimwiki_rxWikiWord = g:vimwiki_word1.'\|'.g:vimwiki_word2
 "}}}
+
 " OPTION get/set functions {{{
 " return value of option for current wiki or if second parameter exists for
 " wiki with a given index.
@@ -145,6 +153,7 @@ function! VimwikiSet(option, value, ...) "{{{
   let g:vimwiki_list[idx][a:option] = a:value
 endfunction "}}}
 " }}}
+
 " FILETYPE setup for all known wiki extensions {{{
 " Getting all extensions that different wikies could have
 let extensions = {}
@@ -173,6 +182,7 @@ augroup vimwiki
   endfor
 augroup END
 "}}}
+
 " COMMANDS {{{
 command! VimwikiUISelect call vimwiki#WikiUISelect()
 command! -count VimwikiGoHome
@@ -180,6 +190,7 @@ command! -count VimwikiGoHome
 command! -count VimwikiTabGoHome tabedit <bar>
       \ call vimwiki#WikiGoHome(v:count1)
 "}}}
+
 " MAPPINGS {{{
 if !hasmapto('<Plug>VimwikiGoHome')
   map <silent><unique> <Leader>ww <Plug>VimwikiGoHome
@@ -197,6 +208,7 @@ endif
 noremap <unique><script> <Plug>VimwikiUISelect :VimwikiUISelect<CR>
 
 "}}}
+
 " MENU {{{
 function! s:build_menu(path)
   let idx = 0
