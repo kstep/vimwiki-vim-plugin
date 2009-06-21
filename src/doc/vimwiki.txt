@@ -850,6 +850,10 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 ==============================================================================
 11. Changelog                                              *vimwiki-changelog*
 
+0.9.4
+  * [fix] Indent incorrect for vim without "float" compile option. Thanks
+    Julian Kooij
+
 0.9.3
   * [new] g:vimwiki_menu option is a string which is menu path. So one can use
     let g:vimwiki_menu = 'Plugin.Vimwiki' to set the menu to the right place.
