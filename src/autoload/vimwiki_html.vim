@@ -582,7 +582,8 @@ function! s:make_internal_link(entag) "{{{
       if s:is_non_wiki_link(link_parts[0])
         let line = '<a href="'.link_parts[0].'">'.link_parts[1].'</a>'
       else
-        let line = '<a href="'.link_parts[0].'.html">'.link_parts[1].'</a>'
+        let line = '<a href="'.vimwiki#safe_link(link_parts[0]).
+              \ '.html">'.link_parts[1].'</a>'
       endif
     elseif s:is_img_link(link_parts[0])
       let line = '<img src="'.link_parts[0].'" alt="'.
@@ -594,7 +595,8 @@ function! s:make_internal_link(entag) "{{{
     elseif s:is_non_wiki_link(link_parts[0])
       let line = '<a href="'.a:entag.'">'.a:entag.'</a>'
     else
-      let line = '<a href="'.a:entag.'.html">'.a:entag.'</a>'
+      let line = '<a href="'.vimwiki#safe_link(a:entag).
+            \ '.html">'.a:entag.'</a>'
     endif
   endif
 

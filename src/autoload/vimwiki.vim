@@ -7,13 +7,39 @@ if exists("g:loaded_vimwiki_auto") || &cp
 endif
 let g:loaded_vimwiki_auto = 1
 
-let s:wiki_badsymbols = '[<>|?*/\:"]'
 
+let s:wiki_badsymbols = '[<>|?*/\:"]'
 " MISC helper functions {{{
+function! vimwiki#mkdir(path) "{{{
+  " TODO: add exception handling...
+  let path = expand(a:path)
+  if !isdirectory(path) && exists("*mkdir")
+    if path[-1:] == '/' || path[-1:] == '\'
+      let path = path[:-2]
+    endif
+    call mkdir(path, "p")
+  endif
+endfunction
+" }}}
+function! vimwiki#safe_link(string) "{{{
+  return substitute(a:string, s:wiki_badsymbols, g:vimwiki_stripsym, 'g')
+endfunction
+"}}}
+function! vimwiki#unsafe_link(string) "{{{
+  return substitute(a:string, g:vimwiki_stripsym, s:wiki_badsymbols, 'g')
+endfunction
+"}}}
 function! s:msg(message) "{{{
   echohl WarningMsg
   echomsg 'vimwiki: '.a:message
   echohl None
+endfunction
+" }}}
+function! s:is_wiki_word(str) "{{{
+  if a:str =~ g:vimwiki_word1 && stridx(a:str, ' ') == -1
+    return 1
+  endif
+  return 0
 endfunction
 " }}}
 function! s:get_file_name_only(filename) "{{{
@@ -55,18 +81,14 @@ function! s:get_word_at_cursor(wikiRX) "{{{
     return ""
   endif
 endf "}}}
-function! s:strip_word(word, sym) "{{{
-  function! s:strip_word_helper(word, sym)
-    return substitute(a:word, s:wiki_badsymbols, a:sym, 'g')
-  endfunction
-
+function! s:strip_word(word) "{{{
   let result = a:word
   if strpart(a:word, 0, 2) == "[["
     " get rid of [[ and ]]
     let w = strpart(a:word, 2, strlen(a:word)-4)
     " we want "link" from [[link|link desc]]
     let w = split(w, "|")[0]
-    let result = s:strip_word_helper(w, a:sym)
+    let result = vimwiki#safe_link(w)
   endif
   return result
 endfunction
@@ -102,17 +124,6 @@ function! s:wiki_select(wnum)"{{{
   endif
   let b:vimwiki_idx = g:vimwiki_current_idx
   let g:vimwiki_current_idx = a:wnum - 1
-endfunction
-" }}}
-function! vimwiki#mkdir(path) "{{{
-  " TODO: add exception handling...
-  let path = expand(a:path)
-  if !isdirectory(path) && exists("*mkdir")
-    if path[-1:] == '/' || path[-1:] == '\'
-      let path = path[:-2]
-    endif
-    call mkdir(path, "p")
-  endif
 endfunction
 " }}}
 function! s:update_wiki_link(fname, old, new) " {{{
@@ -180,7 +191,7 @@ function! vimwiki#WikiHighlightWords() "{{{
       execute 'syntax match wikiWord /\%(^\|[^!]\)\zs\<'.word.'\>/'
     endif
     execute 'syntax match wikiWord /\[\[\<'.
-          \ substitute(word, g:vimwiki_stripsym, s:wiki_badsymbols, "g").
+          \ vimwiki#unsafe_link(word).
           \ '\>\%(|\+.*\)*\]\]/'
   endfor
   execute 'syntax match wikiWord /\[\[.\+\.\%(jpg\|png\|gif\)\%(|\+.*\)*\]\]/'
@@ -215,8 +226,7 @@ function! vimwiki#WikiFollowWord(split) "{{{
   else
     let cmd = ":e "
   endif
-  let word = s:strip_word(s:get_word_at_cursor(g:vimwiki_rxWikiWord),
-        \                                      g:vimwiki_stripsym)
+  let word = s:strip_word(s:get_word_at_cursor(g:vimwiki_rxWikiWord))
   " insert doesn't work properly inside :if. Check :help :if.
   if word == ""
     execute "normal! \n"
@@ -285,9 +295,8 @@ function! vimwiki#WikiRenameWord() "{{{
   "" Rename WikiWord, update all links to renamed WikiWord
   let wwtorename = expand('%:t:r')
   let isOldWordComplex = 0
-  if wwtorename !~ g:vimwiki_word1
-    let wwtorename = substitute(wwtorename, g:vimwiki_stripsym,
-          \ s:wiki_badsymbols, "g")
+  if !s:is_wiki_word(wwtorename)
+    let wwtorename = vimwiki#unsafe_link(wwtorename)
     let isOldWordComplex = 1
   endif
 
@@ -313,11 +322,11 @@ function! vimwiki#WikiRenameWord() "{{{
     return
   endif
 
-  if newWord !~ g:vimwiki_word1
+  if !s:is_wiki_word(newWord)
     " if newWord is 'complex wiki word' then add [[]]
     let newWord = '[['.newWord.']]'
   endif
-  let newFileName = s:strip_word(newWord, g:vimwiki_stripsym).VimwikiGet('ext')
+  let newFileName = s:strip_word(newWord).VimwikiGet('ext')
 
   " do not rename if word with such name exists
   let fname = glob(VimwikiGet('path').newFileName)
