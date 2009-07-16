@@ -17,11 +17,28 @@ function! s:default(varname, value) "{{{
   endif
 endfunction "}}}
 
+function! Str_common_part(str1, str2)"{{{
+  let idx = 0
+  let minlen = min([len(a:str1), len(a:str2)])
+  while (idx < minlen) && (a:str1[idx] == a:str2[idx])
+    let idx = idx + 1
+  endwhile
+
+  return strpart(a:str1, 0, idx)
+endfunction"}}}
+
+function! s:chomp_slash(str)"{{{
+  if a:str =~ '[/\\]$'
+    return strpart(a:str, 0, len(a:str) - 1)
+  endif
+  return a:str
+endfunction"}}}
+
 function! s:find_wiki(path) "{{{
   let idx = 0
   while idx < len(g:vimwiki_list)
-    let path = expand(VimwikiGet('path', idx))
-    if path[:-2] == a:path
+    let path = s:chomp_slash(expand(VimwikiGet('path', idx)))
+    if Str_common_part(path, a:path) == path
       return idx
     endif
     let idx += 1

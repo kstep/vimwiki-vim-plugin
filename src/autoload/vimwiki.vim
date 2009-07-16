@@ -7,8 +7,13 @@ if exists("g:loaded_vimwiki_auto") || &cp
 endif
 let g:loaded_vimwiki_auto = 1
 
+if has("win32")
+  let s:os_sep = '\\'
+else
+  let s:os_sep = '/'
+endif
 
-let s:wiki_badsymbols = '[<>|?*/\:"]'
+let s:wiki_badsymbols = '[<>|?*:"]'
 " MISC helper functions {{{
 function! vimwiki#mkdir(path) "{{{
   " TODO: add exception handling...
@@ -29,6 +34,21 @@ function! vimwiki#unsafe_link(string) "{{{
   return substitute(a:string, g:vimwiki_stripsym, s:wiki_badsymbols, 'g')
 endfunction
 "}}}
+function! vimwiki#subdir(path, filename)"{{{
+  let path = expand(a:path)
+  let filename = expand(a:filename)
+  let idx = 0
+  while path[idx] == filename[idx]
+    let idx = idx + 1
+  endwhile
+
+  let p = split(strpart(filename, idx), '[/\\]')
+  let res = join(p[:-2], s:os_sep)
+  if len(res) > 0
+    let res = res.s:os_sep
+  endif
+  return res
+endfunction"}}}
 function! s:msg(message) "{{{
   echohl WarningMsg
   echomsg 'vimwiki: '.a:message
@@ -50,6 +70,7 @@ endfunction
 " }}}
 function! s:edit_file(command, filename) "{{{
   let fname = escape(a:filename, '% ')
+  call vimwiki#mkdir(fnamemodify(a:filename, ":p:h"))
   execute a:command.' '.fname
 endfunction
 " }}}
@@ -177,14 +198,26 @@ endfunction
 " }}}
 " SYNTAX highlight {{{
 function! vimwiki#WikiHighlightWords() "{{{
-  let wikies = glob(VimwikiGet('path').'*'.VimwikiGet('ext'))
-  "" remove .wiki extensions
+  " search all wiki files in 'path' and its subdirs.
+  let subdir = vimwiki#subdir(VimwikiGet('path'), expand('%:p'))
+  let wikies = glob(VimwikiGet('path').subdir.'**/*'.VimwikiGet('ext'))
+
+  " remove .wiki extensions
   let wikies = substitute(wikies, '\'.VimwikiGet('ext'), "", "g")
   let g:vimwiki_wikiwords = split(wikies, '\n')
-  "" remove paths
-  call map(g:vimwiki_wikiwords, 'substitute(v:val, ''.*[/\\]'', "", "g")')
-  "" remove backup files (.wiki~)
+
+  " remove backup files (.wiki~)
   call filter(g:vimwiki_wikiwords, 'v:val !~ ''.*\~$''')
+
+  " remove paths
+  let rem_path = escape(expand(VimwikiGet('path')).subdir, '\')
+  call map(g:vimwiki_wikiwords, 'substitute(v:val, rem_path, "", "g")')
+
+  " Links with subdirs should be highlighted for linux and windows separators
+  " Change \ or / to [/\\]
+  let os_p = '[/\\]'
+  let os_p2 = escape(os_p, '\')
+  call map(g:vimwiki_wikiwords, 'substitute(v:val, os_p, os_p2, "g")')
 
   for word in g:vimwiki_wikiwords
     if word =~ g:vimwiki_word1 && !s:is_link_to_non_wiki_file(word)
@@ -236,7 +269,8 @@ function! vimwiki#WikiFollowWord(split) "{{{
     call s:edit_file(cmd, word)
   else
     let vimwiki_prev_word = [expand('%:p'), getpos('.')]
-    call s:edit_file(cmd, VimwikiGet('path').word.VimwikiGet('ext'))
+    let subdir = vimwiki#subdir(VimwikiGet('path'), expand('%:p'))
+    call s:edit_file(cmd, VimwikiGet('path').subdir.word.VimwikiGet('ext'))
     let b:vimwiki_prev_word = vimwiki_prev_word
   endif
 endfunction
