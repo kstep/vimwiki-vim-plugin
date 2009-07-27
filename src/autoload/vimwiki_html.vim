@@ -21,7 +21,7 @@ function! s:msg(message) "{{{
   echohl None
 endfunction "}}}
 
-function! s:root_dir(subdir) "{{{
+function! s:root_path(subdir) "{{{
   return repeat('../', len(split(a:subdir, '[/\\]')))
 endfunction "}}}
 
@@ -107,8 +107,8 @@ function! s:get_html_header(wikifile, subdir, charset) "{{{
     try
       let lines = readfile(expand(VimwikiGet('html_header')))
       call map(lines, 'substitute(v:val, "%title%", "'. title .'", "g")')
-      call map(lines, 'substitute(v:val, "%root_dir%", "'.
-            \ s:root_dir(a:subdir) .'", "g")')
+      call map(lines, 'substitute(v:val, "%root_path%", "'.
+            \ s:root_path(a:subdir) .'", "g")')
       return lines
     catch /E484/
       let s:warn_html_header = 1
@@ -121,7 +121,7 @@ function! s:get_html_header(wikifile, subdir, charset) "{{{
   let css_name = substitute(css_name, '\', '/', 'g')
   if !s:has_abs_path(css_name)
     " Relative css file for deep links: [[dir1/dir2/dir3/filename]]
-    let css_name = s:root_dir(a:subdir).css_name
+    let css_name = s:root_path(a:subdir).css_name
   endif
 
   " if no VimwikiGet('html_header') set up or error while reading template

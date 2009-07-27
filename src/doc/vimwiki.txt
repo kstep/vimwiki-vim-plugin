@@ -688,7 +688,7 @@ Set up file name for html header template: >
 This header.tpl could look like: >
     <html>
     <head>
-        <link rel="Stylesheet" type="text/css" href="%root_dir%style.css" />
+        <link rel="Stylesheet" type="text/css" href="%root_path%style.css" />
         <title>%title%</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
@@ -697,9 +697,9 @@ This header.tpl could look like: >
 
 where 
   %title% is replaced by a wiki page name
-  %root_dir% is replaced by a count of ../ for pages buried in subdirs:
+  %root_path% is replaced by a count of ../ for pages buried in subdirs:
     if you have wikilink [[dir1/dir2/dir3/my page in a subdir]] then
-    %root_dir% is replaced by '../../../'.
+    %root_path% is replaced by '../../../'.
 
 
 *vimwiki-option-html_footer*
@@ -856,7 +856,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 
 0.9.4
   * [new] Links with directories: [[dir_name/Link|Text]].
-  * [new] Added %root_dir% template variable to get relative root dir of
+  * [new] Added %root_path% template variable to get relative root dir of
     path_html. See |vimwiki-option-html_header|.
   * [fix] Indent incorrect for vim without "float" compile option. Thanks
     Julian Kooij.
