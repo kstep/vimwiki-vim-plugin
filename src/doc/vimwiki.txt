@@ -8,7 +8,7 @@
        \ `\___/ /\_____\\ \_\\ \_\ `\___x___/ /\_____\\ \_\ \_\ /\_____\~
         `\/__/  \/_____/ \/_/ \/_/'\/__//__/  \/_____/ \/_/\/_/ \/_____/~
 
-                               Version: 0.9.4 ~
+                               Version: 0.9.5 ~
 
 ==============================================================================
 CONTENTS                                                    *vimwiki-contents*
@@ -753,6 +753,32 @@ This disables filesystem checks for WikiWords.
 
 
 ------------------------------------------------------------------------------
+*g:vimwiki_hlheaders*
+
+Highlight headers with =Reddish=, ==Greenish==, ===Blueish=== colors.
+
+Value           Description~
+1               Use predefined colors to highlight different header levels.
+0               Use |hl-Title| or  wikiHeader1-wikiHeader6 (if defined in a
+                colorscheme)
+
+Default: 1
+
+
+------------------------------------------------------------------------------
+*g:vimwiki_global_ext* *vimwiki-temporary-wiki*
+
+If a file with a registered wiki extension is opened in a dir that is not
+listed in |g:vimwiki_list| then:
+
+Value           Description~
+1               make a temporary wiki in that dir.
+0               don't make temporary wiki it that dir.
+
+Default: 1
+
+
+------------------------------------------------------------------------------
 *g:vimwiki_upper* *g:vimwiki_lower*
 
 This affects WikiWord detection.
@@ -854,11 +880,19 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 ==============================================================================
 11. Changelog                                              *vimwiki-changelog*
 
+0.9.5
+  * [new] Added |g:vimwiki_global_ext| to control creation of temporary wikies
+    in a dirs that are not listed in |g:vimwiki_list|.
+  * [new] Added |g:vimwiki_hlheaders| to highlight headers with different
+    predefined colors.
+  * [fix] Links with g:viwmiki_stripsym (default '_') [[My_Link|Text]]
+    are not highlighted when created.
+
 0.9.4
-  * [new] Links with directories: [[dir_name/Link|Text]]. Thanks Jie Wu.
+  * [new] Links with directories: [[dir1/dir2/Link|Text]]. Thanks Jie Wu.
   * [new] Added %root_path% template variable to get relative root dir of
     path_html. See |vimwiki-option-html_header|.
-  * [fix] Indent incorrect for vim without "float" compile option. Thanks
+  * [fix] Indent is incorrect for vim without "float" compile option. Thanks
     Julian Kooij.
   * [fix] Convert to html doesn't work right with links like [[foo::bar]].
   * [fix] Rename wikiword doesn't work right when rename WikiWord to

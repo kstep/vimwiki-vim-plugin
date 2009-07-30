@@ -13,7 +13,7 @@ else
   let s:os_sep = '/'
 endif
 
-let s:wiki_badsymbols = '[<>|?*:"]'
+let s:wiki_badsymbols = '['.g:vimwiki_stripsym.'<>|?*:"]'
 " MISC helper functions {{{
 
 " This function is double defined.
