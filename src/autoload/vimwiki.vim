@@ -30,14 +30,17 @@ function! vimwiki#mkdir(path) "{{{
   endif
 endfunction
 " }}}
+
 function! vimwiki#safe_link(string) "{{{
   return substitute(a:string, s:wiki_badsymbols, g:vimwiki_stripsym, 'g')
 endfunction
 "}}}
+
 function! vimwiki#unsafe_link(string) "{{{
   return substitute(a:string, g:vimwiki_stripsym, s:wiki_badsymbols, 'g')
 endfunction
 "}}}
+
 function! vimwiki#subdir(path, filename)"{{{
   let path = expand(a:path)
   let filename = expand(a:filename)
@@ -53,19 +56,23 @@ function! vimwiki#subdir(path, filename)"{{{
   endif
   return res
 endfunction"}}}
+
 function! vimwiki#current_subdir()"{{{
   return vimwiki#subdir(VimwikiGet('path'), expand('%:p'))
 endfunction"}}}
+
 function! s:msg(message) "{{{
   echohl WarningMsg
   echomsg 'vimwiki: '.a:message
   echohl None
 endfunction
 " }}}
+
 function! s:filename(link) "{{{
   return split(a:link, '|')[0]
 endfunction
 " }}}
+
 function! s:is_wiki_word(str) "{{{
   if a:str =~ g:vimwiki_word1 && a:str !~ '[[:space:]\\/]'
     return 1
@@ -73,12 +80,14 @@ function! s:is_wiki_word(str) "{{{
   return 0
 endfunction
 " }}}
+
 function! s:edit_file(command, filename) "{{{
   let fname = escape(a:filename, '% ')
   call vimwiki#mkdir(fnamemodify(a:filename, ":p:h"))
   execute a:command.' '.fname
 endfunction
 " }}}
+
 function! s:search_word(wikiRx, cmd) "{{{
   let match_line = search(a:wikiRx, 's'.a:cmd)
   if match_line == 0
@@ -86,6 +95,7 @@ function! s:search_word(wikiRx, cmd) "{{{
   endif
 endfunction
 " }}}
+
 function! s:get_word_at_cursor(wikiRX) "{{{
   let col = col('.') - 1
   let line = getline('.')
@@ -107,6 +117,7 @@ function! s:get_word_at_cursor(wikiRX) "{{{
     return ""
   endif
 endf "}}}
+
 function! s:strip_word(word) "{{{
   let result = a:word
   if strpart(a:word, 0, 2) == "[["
@@ -119,6 +130,7 @@ function! s:strip_word(word) "{{{
   return result
 endfunction
 " }}}
+
 function! s:is_link_to_non_wiki_file(word) "{{{
   " Check if word is link to a non-wiki file.
   " The easiest way is to check if it has extension like .txt or .html
@@ -128,6 +140,7 @@ function! s:is_link_to_non_wiki_file(word) "{{{
   return 0
 endfunction
 " }}}
+
 function! s:print_wiki_list() "{{{
   let idx = 0
   while idx < len(g:vimwiki_list)
@@ -144,6 +157,7 @@ function! s:print_wiki_list() "{{{
   echohl None
 endfunction
 " }}}
+
 function! s:wiki_select(wnum)"{{{
   if a:wnum < 1 || a:wnum > len(g:vimwiki_list)
     return
@@ -152,6 +166,7 @@ function! s:wiki_select(wnum)"{{{
   let g:vimwiki_current_idx = a:wnum - 1
 endfunction
 " }}}
+
 function! s:update_wiki_link(fname, old, new) " {{{
   echo "Updating links in ".a:fname
   let has_updates = 0
@@ -170,6 +185,7 @@ function! s:update_wiki_link(fname, old, new) " {{{
   endif
 endfunction
 " }}}
+
 function! s:update_wiki_links_dir(dir, old_fname, new_fname) " {{{
   let old_fname = substitute(a:old_fname, '[/\\]', '[/\\\\]', 'g')
   let new_fname = a:new_fname
@@ -188,6 +204,7 @@ function! s:update_wiki_links_dir(dir, old_fname, new_fname) " {{{
   endfor
 endfunction
 " }}}
+
 function! s:update_wiki_links(old_fname, new_fname) " {{{
   let old_fname = fnamemodify(a:old_fname, ":t:r")
   let new_fname = fnamemodify(a:new_fname, ":t:r")
@@ -220,6 +237,7 @@ function! s:update_wiki_links(old_fname, new_fname) " {{{
   endwhile
 endfunction
 " }}}
+
 function! s:get_wiki_buffers() "{{{
   let blist = []
   let bcount = 1
@@ -236,6 +254,7 @@ function! s:get_wiki_buffers() "{{{
   return blist
 endfunction
 " }}}
+
 function! s:open_wiki_buffer(item) "{{{
   call s:edit_file('e', a:item[0])
   if !empty(a:item[1])
@@ -243,6 +262,7 @@ function! s:open_wiki_buffer(item) "{{{
   endif
 endfunction
 " }}}
+
 " }}}
 " SYNTAX highlight {{{
 function! vimwiki#WikiHighlightWords() "{{{
@@ -278,6 +298,7 @@ function! vimwiki#WikiHighlightWords() "{{{
   execute 'syntax match wikiWord /\[\[.\+\.\%(jpg\|png\|gif\)\%(|\+.*\)*\]\]/'
 endfunction
 " }}}
+
 function! vimwiki#hl_exists(hl)"{{{
   if !hlexists(a:hl)
     return 0
@@ -295,10 +316,12 @@ function! vimwiki#WikiNextWord() "{{{
   call s:search_word(g:vimwiki_rxWikiWord, '')
 endfunction
 " }}}
+
 function! vimwiki#WikiPrevWord() "{{{
   call s:search_word(g:vimwiki_rxWikiWord, 'b')
 endfunction
 " }}}
+
 function! vimwiki#WikiFollowWord(split) "{{{
   if a:split == "split"
     let cmd = ":split "
@@ -323,6 +346,7 @@ function! vimwiki#WikiFollowWord(split) "{{{
   endif
 endfunction
 " }}}
+
 function! vimwiki#WikiGoBackWord() "{{{
   if exists("b:vimwiki_prev_word")
     " go back to saved WikiWord
@@ -332,6 +356,7 @@ function! vimwiki#WikiGoBackWord() "{{{
   endif
 endfunction
 " }}}
+
 function! vimwiki#WikiGoHome(index) "{{{
   call s:wiki_select(a:index)
   call vimwiki#mkdir(VimwikiGet('path'))
@@ -351,6 +376,7 @@ function! vimwiki#WikiGoHome(index) "{{{
   endtry
 endfunction
 "}}}
+
 function! vimwiki#WikiDeleteWord() "{{{
   "" file system funcs
   "" Delete WikiWord you are in from filesystem
@@ -373,6 +399,7 @@ function! vimwiki#WikiDeleteWord() "{{{
   endif
 endfunction
 "}}}
+
 function! vimwiki#WikiRenameWord() "{{{
   "" Rename WikiWord, update all links to renamed WikiWord
   let subdir = vimwiki#current_subdir()
@@ -475,6 +502,7 @@ function! vimwiki#WikiRenameWord() "{{{
   let &more = setting_more
 endfunction
 " }}}
+
 function! vimwiki#WikiUISelect()"{{{
   call s:print_wiki_list()
   let idx = input("Select Wiki (specify number): ")
@@ -484,6 +512,7 @@ function! vimwiki#WikiUISelect()"{{{
   call vimwiki#WikiGoHome(idx)
 endfunction
 "}}}
+
 " }}}
 " TEXT OBJECTS functions {{{
 
@@ -504,6 +533,7 @@ function! vimwiki#TO_header(inner) "{{{
   endif
 endfunction
 "}}}
+
 function! vimwiki#count_first_sym(line) "{{{
   let idx = 0
   while a:line[idx] == a:line[0] && idx < len(a:line)
@@ -530,6 +560,7 @@ function! vimwiki#AddHeaderLevel() "{{{
   endif
 endfunction
 "}}}
+
 function! vimwiki#RemoveHeaderLevel() "{{{
   let lnum = line('.')
   let line = getline(lnum)

@@ -885,7 +885,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     in a dirs that are not listed in |g:vimwiki_list|.
   * [new] Added |g:vimwiki_hlheaders| to highlight headers with different
     predefined colors.
-  * [fix] Links with g:viwmiki_stripsym (default '_') [[My_Link|Text]]
+  * [fix] Links with g:vimwiki_stripsym (default '_') [[My_Link|Text]]
     are not highlighted when created.
 
 0.9.4

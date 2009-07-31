@@ -45,7 +45,7 @@ endfunction "}}}
 
 function! s:setup_buffer_leave()"{{{
   if &filetype == 'vimwiki' && !exists("b:vimwiki_idx")
-    let b:vimwiki_idx=g:vimwiki_current_idx
+    let b:vimwiki_idx = g:vimwiki_current_idx
   endif
 endfunction"}}}
 
