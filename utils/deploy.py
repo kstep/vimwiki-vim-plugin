@@ -61,8 +61,7 @@ def make_vba_file(src_dir, vba_file_name):
 def set_ff_unix(vw_file):
   """Set unix line endings."""
   fname_tmp = vw_file + ".#tmp#"
-  # with open(fname_tmp, "w", newline='\n') as file_to: # python3k
-  with open(fname_tmp, "wb") as file_to: # python26
+  with open(fname_tmp, "w", newline='\n') as file_to:
     with open(vw_file, "r") as file_from:
       for line in file_from:
         file_to.write(line.rstrip('\r\n') + '\n')
