@@ -78,8 +78,10 @@ execute 'syntax region wikiPre start=/'.g:vimwiki_rxPreStart.
 
 " List item checkbox
 syntax match wikiCheckBox /\[.\?\]/
-execute 'syntax match wikiCheckBoxDone /'.g:vimwiki_rxListBullet.'\s*\[x\].*$/'
-execute 'syntax match wikiCheckBoxDone /'.g:vimwiki_rxListNumber.'\s*\[x\].*$/'
+if g:vimwiki_hl_cb_checked
+  execute 'syntax match wikiCheckBoxDone /'.g:vimwiki_rxListBullet.'\s*\[x\].*$/'
+  execute 'syntax match wikiCheckBoxDone /'.g:vimwiki_rxListNumber.'\s*\[x\].*$/'
+endif
 
 syntax region wikiComment start='<!--' end='-->'
 

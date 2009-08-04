@@ -87,13 +87,13 @@ function! s:setup_buffer_enter() "{{{
 endfunction "}}}
 
 function! s:setup_colors()"{{{
-  if g:vimwiki_setup_hlheaders == 0
+  if g:vimwiki_hl_def_headers == 0
     return
   endif
 
   if &background == 'light'
-    hi def wikiHeader1 guibg=bg guifg=#ff3355 gui=bold ctermfg=Magenta
-    hi def wikiHeader2 guibg=bg guifg=#20b040 gui=bold ctermfg=DarkGreen
+    hi def wikiHeader1 guibg=bg guifg=#e03010 gui=bold ctermfg=Magenta
+    hi def wikiHeader2 guibg=bg guifg=#309010 gui=bold ctermfg=Magenta
     hi def wikiHeader3 guibg=bg guifg=#1030a0 gui=bold ctermfg=Blue
     hi def wikiHeader4 guibg=bg guifg=#103040 gui=bold ctermfg=Black
     hi def wikiHeader5 guibg=bg guifg=#001020 gui=bold ctermfg=Black
@@ -187,7 +187,8 @@ call s:default('menu', 'Vimwiki')
 call s:default('current_idx', 0)
 call s:default('list', [s:vimwiki_defaults])
 call s:default('global_ext', 0)
-call s:default('setup_hlheaders', 1)
+call s:default('hl_def_headers', 1)
+call s:default('hl_cb_checked', 0)
 
 let upp = g:vimwiki_upper
 let low = g:vimwiki_lower

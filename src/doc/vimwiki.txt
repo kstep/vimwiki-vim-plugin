@@ -751,9 +751,8 @@ it set maxhi to 0: >
 
 This disables filesystem checks for WikiWords.
 
-
 ------------------------------------------------------------------------------
-*g:vimwiki_hlheaders*
+*g:vimwiki_hl_def_headers*
 
 Highlight headers with =Reddish=, ==Greenish==, ===Blueish=== colors.
 
@@ -763,6 +762,21 @@ Value           Description~
                 colorscheme)
 
 Default: 1
+
+
+------------------------------------------------------------------------------
+*g:vimwiki_hl_cb_checked*
+
+Checked list items could be highlighted with a color:
+
+  * [x] the whole line could be highlighted with the option set to 1.
+  * [ ] I wish vim could use strikethru.
+
+Value           Description~
+1               Highlight checked [x] check box with |group-name| "Comment".
+0               Don't.
+
+Default: 0
 
 
 ------------------------------------------------------------------------------
@@ -883,8 +897,10 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 0.9.5
   * [new] Added |g:vimwiki_global_ext| to control creation of temporary wikies
     in a dirs that are not listed in |g:vimwiki_list|.
-  * [new] Added |g:vimwiki_hlheaders| to highlight headers with different
+  * [new] Added |g:vimwiki_hl_def_headers| to highlight headers with different
     predefined colors.
+  * [new] Checked [x] items are not highlighted with Comment syntax group by
+    default. Use |g:vimwiki_hl_cb_checked| to turn it on.
   * [fix] Links with g:vimwiki_stripsym (default '_') [[My_Link|Text]]
     are not highlighted when created.
 
