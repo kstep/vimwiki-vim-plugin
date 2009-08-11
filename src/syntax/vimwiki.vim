@@ -58,10 +58,6 @@ execute 'syntax match wikiSubScript /'.g:vimwiki_rxSubScript.'/'
 
 execute 'syntax match wikiCode /'.g:vimwiki_rxCode.'/'
 
-" Aggregate all the regular text highlighting into wikiText
-" syntax cluster wikiText contains=wikiItalic,wikiBold,wikiCode,
-      " \wikiDelText,wikiSuperScript,wikiSubScript,wikiWord,wikiEmoticons
-
 " <hr> horizontal rule
 execute 'syntax match wikiHR /'.g:vimwiki_rxHR.'/'
 
@@ -119,15 +115,14 @@ hi def link wikiNoExistsWord Error
 
 hi def link wikiPre PreProc
 hi def link wikiLink Underlined
-hi def link wikiList Operator
+hi def link wikiList Special
 hi def link wikiCheckBox wikiList
 hi def link wikiCheckBoxDone Comment
 hi def link wikiTable PreProc
-hi def link wikiEmoticons Constant
+hi def link wikiEmoticons Character
 hi def link wikiDelText Constant
-hi def link wikiInsText Constant
-hi def link wikiSuperScript Constant
-hi def link wikiSubScript Constant
+hi def link wikiSuperScript Number
+hi def link wikiSubScript Number
 hi def link wikiTodo Todo
 hi def link wikiComment Comment
 

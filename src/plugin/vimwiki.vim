@@ -273,8 +273,4 @@ if !empty(g:vimwiki_menu)
 endif
 " }}}
 
-" COLORS {{{
-" call s:setup_colors()
-" }}}
-
 let &cpo = s:old_cpo
