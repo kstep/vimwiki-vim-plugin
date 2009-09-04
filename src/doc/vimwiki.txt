@@ -752,7 +752,7 @@ it set maxhi to 0: >
 This disables filesystem checks for WikiWords.
 
 ------------------------------------------------------------------------------
-*g:vimwiki_hl_def_headers*
+*g:vimwiki_hl_headers*
 
 Highlight headers with =Reddish=, ==Greenish==, ===Blueish=== colors.
 
@@ -761,7 +761,7 @@ Value           Description~
 0               Use |hl-Title| or  wikiHeader1-wikiHeader6 (if defined in a
                 colorscheme)
 
-Default: 1
+Default: 0
 
 
 ------------------------------------------------------------------------------
@@ -897,7 +897,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 0.9.5
   * [new] Added |g:vimwiki_global_ext| to control creation of temporary wikies
     in a dirs that are not listed in |g:vimwiki_list|.
-  * [new] Added |g:vimwiki_hl_def_headers| to highlight headers with different
+  * [new] Added |g:vimwiki_hl_headers| to highlight headers with different
     predefined colors.
   * [new] Checked [x] items are not highlighted with Comment syntax group by
     default. Use |g:vimwiki_hl_cb_checked| to turn it on.

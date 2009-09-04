@@ -87,7 +87,7 @@ function! s:setup_buffer_enter() "{{{
 endfunction "}}}
 
 function! s:setup_colors()"{{{
-  if g:vimwiki_hl_def_headers == 0
+  if g:vimwiki_hl_headers == 0
     return
   endif
 
@@ -187,7 +187,7 @@ call s:default('menu', 'Vimwiki')
 call s:default('current_idx', 0)
 call s:default('list', [s:vimwiki_defaults])
 call s:default('global_ext', 0)
-call s:default('hl_def_headers', 1)
+call s:default('hl_headers', 0)
 call s:default('hl_cb_checked', 0)
 
 let upp = g:vimwiki_upper
