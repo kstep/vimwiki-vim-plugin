@@ -903,6 +903,9 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     default. Use |g:vimwiki_hl_cb_checked| to turn it on.
   * [fix] Links with g:vimwiki_stripsym (default '_') [[My_Link|Text]]
     are not highlighted when created.
+  * [fix] indent/vimwiki.vim is obsolete. If you upgrade from previous
+    versions remove it. It causes wrong list indentation if noexpandtab is
+    set.
 
 0.9.4
   * [new] Links with directories: [[dir1/dir2/Link|Text]]. Thanks Jie Wu.
