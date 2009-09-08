@@ -276,7 +276,11 @@ function! s:process_tag_list(line, lists) "{{{
     let processed = 1
   endif
   if lstSym != ''
-    let indent = stridx(a:line, lstSym)
+    " To get proper indent level 'retab' the line -- change all tabs
+    " to spaces*tabstop 
+    let line = substitute(a:line, '\t', repeat(' ', &tabstop), 'g')
+    let indent = stridx(line, lstSym)
+
     let cnt = len(a:lists)
     if !cnt || (cnt && indent > a:lists[-1][1])
       call add(a:lists, [lstTagClose, indent])
@@ -578,11 +582,17 @@ function! s:make_internal_link(entag) "{{{
   " from [[This is a link]]
   " Make <a href="link">This is a link</a>
   " from [[link|This is a link]]
+  " Make <a href="link">This is a link</a>
+  " from [[link][This is a link]]
   " TODO: rename function -- it makes not only internal links.
   " TODO: refactor it.
 
   let line = ''
-  let link_parts = split(a:entag, "|", 1)
+  if a:entag =~ '|'
+    let link_parts = split(a:entag, "|", 1)
+  else
+    let link_parts = split(a:entag, "][", 1)
+  endif
 
   if len(link_parts) > 1
     if len(link_parts) < 3

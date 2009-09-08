@@ -186,7 +186,7 @@ call s:default('fold_empty_lines', 0)
 call s:default('menu', 'Vimwiki')
 call s:default('current_idx', 0)
 call s:default('list', [s:vimwiki_defaults])
-call s:default('global_ext', 0)
+call s:default('global_ext', 1)
 call s:default('hl_headers', 0)
 call s:default('hl_cb_checked', 0)
 
@@ -200,7 +200,11 @@ let any = upp.nup
 let g:vimwiki_word1 = '\C\<['.upp.']['.nlo.']*['.
       \ low.']['.nup.']*['.upp.']['.any.']*\>'
 let g:vimwiki_word2 = '\[\[[^\]]\+\]\]'
-let g:vimwiki_rxWikiWord = g:vimwiki_word1.'\|'.g:vimwiki_word2
+let g:vimwiki_word3 = '\[\[.\+\]\[.\+\]\]'
+let g:vimwiki_rxWikiWord = g:vimwiki_word1.'\|'.g:vimwiki_word2.'\|'.g:vimwiki_word3
+let g:vimwiki_rxWeblink = '\%("[^"(]\+\((\([^)]\+\))\)\?":\)\?'.
+      \'\%(https\?\|ftp\|gopher\|telnet\|file\|notes\|ms-help\):'.
+      \'\%(\%(\%(//\)\|\%(\\\\\)\)\+[A-Za-z0-9:#@%/;,$~()_?+=.&\\\-]*\)'
 "}}}
 
 " FILETYPE setup for all known wiki extensions {{{

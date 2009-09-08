@@ -300,6 +300,8 @@ Link with spaces in it: >
   [[This is a link]]
 or: >
   [[This is a link source|Description of the link]]
+or: >
+  [[This is a link source][Description of the link]]
 
 
 External links~
@@ -901,11 +903,15 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     predefined colors.
   * [new] Checked [x] items are not highlighted with Comment syntax group by
     default. Use |g:vimwiki_hl_cb_checked| to turn it on.
+  * [new] Added new syntax for links: [[link address][link description]].
+  * [new] Added <C-@> allias of <C-Space> mapping for *nix systems.
   * [fix] Links with g:vimwiki_stripsym (default '_') [[My_Link|Text]]
     are not highlighted when created.
   * [fix] indent/vimwiki.vim is obsolete. If you upgrade from previous
     versions remove it. It causes wrong list indentation if noexpandtab is
     set.
+  * [fix] If tabs and spaces are used to indent list items html export gives
+    error. Thanks Klaus Ethgen for report.
 
 0.9.4
   * [new] Links with directories: [[dir1/dir2/Link|Text]]. Thanks Jie Wu.

@@ -123,8 +123,15 @@ function! s:strip_word(word) "{{{
   if strpart(a:word, 0, 2) == "[["
     " get rid of [[ and ]]
     let w = strpart(a:word, 2, strlen(a:word)-4)
-    " we want "link" from [[link|link desc]]
-    let w = split(w, "|")[0]
+
+    if w =~ '|'
+      " we want "link" from [[link|link desc]]
+      let w = split(w, "|")[0]
+    elseif w =~ ']['
+      " we want "link" from [[link][link desc]]
+      let w = split(w, "][")[0]
+    endif
+
     let result = vimwiki#safe_link(w)
   endif
   return result
@@ -294,8 +301,12 @@ function! vimwiki#WikiHighlightWords() "{{{
     execute 'syntax match wikiWord /\[\[\<'.
           \ vimwiki#unsafe_link(word).
           \ '\>\%(|\+.*\)*\]\]/'
+    execute 'syntax match wikiWord /\[\[\<'.
+          \ vimwiki#unsafe_link(word).
+          \ '\>\]\[.\+\]\]/'
   endfor
   execute 'syntax match wikiWord /\[\[.\+\.\%(jpg\|png\|gif\)\%(|\+.*\)*\]\]/'
+  execute 'syntax match wikiWord /\[\[.\+\.\%(jpg\|png\|gif\)\]\[.\+\]\]/'
 endfunction
 " }}}
 
@@ -331,7 +342,6 @@ function! vimwiki#WikiFollowWord(split) "{{{
     let cmd = ":e "
   endif
   let word = s:strip_word(s:get_word_at_cursor(g:vimwiki_rxWikiWord))
-  " insert doesn't work properly inside :if. Check :help :if.
   if word == ""
     execute "normal! \n"
     return
@@ -341,6 +351,7 @@ function! vimwiki#WikiFollowWord(split) "{{{
   else
     let vimwiki_prev_word = [expand('%:p'), getpos('.')]
     let subdir = vimwiki#current_subdir()
+    echomsg VimwikiGet('path').subdir.word.VimwikiGet('ext')
     call s:edit_file(cmd, VimwikiGet('path').subdir.word.VimwikiGet('ext'))
     let b:vimwiki_prev_word = vimwiki_prev_word
   endif

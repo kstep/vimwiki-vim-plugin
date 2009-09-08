@@ -15,6 +15,7 @@ if VimwikiGet('maxhi')
   " Every WikiWord is nonexistent
   execute 'syntax match wikiNoExistsWord /\%(^\|[^!]\)\zs'.g:vimwiki_word1.'/'
   execute 'syntax match wikiNoExistsWord /'.g:vimwiki_word2.'/'
+  execute 'syntax match wikiNoExistsWord /'.g:vimwiki_word3.'/'
   " till we find them in vimwiki's path
   call vimwiki#WikiHighlightWords()
 else
@@ -24,9 +25,6 @@ else
   execute 'syntax match wikiWord /'.g:vimwiki_word2.'/'
 endif
 
-let g:vimwiki_rxWeblink = '\%("[^"(]\+\((\([^)]\+\))\)\?":\)\?'.
-      \'\%(https\?\|ftp\|gopher\|telnet\|file\|notes\|ms-help\):'.
-      \'\%(\%(\%(//\)\|\%(\\\\\)\)\+[A-Za-z0-9:#@%/;,$~()_?+=.&\\\-]*\)'
 execute 'syntax match wikiLink `'.g:vimwiki_rxWeblink.'`'
 
 " Emoticons: must come after the Textilisms, as later rules take precedence
