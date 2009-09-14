@@ -200,7 +200,7 @@ let any = upp.nup
 let g:vimwiki_word1 = '\C\<['.upp.']['.nlo.']*['.
       \ low.']['.nup.']*['.upp.']['.any.']*\>'
 let g:vimwiki_word2 = '\[\[[^\]]\+\]\]'
-let g:vimwiki_word3 = '\[\[.\+\]\[.\+\]\]'
+let g:vimwiki_word3 = '\[\[[^\]]\+\]\[[^\]]\+\]\]'
 let g:vimwiki_rxWikiWord = g:vimwiki_word1.'\|'.g:vimwiki_word2.'\|'.g:vimwiki_word3
 let g:vimwiki_rxWeblink = '\%("[^"(]\+\((\([^)]\+\))\)\?":\)\?'.
       \'\%(https\?\|ftp\|gopher\|telnet\|file\|notes\|ms-help\):'.
