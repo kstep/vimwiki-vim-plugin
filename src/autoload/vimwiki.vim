@@ -69,7 +69,13 @@ endfunction
 " }}}
 
 function! s:filename(link) "{{{
-  return split(a:link, '|')[0]
+  if a:link =~ '|'
+    return split(a:link, '|')[0]
+  elseif a:link =~ ']['
+    return split(a:link, '][')[0]
+  else
+    return a:link
+  endif
 endfunction
 " }}}
 
@@ -201,7 +207,8 @@ function! s:update_wiki_links_dir(dir, old_fname, new_fname) " {{{
     let new_fname = '[['.new_fname.']]'
   endif
   if !s:is_wiki_word(old_fname)
-    let old_fname = '\[\['.vimwiki#unsafe_link(old_fname).'\%(|.*\)\?\]\]'
+    let old_fname = '\[\['.vimwiki#unsafe_link(old_fname).
+          \ '\%(|.*\)\?\%(\]\[.*\)\?\]\]'
   else
     let old_fname = '\<'.old_fname.'\>'
   endif
@@ -494,7 +501,6 @@ function! vimwiki#WikiRenameWord() "{{{
   setlocal nomore
 
   " update links
-  " XXX: doesn't work for [[link|desc link]]
   call s:update_wiki_links(old_fname, new_link)
 
   " restore wiki buffers

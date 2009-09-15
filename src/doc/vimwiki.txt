@@ -912,6 +912,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     set.
   * [fix] If tabs and spaces are used to indent list items html export gives
     error. Thanks Klaus Ethgen for report.
+  * [fix] Some html export fixes.
 
 0.9.4
   * [new] Links with directories: [[dir1/dir2/Link|Text]]. Thanks Jie Wu.
