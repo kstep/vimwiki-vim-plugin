@@ -13,7 +13,9 @@ endif
 "" use max highlighting - could be quite slow if there are too many wikifiles
 if VimwikiGet('maxhi')
   " Every WikiWord is nonexistent
-  execute 'syntax match wikiNoExistsWord /\%(^\|[^!]\)\zs'.g:vimwiki_word1.'/'
+  if g:vimwiki_camel_case
+    execute 'syntax match wikiNoExistsWord /\%(^\|[^!]\)\zs'.g:vimwiki_word1.'/'
+  endif
   execute 'syntax match wikiNoExistsWord /'.g:vimwiki_word2.'/'
   execute 'syntax match wikiNoExistsWord /'.g:vimwiki_word3.'/'
   " till we find them in vimwiki's path
@@ -64,7 +66,7 @@ execute 'syntax match wikiList /'.g:vimwiki_rxListBullet.'/'
 execute 'syntax match wikiList /'.g:vimwiki_rxListNumber.'/'
 execute 'syntax match wikiList /'.g:vimwiki_rxListDefine.'/'
 
-" Think of removing this highlighting.
+" XXX: Think of removing this highlighting.
 "============================================================================== 
 "
 " Treat all other lines that start with spaces as PRE-formatted text.
@@ -122,7 +124,8 @@ hi def link wikiNoExistsWord Error
 
 hi def link wikiPre PreProc
 hi def link wikiLink Underlined
-hi def link wikiList Special
+hi def link wikiList Statement
+" hi def link wikiList Identifier
 hi def link wikiCheckBox wikiList
 hi def link wikiCheckBoxDone Comment
 hi def link wikiTable PreProc

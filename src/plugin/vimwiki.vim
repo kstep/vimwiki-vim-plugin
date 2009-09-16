@@ -189,6 +189,7 @@ call s:default('list', [s:vimwiki_defaults])
 call s:default('global_ext', 1)
 call s:default('hl_headers', 0)
 call s:default('hl_cb_checked', 0)
+call s:default('camel_case', 1)
 
 let upp = g:vimwiki_upper
 let low = g:vimwiki_lower
@@ -201,7 +202,11 @@ let g:vimwiki_word1 = '\C\<['.upp.']['.nlo.']*['.
       \ low.']['.nup.']*['.upp.']['.any.']*\>'
 let g:vimwiki_word2 = '\[\[[^\]]\+\]\]'
 let g:vimwiki_word3 = '\[\[[^\]]\+\]\[[^\]]\+\]\]'
-let g:vimwiki_rxWikiWord = g:vimwiki_word1.'\|'.g:vimwiki_word2.'\|'.g:vimwiki_word3
+if g:vimwiki_camel_case
+  let g:vimwiki_rxWikiWord = g:vimwiki_word1.'\|'.g:vimwiki_word2.'\|'.g:vimwiki_word3
+else
+  let g:vimwiki_rxWikiWord = g:vimwiki_word2.'\|'.g:vimwiki_word3
+endif
 let g:vimwiki_rxWeblink = '\%("[^"(]\+\((\([^)]\+\))\)\?":\)\?'.
       \'\%(https\?\|ftp\|gopher\|telnet\|file\|notes\|ms-help\):'.
       \'\%(\%(\%(//\)\|\%(\\\\\)\)\+[A-Za-z0-9:#@%/;,$~()_?+=.&\\\-]*\)'

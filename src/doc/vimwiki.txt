@@ -296,6 +296,8 @@ You can limit linking of WikiWords by adding an exclamation mark in front of
 it: >
   !CapitalizedWordsConnected
 
+Or disable it completely with |g:vimwiki_camel_case|.
+
 Link with spaces in it: >
   [[This is a link]]
 or: >
@@ -865,6 +867,18 @@ Value           Description~
 
 Default: 0
 
+------------------------------------------------------------------------------
+*g:vimwiki_camel_case*
+
+If you do not want WikiWord to be a link this setting is just for you.
+
+Value           Description~
+0               Do not make links from CamelCased words.
+1               Make links from CamelCased words.
+
+Default: 1
+
+
 ==============================================================================
 9. Help                                                         *vimwiki-help*
 
@@ -905,6 +919,8 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     default. Use |g:vimwiki_hl_cb_checked| to turn it on.
   * [new] Added new syntax for links: [[link address][link description]].
   * [new] Added <C-@> allias of <C-Space> mapping for *nix systems.
+  * [new] Added |g:vimwiki_camel_case|. Set it to 0 if you do not want
+    CamelCased WikiWords to be linkified.
   * [fix] Links with g:vimwiki_stripsym (default '_') [[My_Link|Text]]
     are not highlighted when created.
   * [fix] indent/vimwiki.vim is obsolete. If you upgrade from previous
@@ -1164,11 +1180,29 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 ==============================================================================
 12. License                                                   *vimwiki-license*
 
-GNU General Public License v2
-http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+The MIT Licence
+http://www.opensource.org/licenses/mit-license.php
 
-To be frank I didn't read it myself. It is not that easy reading. But I hope
-it's free enough to suit your needs.
+Copyright (c) 2009 Maxim Kim
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
 
 
  vim:tw=78:ts=8:ft=help

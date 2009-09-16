@@ -302,7 +302,8 @@ function! vimwiki#WikiHighlightWords() "{{{
   call map(g:vimwiki_wikiwords, 'substitute(v:val, os_p, os_p2, "g")')
 
   for word in g:vimwiki_wikiwords
-    if word =~ g:vimwiki_word1 && !s:is_link_to_non_wiki_file(word)
+    if g:vimwiki_camel_case && 
+          \ word =~ g:vimwiki_word1 && !s:is_link_to_non_wiki_file(word)
       execute 'syntax match wikiWord /\%(^\|[^!]\)\zs\<'.word.'\>/'
     endif
     execute 'syntax match wikiWord /\[\[\<'.
