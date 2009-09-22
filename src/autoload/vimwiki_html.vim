@@ -44,13 +44,14 @@ function! s:create_default_CSS(path) " {{{
     call add(lines, 'h4 {font-size: 1.1em; color: #113344;}')
     call add(lines, 'h5 {font-size: 1.0em; color: #112233;}')
     call add(lines, 'h6 {font-size: 1.0em; color: #111111;}')
-    call add(lines, 'p, pre, table, ul, ol, dl {margin-top: 1em; margin-bottom: 1em;}')
+    call add(lines, 'p, pre, blockquote, table, ul, ol, dl {margin-top: 1em; margin-bottom: 1em;}')
     call add(lines, 'ul ul, ul ol, ol ol, ol ul {margin-top: 0.5em; margin-bottom: 0.5em;}')
     call add(lines, 'li {margin: 0.3em auto;}')
     call add(lines, 'ul {margin-left: 2em; padding-left: 0.5em;}')
     call add(lines, 'dt {font-weight: bold;}')
     call add(lines, 'img {border: none;}')
     call add(lines, 'pre {border-left: 1px solid #ccc; margin-left: 2em; padding-left: 0.5em;}')
+    call add(lines, 'blockquote {border: 1px solid #ccc; width: 85%; margin-left: auto; margin-right: auto; padding: 0.4em; background-color: #ffffe0;}')
     call add(lines, 'td {border: 1px solid #ccc; padding: 0.3em;}')
     call add(lines, 'hr {border: none; border-top: 1px solid #ccc; width: 100%;}')
     call add(lines, '.todo {font-weight: bold; background-color: #f0ece8; color: #a03020;}')
@@ -162,20 +163,20 @@ function! s:get_html_footer() "{{{
   return lines
 endfunction "}}}
 
-function! s:close_tag_code(code, ldest) "{{{
-  if a:code
+function! s:close_tag_pre(pre, ldest) "{{{
+  if a:pre
     call insert(a:ldest, "</pre></code>")
     return 0
   endif
-  return a:code
+  return a:pre
 endfunction "}}}
 
-function! s:close_tag_pre(pre, ldest) "{{{
-  if a:pre
-    call insert(a:ldest, "</pre>")
+function! s:close_tag_quote(quote, ldest) "{{{
+  if a:quote
+    call insert(a:ldest, "</blockquote>")
     return 0
   endif
-  return a:pre
+  return a:quote
 endfunction "}}}
 
 function! s:close_tag_para(para, ldest) "{{{
@@ -209,11 +210,11 @@ function! s:close_tag_def_list(deflist, ldest) "{{{
   return a:deflist
 endfunction! "}}}
 
-function! s:process_tag_pre_cl(line, code) "{{{
+function! s:process_tag_pre(line, pre) "{{{
   let lines = []
-  let code = a:code
+  let pre = a:pre
   let processed = 0
-  if !code && a:line =~ '{{{[^\(}}}\)]*\s*$'
+  if !pre && a:line =~ '{{{[^\(}}}\)]*\s*$'
     let class = matchstr(a:line, '{{{\zs.*$')
     let class = substitute(class, '\s\+$', '', 'g')
     if class != ""
@@ -221,38 +222,38 @@ function! s:process_tag_pre_cl(line, code) "{{{
     else
       call add(lines, "<pre>")
     endif
-    let code = 1
+    let pre = 1
     let processed = 1
-  elseif code && a:line =~ '^}}}\s*$'
-    let code = 0
+  elseif pre && a:line =~ '^}}}\s*$'
+    let pre = 0
     call add(lines, "</pre>")
     let processed = 1
-  elseif code
+  elseif pre
     let processed = 1
     call add(lines, a:line)
   endif
-  return [processed, lines, code]
+  return [processed, lines, pre]
 endfunction "}}}
 
-function! s:process_tag_pre(line, pre) "{{{
+function! s:process_tag_quote(line, quote) "{{{
   let lines = []
-  let pre = a:pre
+  let quote = a:quote
   let processed = 0
-  if a:line =~ '^\s\+[^[:blank:]*#]'
-    if !pre
-      call add(lines, "<pre>")
-      let pre = 1
+  if a:line =~ '^\s\{4,}[^[:blank:]*#]'
+    if !quote
+      call add(lines, "<blockquote>")
+      let quote = 1
     endif
     let processed = 1
     call add(lines, a:line)
-  elseif pre && a:line =~ '^\s*$'
+  elseif quote && a:line =~ '^\s*$'
     let processed = 1
     call add(lines, a:line)
-  elseif pre
-    call add(lines, "</pre>")
-    let pre = 0
+  elseif quote
+    call add(lines, "</blockquote>")
+    let quote = 0
   endif
-  return [processed, lines, pre]
+  return [processed, lines, quote]
 endfunction "}}}
 
 function! s:process_tag_list(line, lists) "{{{
@@ -666,11 +667,11 @@ function! s:make_barebone_link(entag) "{{{
   return line
 endfunction "}}}
 
-function! s:get_html_from_wiki_line(line, para, pre, code,
+function! s:get_html_from_wiki_line(line, para, quote, pre,
       \ table, lists, deflist) " {{{
   let para = a:para
+  let quote = a:quote
   let pre = a:pre
-  let code = a:code
   let table = a:table
   let lists = a:lists
   let deflist = a:deflist
@@ -680,9 +681,9 @@ function! s:get_html_from_wiki_line(line, para, pre, code,
   let line = s:safe_html(a:line)
 
   let processed = 0
-  "" Code
+  "" pre
   if !processed
-    let [processed, lines, code] = s:process_tag_pre_cl(line, code)
+    let [processed, lines, pre] = s:process_tag_pre(line, pre)
     if processed && len(lists)
       call s:close_tag_list(lists, lines)
     endif
@@ -692,8 +693,8 @@ function! s:get_html_from_wiki_line(line, para, pre, code,
     if processed && deflist
       let deflist = s:close_tag_def_list(deflist, lines)
     endif
-    if processed && pre
-      let pre = s:close_tag_pre(pre, lines)
+    if processed && quote
+      let quote = s:close_tag_quote(quote, lines)
     endif
     if processed && para
       let para = s:close_tag_para(para, lines)
@@ -704,11 +705,11 @@ function! s:get_html_from_wiki_line(line, para, pre, code,
   "" list
   if !processed
     let [processed, lines] = s:process_tag_list(line, lists)
+    if processed && quote
+      let quote = s:close_tag_quote(quote, lines)
+    endif
     if processed && pre
       let pre = s:close_tag_pre(pre, lines)
-    endif
-    if processed && code
-      let code = s:close_tag_code(code, lines)
     endif
     if processed && table
       let table = s:close_tag_table(table, lines)
@@ -725,9 +726,9 @@ function! s:get_html_from_wiki_line(line, para, pre, code,
     call extend(res_lines, lines)
   endif
 
-  "" Pre
+  "" quote
   if !processed
-    let [processed, lines, pre] = s:process_tag_pre(line, pre)
+    let [processed, lines, quote] = s:process_tag_quote(line, quote)
     if processed && len(lists)
       call s:close_tag_list(lists, lines)
     endif
@@ -737,8 +738,8 @@ function! s:get_html_from_wiki_line(line, para, pre, code,
     if processed && table
       let table = s:close_tag_table(table, lines)
     endif
-    if processed && code
-      let code = s:close_tag_code(code, lines)
+    if processed && pre
+      let pre = s:close_tag_pre(pre, lines)
     endif
     if processed && para
       let para = s:close_tag_para(para, lines)
@@ -770,7 +771,7 @@ function! s:get_html_from_wiki_line(line, para, pre, code,
     if processed
       call s:close_tag_list(lists, res_lines)
       let table = s:close_tag_table(table, res_lines)
-      let code = s:close_tag_code(code, res_lines)
+      let pre = s:close_tag_pre(pre, res_lines)
       call add(res_lines, line)
     endif
   endif
@@ -780,7 +781,7 @@ function! s:get_html_from_wiki_line(line, para, pre, code,
     if processed
       call s:close_tag_list(lists, res_lines)
       let table = s:close_tag_table(table, res_lines)
-      let code = s:close_tag_code(code, res_lines)
+      let pre = s:close_tag_pre(pre, res_lines)
       call add(res_lines, line)
     endif
   endif
@@ -791,11 +792,11 @@ function! s:get_html_from_wiki_line(line, para, pre, code,
     if processed && len(lists)
       call s:close_tag_list(lists, lines)
     endif
+    if processed && quote
+      let quote = s:close_tag_quote(quote, res_lines)
+    endif
     if processed && pre
       let pre = s:close_tag_pre(pre, res_lines)
-    endif
-    if processed && code
-      let code = s:close_tag_code(code, res_lines)
     endif
     if processed && table
       let table = s:close_tag_table(table, res_lines)
@@ -811,7 +812,7 @@ function! s:get_html_from_wiki_line(line, para, pre, code,
     call add(res_lines, line)
   endif
 
-  return [res_lines, para, pre, code, table, lists, deflist]
+  return [res_lines, para, quote, pre, table, lists, deflist]
 
 endfunction " }}}
 
@@ -872,22 +873,22 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
 
 
   let para = 0
+  let quote = 0
   let pre = 0
-  let code = 0
   let table = 0
   let deflist = 0
   let lists = []
 
   for line in lsource
-    let oldpre = pre
-    let [lines, para, pre, code, table, lists, deflist] =
-          \ s:get_html_from_wiki_line(line, para, pre, code,
+    let oldquote = quote
+    let [lines, para, quote, pre, table, lists, deflist] =
+          \ s:get_html_from_wiki_line(line, para, quote, pre,
           \ table, lists, deflist)
 
     " A dirty hack: There could be a lot of empty strings before
-    " s:process_tag_pre find out `pre` is over. So we should delete
+    " s:process_tag_quote find out `pre` is over. So we should delete
     " them all. Think of the way to refactor it out.
-    if (oldpre != pre) && ldest[-1] =~ '^\s*$'
+    if (oldquote != quote) && ldest[-1] =~ '^\s*$'
       call s:remove_blank_lines(ldest)
     endif
 
@@ -899,9 +900,9 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
   "" process end of file
   "" close opened tags if any
   let lines = []
-  call s:close_tag_pre(pre, lines)
+  call s:close_tag_quote(quote, lines)
   call s:close_tag_para(para, lines)
-  call s:close_tag_code(code, lines)
+  call s:close_tag_pre(pre, lines)
   call s:close_tag_list(lists, lines)
   call s:close_tag_def_list(deflist, lines)
   call s:close_tag_table(table, lines)

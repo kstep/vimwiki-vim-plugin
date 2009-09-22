@@ -35,12 +35,13 @@ if VimwikiGet('syntax') == 'default'
   setl comments=b:\ *\ [\ ],b:\ *[\ ],b:\ *\ [],b:\ *[],b:\ *\ [x],b:\ *[x]
   setl comments+=b:\ #\ [\ ],b:\ #[\ ],b:\ #\ [],b:\ #[],b:\ #\ [x],b:\ #[x]
   setl comments+=b:\ *,b:\ #
+  setl formatlistpat=^\\s\\+[*#]\\s*
 else
   setl comments=n:*\ [\ ],n:*[\ ],n:*\ [],n:*[],n:*\ [x],n:*[x]
   setl comments+=n:#\ [\ ],n:#[\ ],n:#\ [],n:#[],n:#\ [x],n:#[x]
   setl comments+=n:*,n:#
 endif
-setlocal formatoptions=ctnqro
+setlocal formatoptions=ctnr
 " COMMENTS }}}
 
 " FOLDING for headers and list items using expr fold method. {{{
@@ -206,6 +207,7 @@ if !hasmapto('<Plug>VimwikiToggleListItem')
 endif
 noremap <silent><script><buffer>
       \ <Plug>VimwikiToggleListItem :VimwikiToggleListItem<CR>
+
 
 " Text objects {{{
 omap <silent><buffer> ah :<C-U>call vimwiki#TO_header(0)<CR>
