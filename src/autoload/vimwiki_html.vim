@@ -257,7 +257,8 @@ function! s:process_tag_quote(line, quote) "{{{
 endfunction "}}}
 
 function! s:process_tag_list(line, lists) "{{{
-  function! s:add_strike(line, st_tag, en_tag)
+
+  function! s:add_strike(line, st_tag, en_tag) "{{{
     let st_tag = a:st_tag
     let en_tag = a:en_tag
     " apply strikethrough for checked list items
@@ -266,9 +267,9 @@ function! s:process_tag_list(line, lists) "{{{
       let en_tag = '</span>'.a:en_tag
     endif
     return [st_tag, en_tag]
-  endfunction 
+  endfunction "}}}
 
-  function! s:add_checkbox(line, rx_list, st_tag, en_tag)
+  function! s:add_checkbox(line, rx_list, st_tag, en_tag) "{{{
     let st_tag = a:st_tag
     let en_tag = a:en_tag
 
@@ -281,50 +282,71 @@ function! s:process_tag_list(line, lists) "{{{
       endif
     endif
     return [st_tag, en_tag]
-  endfunction
+  endfunction "}}}
 
   let lines = []
-  let lstSym = ''
-  let lstTagOpen = ''
-  let lstTagClose = ''
-  let lstRegExp = ''
   let processed = 0
+
   if a:line =~ '^\s\+\*'
     let lstSym = '*'
     let lstTagOpen = '<ul>'
     let lstTagClose = '</ul>'
     let lstRegExp = '^\s\+\*'
-    let processed = 1
   elseif a:line =~ '^\s\+#'
     let lstSym = '#'
     let lstTagOpen = '<ol>'
     let lstTagClose = '</ol>'
     let lstRegExp = '^\s\+#'
-    let processed = 1
+  else
+    let lstSym = ''
+    let lstTagOpen = ''
+    let lstTagClose = ''
+    let lstRegExp = ''
   endif
 
-  let cnt = len(a:lists)
+  let in_list = (len(a:lists) > 0)
   if lstSym != ''
     " To get proper indent level 'retab' the line -- change all tabs
     " to spaces*tabstop 
     let line = substitute(a:line, '\t', repeat(' ', &tabstop), 'g')
     let indent = stridx(line, lstSym)
 
-    if !cnt || (cnt && indent > a:lists[-1][1])
+    let checkbox = '\s*\[\(.\?\)]'
+    let [st_tag, en_tag] = s:add_strike(line, '<li>', '</li>')
+    let [st_tag, en_tag] = s:add_checkbox(line,
+          \ lstRegExp.checkbox, st_tag, en_tag)
+
+    if !in_list
       call add(a:lists, [lstTagClose, indent])
       call add(lines, lstTagOpen)
-    elseif (cnt && indent < a:lists[-1][1])
+    elseif (in_list && indent > a:lists[-1][1])
+      let item = remove(a:lists, -1)
+      call add(lines, item[0])
+
+      call add(a:lists, [lstTagClose, indent])
+      call add(lines, lstTagOpen)
+    elseif (in_list && indent < a:lists[-1][1])
       while len(a:lists) && indent < a:lists[-1][1]
         let item = remove(a:lists, -1)
         call add(lines, item[0])
       endwhile
+    elseif in_list
+      let item = remove(a:lists, -1)
+      call add(lines, item[0])
     endif
-    let checkbox = '\s*\[\(.\?\)]'
-    let [st_tag, en_tag] = s:add_strike(a:line, '<li>', '</li>')
-    let [st_tag, en_tag] = s:add_checkbox(a:line, lstRegExp.checkbox, st_tag, en_tag)
-    call add(lines, st_tag.
-          \ substitute(a:line, lstRegExp.'\%('.checkbox.'\)\?', '', '').
-          \ en_tag)
+
+    call add(a:lists, [en_tag, indent])
+    call add(lines, st_tag)
+    call add(lines,
+          \ substitute(a:line, lstRegExp.'\%('.checkbox.'\)\?', '', ''))
+    let processed = 1
+  elseif in_list > 0 && a:line =~ '^\s\+\S\+'
+    if g:vimwiki_lst_ignore_newline
+      call add(lines, a:line)
+    else
+      call add(lines, '<br />'.a:line)
+    endif
+    let processed = 1
   else
     while len(a:lists)
       let item = remove(a:lists, -1)

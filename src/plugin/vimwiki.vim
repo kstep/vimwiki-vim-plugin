@@ -190,6 +190,7 @@ call s:default('global_ext', 1)
 call s:default('hl_headers', 0)
 call s:default('hl_cb_checked', 0)
 call s:default('camel_case', 1)
+call s:default('lst_ignore_newline', 1)
 
 let upp = g:vimwiki_upper
 let low = g:vimwiki_lower

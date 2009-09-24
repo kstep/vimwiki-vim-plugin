@@ -444,6 +444,16 @@ It is possible to mix bulleted and numbered lists: >
     # Numbered list sub item 1
     # Numbered list sub item 2
 
+Multiline list items: >
+  * Bulleted list item 1
+    List item 1 continued line.
+    List item 1 next continued line.
+  * Bulleted list item 2
+    * Bulleted list sub item 1
+      List sub item 1 continued line.
+      List sub item 1 next continued line.
+    * Bulleted list sub item 2
+    * etc.
 
 Definition lists: >
 Term 1:: Definition 1
@@ -877,6 +887,18 @@ Value           Description~
 
 Default: 1
 
+------------------------------------------------------------------------------
+*g:vimwiki_lst_ignore_newline*
+
+This is HTML related.
+Convert newlines to <BR />s in multiline list items.
+
+Value           Description~
+0               Newlines in a list item are converted to <BR />s.
+1               Ignore newlines.
+
+Default: 1
+
 
 ==============================================================================
 9. Help                                                         *vimwiki-help*
@@ -910,8 +932,10 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 11. Changelog                                              *vimwiki-changelog*
 
 0.9.6
+    * [new] Added multiline list items. See |vimwiki-syntax-lists|.
+    * [new] Added |g:vimwiki_lst_ignore_newline| option.
     * [new] Remove 'o' from |formatoptions|. Do not create new list item while
-      pressing 'o' on a list item.
+      pressing 'o' on it.
     * [new] Remove syntax of preformatted text that is started by a
       whitespace.
     * [new] Added blockquote syntax. See |vimwiki-syntax-blockquote|.
