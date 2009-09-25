@@ -341,7 +341,7 @@ function! s:process_tag_list(line, lists) "{{{
           \ substitute(a:line, lstRegExp.'\%('.checkbox.'\)\?', '', ''))
     let processed = 1
   elseif in_list > 0 && a:line =~ '^\s\+\S\+'
-    if g:vimwiki_lst_ignore_newline
+    if g:vimwiki_list_ignore_newline
       call add(lines, a:line)
     else
       call add(lines, '<br />'.a:line)
