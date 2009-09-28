@@ -86,7 +86,8 @@ function! s:is_img_link(lnk) "{{{
 endfunction "}}}
 
 function! s:is_non_wiki_link(lnk) "{{{
-  if a:lnk =~ '.\+\..\+$'
+  " TODO: Add more file extensions here
+  if a:lnk =~ '.\+\.\%(pdf\|txt\|doc\|rtf\|xls\)$'
     return 1
   endif
   return 0
@@ -662,7 +663,6 @@ function! s:make_internal_link(entag) "{{{
             \ '.html">'.a:entag.'</a>'
     endif
   endif
-
   return line
 endfunction "}}}
 

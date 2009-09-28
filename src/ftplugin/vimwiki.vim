@@ -69,7 +69,6 @@ function! VimwikiFoldLevel(lnum) "{{{
 
   " List item folding...
   if g:vimwiki_fold_lists
-
     let rx_list_item = '\('.
           \ g:vimwiki_rxListBullet.'\|'.g:vimwiki_rxListNumber.
           \ '\)'
@@ -126,6 +125,7 @@ function! s:find_next_item(rx_item, lnum) "{{{
 
   while lnum <= line('$')
     if getline(lnum) =~ a:rx_item
+          \ || getline(lnum) =~ '^\S'
           \ || indent(lnum) <= indent(a:lnum)
       break
     endif
@@ -140,7 +140,7 @@ function! s:find_prev_item(rx_item, lnum) "{{{
 
   while lnum > 1
     if getline(lnum) =~ a:rx_item
-          " \ || indent(lnum) <= indent(a:lnum)
+          \ || getline(lnum) =~ '^\S'
       break
     endif
     let lnum -= 1
@@ -151,8 +151,8 @@ endfunction "}}}
 
 function! s:get_li_level(lnum, nnum) "{{{
   if VimwikiGet('syntax') == 'media'
-    let level = s:count_first_sym(getline(a:nnum)) -
-          \ s:count_first_sym(getline(a:lnum))
+    let level = vimwiki#count_first_sym(getline(a:nnum)) -
+          \ vimwiki#count_first_sym(getline(a:lnum))
   else
     let level = ((indent(a:nnum) - indent(a:lnum)) / &sw)
   endif
@@ -161,7 +161,7 @@ endfunction "}}}
 
 function! s:get_li_level_last(lnum) "{{{
   if VimwikiGet('syntax') == 'media'
-    return -(s:count_first_sym(getline(a:lnum)) - 1)
+    return -(vimwiki#count_first_sym(getline(a:lnum)) - 1)
   else
     return -(indent(a:lnum) / &sw - 1)
   endif
