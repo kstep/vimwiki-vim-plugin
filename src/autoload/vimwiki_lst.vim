@@ -10,8 +10,6 @@ let g:loaded_vimwiki_lst_auto = 1
 
 " Script variables {{{
 " for various checks
-" let s:rx_list_item = '\('.g:vimwiki_rxListBullet.'\|'.g:vimwiki_rxListNumber.'\)'
-" let s:rx_cb_list_item = s:rx_list_item.'\s*\zs\[.\?\]'
 let s:rx_li_box = '\[.\?\]'
 let s:rx_li_unchecked = '\[\s\?\]'
 " for substitutions
@@ -21,14 +19,18 @@ let s:rx_li_uncheck = '\[ \]'
 
 " Script functions {{{
 
-function! s:rx_list_item()
+" Get regexp of the list item.
+function! s:rx_list_item() "{{{
   return '\('.g:vimwiki_rxListBullet.'\|'.g:vimwiki_rxListNumber.'\)'
-endfunction
+endfunction "}}}
 
-function! s:rx_cb_list_item()
+" Get regexp of the list item with checkbox.
+function! s:rx_cb_list_item() "{{{
   return s:rx_list_item().'\s*\zs\[.\?\]'
-endfunction
+endfunction "}}}
 
+" Get previous list item.
+" Returns: line number or 0.
 function! s:prev_list_item(lnum) "{{{
   let c_lnum = a:lnum - 1
   while c_lnum >= 1
@@ -44,6 +46,8 @@ function! s:prev_list_item(lnum) "{{{
   return 0
 endfunction "}}}
 
+" Get next list item.
+" Returns: line number or 0.
 function! s:next_list_item(lnum) "{{{
   let c_lnum = a:lnum + 1
   while c_lnum <= line('$')
@@ -115,15 +119,13 @@ endfunction "}}}
 function! s:get_child_items(lnum) "{{{
   let result = []
   let lnum = a:lnum
-  let parent_pos = s:get_li_pos(lnum)
+  let p_pos = s:get_li_pos(lnum)
 
   " add parent
   call add(result, lnum)
 
   let lnum = s:next_list_item(lnum)
-  while s:get_li_pos(lnum) > parent_pos &&
-        \ lnum != 0 
-
+  while s:get_li_pos(lnum) == -1 || (s:get_li_pos(lnum) > p_pos && lnum != 0)
     call add(result, lnum)
     let lnum = s:next_list_item(lnum)
   endwhile
@@ -167,8 +169,8 @@ function! s:get_parent_item(lnum) "{{{
   let ind = s:get_li_pos(lnum)
 
   let lnum = s:prev_list_item(lnum)
-  while s:get_li_pos(lnum) >= ind &&
-        \ lnum != 0 
+  while (s:is_list_item(lnum) && s:get_li_pos(lnum) == -1)
+        \ || (s:get_li_pos(lnum) >= ind && lnum != 0)
     let lnum = s:prev_list_item(lnum)
   endwhile
 
@@ -189,6 +191,7 @@ function! s:create_cb_list_item(lnum) "{{{
   endif
 endfunction "}}}
 
+" Tells if all of the sibling list items are checked or not.
 function! s:all_siblings_checked(lnum) "{{{
   let result = 1
   for lnum in s:get_sibling_items(a:lnum)
@@ -200,6 +203,7 @@ function! s:all_siblings_checked(lnum) "{{{
   return result
 endfunction "}}}
 
+" Creates checkbox on a list item if there is no one.
 function! s:TLI_create_checkbox(lnum) "{{{
   if a:lnum && !s:is_cb_list_item(a:lnum)
     if g:vimwiki_auto_checkbox
@@ -210,6 +214,7 @@ function! s:TLI_create_checkbox(lnum) "{{{
   return 0
 endfunction "}}}
 
+" Switch state of the child list items.
 function! s:TLI_switch_child_state(lnum) "{{{
   let current_state = s:get_state(a:lnum)
   for lnum in s:get_child_items(a:lnum)
@@ -217,6 +222,7 @@ function! s:TLI_switch_child_state(lnum) "{{{
   endfor
 endfunction "}}}
 
+" Switch state of the parent list items.
 function! s:TLI_switch_parent_state(lnum) "{{{
   let c_lnum = a:lnum
   while s:is_cb_list_item(c_lnum)
@@ -237,11 +243,9 @@ function! vimwiki_lst#ToggleListItem() "{{{
   let current_lnum = line('.')
   let li_lnum = s:is_list_item(current_lnum)
 
-  if s:TLI_create_checkbox(li_lnum)
-    return
+  if !s:TLI_create_checkbox(li_lnum)
+    call s:TLI_switch_child_state(li_lnum)
   endif
-
-  call s:TLI_switch_child_state(li_lnum)
 
   call s:TLI_switch_parent_state(li_lnum)
 
