@@ -246,7 +246,7 @@ function! s:process_tag_quote(line, quote) "{{{
       let quote = 1
     endif
     let processed = 1
-    call add(lines, a:line)
+    call add(lines, substitute(a:line, '^\s*', '', ''))
   elseif quote && a:line =~ '^\s*$'
     let processed = 1
     call add(lines, a:line)
@@ -292,12 +292,12 @@ function! s:process_tag_list(line, lists) "{{{
     let lstSym = '*'
     let lstTagOpen = '<ul>'
     let lstTagClose = '</ul>'
-    let lstRegExp = '^\s\+\*'
+    let lstRegExp = '^\s\+\*\s*'
   elseif a:line =~ '^\s\+#'
     let lstSym = '#'
     let lstTagOpen = '<ol>'
     let lstTagClose = '</ol>'
-    let lstRegExp = '^\s\+#'
+    let lstRegExp = '^\s\+#\s*'
   else
     let lstSym = ''
     let lstTagOpen = ''
@@ -312,7 +312,7 @@ function! s:process_tag_list(line, lists) "{{{
     let line = substitute(a:line, '\t', repeat(' ', &tabstop), 'g')
     let indent = stridx(line, lstSym)
 
-    let checkbox = '\s*\[\(.\?\)]'
+    let checkbox = '\s*\[\(.\?\)]\s*'
     let [st_tag, en_tag] = s:add_strike(line, '<li>', '</li>')
     let [st_tag, en_tag] = s:add_checkbox(line,
           \ lstRegExp.checkbox, st_tag, en_tag)
