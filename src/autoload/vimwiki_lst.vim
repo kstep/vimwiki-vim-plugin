@@ -29,6 +29,16 @@ function! s:rx_cb_list_item() "{{{
   return s:rx_list_item().'\s*\zs\[.\?\]'
 endfunction "}}}
 
+" Get level of the list item.
+function! s:get_level(lnum) "{{{
+  if VimwikiGet('syntax') == 'media'
+    let level = vimwiki#count_first_sym(getline(a:lnum))
+  else
+    let level = indent(a:lnum)
+  endif
+  return level
+endfunction "}}}
+
 " Get previous list item.
 " Returns: line number or 0.
 function! s:prev_list_item(lnum) "{{{
@@ -119,17 +129,17 @@ endfunction "}}}
 function! s:get_child_items(lnum) "{{{
   let result = []
   let lnum = a:lnum
-  let p_pos = s:get_li_pos(lnum)
+  let p_pos = s:get_level(lnum)
 
   " add parent
   call add(result, lnum)
 
   let lnum = s:next_list_item(lnum)
-  while s:get_li_pos(lnum) == -1 || (s:get_li_pos(lnum) > p_pos && lnum != 0)
+  while lnum != 0 && s:is_list_item(lnum) && s:get_level(lnum) > p_pos
     call add(result, lnum)
     let lnum = s:next_list_item(lnum)
   endwhile
-
+  
   return result
 endfunction "}}}
 
@@ -137,40 +147,37 @@ endfunction "}}}
 function! s:get_sibling_items(lnum) "{{{
   let result = []
   let lnum = a:lnum
-  let ind = s:get_li_pos(lnum)
+  let ind = s:get_level(lnum)
 
-  while s:is_cb_list_item(lnum) &&
-        \ s:get_li_pos(lnum) >= ind &&
+  while s:get_level(lnum) >= ind &&
         \ lnum != 0
 
-    if s:get_li_pos(lnum) == ind
+    if s:get_level(lnum) == ind && s:is_cb_list_item(lnum)
       call add(result, lnum)
     endif
     let lnum = s:next_list_item(lnum)
   endwhile
 
   let lnum = s:prev_list_item(a:lnum)
-  while s:is_cb_list_item(lnum) &&
-        \ s:get_li_pos(lnum) >= ind &&
+  while s:get_level(lnum) >= ind &&
         \ lnum != 0
 
-    if s:get_li_pos(lnum) == ind
+    if s:get_level(lnum) == ind && s:is_cb_list_item(lnum)
       call add(result, lnum)
     endif
     let lnum = s:prev_list_item(lnum)
   endwhile
-
+  
   return result
 endfunction "}}}
 
 " Returns line number of the parent of lnum item
 function! s:get_parent_item(lnum) "{{{
   let lnum = a:lnum
-  let ind = s:get_li_pos(lnum)
+  let ind = s:get_level(lnum)
 
   let lnum = s:prev_list_item(lnum)
-  while (s:is_list_item(lnum) && s:get_li_pos(lnum) == -1)
-        \ || (s:get_li_pos(lnum) >= ind && lnum != 0)
+  while lnum != 0 && s:is_list_item(lnum) && s:get_level(lnum) >= ind
     let lnum = s:prev_list_item(lnum)
   endwhile
 

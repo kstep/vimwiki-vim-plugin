@@ -51,7 +51,7 @@ function! s:create_default_CSS(path) " {{{
     call add(lines, 'dt {font-weight: bold;}')
     call add(lines, 'img {border: none;}')
     call add(lines, 'pre {border-left: 1px solid #ccc; margin-left: 2em; padding-left: 0.5em;}')
-    call add(lines, 'blockquote {border: 1px solid #ccc; width: 85%; margin-left: auto; margin-right: auto; padding: 0.4em; background-color: #ffffe0;}')
+    call add(lines, 'blockquote {padding: 0.4em; background-color: #f6f5eb;}')
     call add(lines, 'td {border: 1px solid #ccc; padding: 0.3em;}')
     call add(lines, 'hr {border: none; border-top: 1px solid #ccc; width: 100%;}')
     call add(lines, '.todo {font-weight: bold; background-color: #f0ece8; color: #a03020;}')

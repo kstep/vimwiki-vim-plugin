@@ -69,13 +69,13 @@ endfunction
 " }}}
 
 function! s:filename(link) "{{{
+  let result = vimwiki#safe_link(a:link)
   if a:link =~ '|'
-    return split(a:link, '|')[0]
+    let result = vimwiki#safe_link(split(a:link, '|')[0])
   elseif a:link =~ ']['
-    return split(a:link, '][')[0]
-  else
-    return a:link
+    let result = vimwiki#safe_link(split(a:link, '][')[0])
   endif
+  return result
 endfunction
 " }}}
 
@@ -219,9 +219,16 @@ function! s:update_wiki_links_dir(dir, old_fname, new_fname) " {{{
 endfunction
 " }}}
 
+function! s:tail_name(fname)
+  let result = substitute(a:fname, ":", "__colon__", "g")
+  let result = fnamemodify(result, ":t:r")
+  let result = substitute(result, "__colon__", ":", "g")
+  return result
+endfunction
+
 function! s:update_wiki_links(old_fname, new_fname) " {{{
-  let old_fname = fnamemodify(a:old_fname, ":t:r")
-  let new_fname = fnamemodify(a:new_fname, ":t:r")
+  let old_fname = s:tail_name(a:old_fname)
+  let new_fname = s:tail_name(a:new_fname)
 
   let subdirs = split(a:old_fname, '[/\\]')[: -2]
 

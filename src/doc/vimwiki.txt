@@ -958,7 +958,10 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       wikies opened at the same time with different syntaxes.
     * FIX: Command |:VimwikiToggleListItem| do not switch parent checkboxes if
       there are non-checkbox list items available.
-    * FIX: Issue 24: Link error in html when write [[one.two.three]]
+    * FIX: Issue 24: Link error in html when write [[one.two.three]].
+    * FIX: Rename WikiWord to something with a colon (:) does nasty things.
+    * FIX: Command |:VimwikiToggleListItem| do not switch right if there are
+      list items without checkboxes in the list.
 
 0.9.5
     * NEW: Added |g:vimwiki_global_ext| to control creation of temporary
