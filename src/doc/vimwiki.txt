@@ -579,7 +579,7 @@ NOTE: Whether you use default syntax, folding on list items should work
 properly only if all of them are indented using current |shiftwidth|.
 For MediaWiki * or # should be in the first column.
 
-To turn folding on/off checkout |vimwiki-option-folding|.
+To turn folding on/off check |g:vimwiki-folding|.
 
 ==============================================================================
 7. Todo lists                                             *vimwiki-todo-lists*
@@ -948,9 +948,9 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * NEW: Added multiline list items. See |vimwiki-syntax-lists|. XXX:
       Folding for 'media' syntax doesn't work yet.
     * NEW: Added |g:vimwiki_list_ignore_newline| option.
-    * NEW: Remove syntax of preformatted text that is started by a whitespace.
+    * NEW: Removed syntax of preformatted text that is started by a whitespace.
     * NEW: Added blockquote syntax. See |vimwiki-syntax-blockquote|.
-    * NEW: Remove vimwiki-option-folding. Added |g:vimwiki_folding| and
+    * NEW: Removed vimwiki-option-folding. Added |g:vimwiki_folding| and
       |g:vimwiki_fold_lists|.
     * NEW: Due to being quite slow folding of list items is off by default.
       Use |g:vimwiki_fold_lists| to turn it on.
