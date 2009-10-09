@@ -41,7 +41,7 @@ else
   setl comments+=n:#\ [\ ],n:#[\ ],n:#\ [],n:#[],n:#\ [x],n:#[x]
   setl comments+=n:*,n:#
 endif
-setlocal formatoptions=ctnro
+setlocal formatoptions=tnro
 " COMMENTS }}}
 
 " FOLDING for headers and list items using expr fold method. {{{
