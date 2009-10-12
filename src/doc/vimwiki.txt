@@ -945,10 +945,10 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 11. Changelog                                              *vimwiki-changelog*
 
 0.9.6
-    * NEW: Added multiline list items. See |vimwiki-syntax-lists|. XXX:
-      Folding for 'media' syntax doesn't work yet.
+    * NEW: Added multiline list items. See |vimwiki-syntax-lists|.
     * NEW: Added |g:vimwiki_list_ignore_newline| option.
-    * NEW: Removed syntax of preformatted text that is started by a whitespace.
+    * NEW: Removed syntax of preformatted text that is started by a
+      whitespace.
     * NEW: Added blockquote syntax. See |vimwiki-syntax-blockquote|.
     * NEW: Removed vimwiki-option-folding. Added |g:vimwiki_folding| and
       |g:vimwiki_fold_lists|.
