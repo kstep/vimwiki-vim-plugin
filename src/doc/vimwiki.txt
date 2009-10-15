@@ -587,7 +587,7 @@ To turn folding on/off check |g:vimwiki-folding|.
 You can have todo lists -- lists of items you can check/uncheck.
 
 Consider the following example:
-= Toggleable list of items =
+= Toggleable list of todo items =
   * [x] Toggle list item on/off.
     * [x] Simple toggling between [ ] and [x].
     * [x] All list's subitems should be toggled on/off appropriately.
@@ -597,8 +597,39 @@ Consider the following example:
   * [x] Add highlighting to list item boxes
   * [x] Add [ ] to the next created with o, O and <CR> list item.
 
+
 Pressing <C-Space> on the first list item will toggle it and all of it's child
-items.
+items:
+= Toggleable list of todo items =
+  * [ ] Toggle list item on/off.
+    * [ ] Simple toggling between [ ] and [x].
+    * [ ] All list's subitems should be toggled on/off appropriately.
+    * [ ] Toggle child subitems only if current line is list item
+    * [ ] Parent list item should be toggled depending on it's child items.
+  * [x] Make numbered list items toggleable too
+  * [x] Add highlighting to list item boxes
+  * [x] Add [ ] to the next created with o, O and <CR> list item.
+
+Pressing <C-Space> on the third list item will toggle it and all of it's
+parent items:
+= Toggleable list of todo items =
+  * [.] Toggle list item on/off.
+    * [ ] Simple toggling between [ ] and [x].
+    * [x] All list's subitems should be toggled on/off appropriately.
+    * [ ] Toggle child subitems only if current line is list item
+    * [ ] Parent list item should be toggled depending on it's child items.
+  * [ ] Make numbered list items toggleable too
+  * [ ] Add highlighting to list item boxes
+  * [ ] Add [ ] to the next created with o, O and <CR> list item.
+
+Parent items could be toggled by its child items. Symbol inside [ ] depends on
+percentage of toggled child items: >
+    [ ] -- 0%
+    [.] -- 1-33%
+    [:] -- 34-66%
+    [o] -- 67-99%
+    [x] -- 100%
+
 
 ==============================================================================
 8. Options                                                   *vimwiki-options*
@@ -945,13 +976,16 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 11. Changelog                                              *vimwiki-changelog*
 
 0.9.6
-    * NEW: Added multiline list items. See |vimwiki-syntax-lists|.
-    * NEW: Added |g:vimwiki_list_ignore_newline| option.
-    * NEW: Removed syntax of preformatted text that is started by a
-      whitespace.
-    * NEW: Added blockquote syntax. See |vimwiki-syntax-blockquote|.
-    * NEW: Removed vimwiki-option-folding. Added |g:vimwiki_folding| and
-      |g:vimwiki_fold_lists|.
+    * NEW: You can have multiline list items. See |vimwiki-syntax-lists|.
+    * NEW: You can ignore newlines in multiline list items when do export to
+      html. See |g:vimwiki_list_ignore_newline| option.
+    * NEW: Different checkbox symbols [.], [:], [o] are added. See
+      |vimwiki-todo-lists|.
+    * NEW: Now there is no longer syntax of preformatted text that is started
+      by a whitespace.
+    * NEW: Blockquotes. See |vimwiki-syntax-blockquote|.
+    * NEW: Per wiki folding option (vimwiki-option-folding) is removed. Global
+      |g:vimwiki_folding| and |g:vimwiki_fold_lists| are added.
     * NEW: Due to being quite slow folding of list items is off by default.
       Use |g:vimwiki_fold_lists| to turn it on.
     * FIX: Command |:VimwikiToggleListItem| doesn't work for one of the two

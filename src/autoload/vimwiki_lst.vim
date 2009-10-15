@@ -9,12 +9,13 @@ endif
 let g:loaded_vimwiki_lst_auto = 1
 
 " Script variables {{{
-" for various checks
 let s:rx_li_box = '\[.\?\]'
-let s:rx_li_unchecked = '\[\s\?\]'
 " for substitutions
-let s:rx_li_check = '\[x\]'
-let s:rx_li_uncheck = '\[ \]'
+let s:rx_li_100 = '\[x\]'
+let s:rx_li_0 = '\[ \]'
+let s:rx_li_67_99 = '\[o\]'
+let s:rx_li_34_66 = '\[:\]'
+let s:rx_li_1_33 = '\[\.\]'
 " }}}
 
 " Script functions {{{
@@ -74,12 +75,18 @@ function! s:next_list_item(lnum) "{{{
 endfunction "}}}
 
 " Set state of the list item on line number "lnum" to [ ] or [x]
-function! s:set_state(lnum, on_off) "{{{
+function! s:set_state(lnum, rate) "{{{
   let line = getline(a:lnum)
-  if a:on_off
-    let state = s:rx_li_check
+  if a:rate == 100
+    let state = s:rx_li_100
+  elseif a:rate == 0
+    let state = s:rx_li_0
+  elseif a:rate >= 67
+    let state = s:rx_li_67_99
+  elseif a:rate >= 34
+    let state = s:rx_li_34_66
   else
-    let state = s:rx_li_uncheck
+    let state = s:rx_li_1_33
   endif
   let line = substitute(line, s:rx_li_box, state, '')
   call setline(a:lnum, line)
@@ -87,11 +94,19 @@ endfunction "}}}
 
 " Get state of the list item on line number "lnum"
 function! s:get_state(lnum) "{{{
-  let state = 1
+  let state = 0
   let line = getline(a:lnum)
   let opt = matchstr(line, s:rx_cb_list_item())
-  if opt =~ s:rx_li_unchecked
+  if opt =~ s:rx_li_100
+    let state = 100
+  elseif opt =~ s:rx_li_0
     let state = 0
+  elseif opt =~ s:rx_li_1_33
+    let state = 25
+  elseif opt =~ s:rx_li_34_66
+    let state = 50 
+  elseif opt =~ s:rx_li_67_99
+    let state = 75
   endif
   return state
 endfunction "}}}
@@ -200,13 +215,13 @@ endfunction "}}}
 
 " Tells if all of the sibling list items are checked or not.
 function! s:all_siblings_checked(lnum) "{{{
-  let result = 1
-  for lnum in s:get_sibling_items(a:lnum)
-    if s:get_state(lnum) != 1
-      let result = 0
-      break
-    endif
+  let result = 0
+  let cnt = 0
+  let siblings = s:get_sibling_items(a:lnum)
+  for lnum in siblings
+    let cnt += s:get_state(lnum)/100.0
   endfor
+  let result = (cnt*100.0)/len(siblings)
   return result
 endfunction "}}}
 
@@ -224,8 +239,13 @@ endfunction "}}}
 " Switch state of the child list items.
 function! s:TLI_switch_child_state(lnum) "{{{
   let current_state = s:get_state(a:lnum)
+  if current_state == 100
+    let new_state = 0
+  else
+    let new_state = 100
+  endif
   for lnum in s:get_child_items(a:lnum)
-    call s:set_state(lnum, !current_state)
+    call s:set_state(lnum, new_state)
   endfor
 endfunction "}}}
 
