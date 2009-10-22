@@ -13,7 +13,7 @@ else
   let s:os_sep = '/'
 endif
 
-let s:wiki_badsymbols = '['.g:vimwiki_stripsym.'<>|?*:"]'
+let s:badsymbols = '['.g:vimwiki_badsyms.g:vimwiki_stripsym.'<>|?*:"]'
 " MISC helper functions {{{
 
 " This function is double defined.
@@ -32,12 +32,12 @@ endfunction
 " }}}
 
 function! vimwiki#safe_link(string) "{{{
-  return substitute(a:string, s:wiki_badsymbols, g:vimwiki_stripsym, 'g')
+  return substitute(a:string, s:badsymbols, g:vimwiki_stripsym, 'g')
 endfunction
 "}}}
 
 function! vimwiki#unsafe_link(string) "{{{
-  return substitute(a:string, g:vimwiki_stripsym, s:wiki_badsymbols, 'g')
+  return substitute(a:string, g:vimwiki_stripsym, s:badsymbols, 'g')
 endfunction
 "}}}
 

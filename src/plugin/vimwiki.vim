@@ -178,6 +178,7 @@ else
 endif
 call s:default('other', '0-9')
 call s:default('stripsym', '_')
+call s:default('badsyms', '')
 call s:default('auto_checkbox', 1)
 call s:default('use_mouse', 0)
 call s:default('folding', 1)

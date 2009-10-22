@@ -873,7 +873,23 @@ Default: 'Vimwiki'
 
 Change strip symbol -- in Windows you cannot use /*?<>:" in file names so
 vimwiki replaces them with neutral symbol (_ is default): >
+    let g:vimwiki_stripsym = '_'
+
+You can change it to a <space> for example: >
     let g:vimwiki_stripsym = ' '
+
+------------------------------------------------------------------------------
+*g:vimwiki_badsyms*
+
+Consider you do not like spaces or in filenames (as some vimwiki users do).
+In that case you can set up bad symbols that would be converted to
+|g:vimwiki_stripsym|: >
+    let g:vimwiki_badsyms = ' '
+    
+Now files for all [[links with spaces]] would be created like
+'links_with_spaces'.
+
+This option is a complement one to |g:vimwiki_stripsym|.
 
 ------------------------------------------------------------------------------
 *g:vimwiki_use_mouse*
@@ -988,6 +1004,8 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       |g:vimwiki_folding| and |g:vimwiki_fold_lists| are added.
     * NEW: Due to being quite slow folding of list items is off by default.
       Use |g:vimwiki_fold_lists| to turn it on.
+    * NEW: If you want replace some symbols in a wikifilename use
+      |g:vimwiki_badsyms| option (Andreas Baldeau).
     * FIX: Command |:VimwikiToggleListItem| doesn't work for one of the two
       wikies opened at the same time with different syntaxes.
     * FIX: Command |:VimwikiToggleListItem| do not switch parent checkboxes if
