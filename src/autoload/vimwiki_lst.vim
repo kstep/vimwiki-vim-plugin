@@ -10,15 +10,27 @@ let g:loaded_vimwiki_lst_auto = 1
 
 " Script variables {{{
 let s:rx_li_box = '\[.\?\]'
-" for substitutions
-let s:rx_li_100 = '\[x\]'
-let s:rx_li_0 = '\[ \]'
-let s:rx_li_67_99 = '\[o\]'
-let s:rx_li_34_66 = '\[:\]'
-let s:rx_li_1_33 = '\[\.\]'
 " }}}
 
 " Script functions {{{
+
+" Get checkbox regexp
+function! s:rx_li_symbol(rate) "{{{
+  let result = ''
+  if a:rate == 100
+    let result = g:vimwiki_listsyms[4]
+  elseif a:rate == 0
+    let result = g:vimwiki_listsyms[0]
+  elseif a:rate >= 67
+    let result = g:vimwiki_listsyms[3]
+  elseif a:rate >= 34
+    let result = g:vimwiki_listsyms[2]
+  else
+    let result = g:vimwiki_listsyms[1]
+  endif
+
+  return '\['.result.'\]'
+endfunction "}}}
 
 " Get regexp of the list item.
 function! s:rx_list_item() "{{{
@@ -77,17 +89,7 @@ endfunction "}}}
 " Set state of the list item on line number "lnum" to [ ] or [x]
 function! s:set_state(lnum, rate) "{{{
   let line = getline(a:lnum)
-  if a:rate == 100
-    let state = s:rx_li_100
-  elseif a:rate == 0
-    let state = s:rx_li_0
-  elseif a:rate >= 67
-    let state = s:rx_li_67_99
-  elseif a:rate >= 34
-    let state = s:rx_li_34_66
-  else
-    let state = s:rx_li_1_33
-  endif
+  let state = s:rx_li_symbol(a:rate)
   let line = substitute(line, s:rx_li_box, state, '')
   call setline(a:lnum, line)
 endfunction "}}}
@@ -97,15 +99,15 @@ function! s:get_state(lnum) "{{{
   let state = 0
   let line = getline(a:lnum)
   let opt = matchstr(line, s:rx_cb_list_item())
-  if opt =~ s:rx_li_100
+  if opt =~ s:rx_li_symbol(100)
     let state = 100
-  elseif opt =~ s:rx_li_0
+  elseif opt =~ s:rx_li_symbol(0)
     let state = 0
-  elseif opt =~ s:rx_li_1_33
+  elseif opt =~ s:rx_li_symbol(25)
     let state = 25
-  elseif opt =~ s:rx_li_34_66
+  elseif opt =~ s:rx_li_symbol(50)
     let state = 50 
-  elseif opt =~ s:rx_li_67_99
+  elseif opt =~ s:rx_li_symbol(75)
     let state = 75
   endif
   return state

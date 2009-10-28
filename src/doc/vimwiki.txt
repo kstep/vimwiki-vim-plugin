@@ -8,7 +8,7 @@
        \ `\___/ /\_____\\ \_\\ \_\ `\___x___/ /\_____\\ \_\ \_\ /\_____\~
         `\/__/  \/_____/ \/_/ \/_/'\/__//__/  \/_____/ \/_/\/_/ \/_____/~
 
-                               Version: 0.9.6 ~
+                               Version: 0.9.7 ~
 
 ==============================================================================
 CONTENTS                                                    *vimwiki-contents*
@@ -588,34 +588,34 @@ You can have todo lists -- lists of items you can check/uncheck.
 
 Consider the following example:
 = Toggleable list of todo items =
-  * [x] Toggle list item on/off.
-    * [x] Simple toggling between [ ] and [x].
-    * [x] All list's subitems should be toggled on/off appropriately.
-    * [x] Toggle child subitems only if current line is list item
-    * [x] Parent list item should be toggled depending on it's child items.
-  * [x] Make numbered list items toggleable too
-  * [x] Add highlighting to list item boxes
-  * [x] Add [ ] to the next created with o, O and <CR> list item.
+  * [X] Toggle list item on/off.
+    * [X] Simple toggling between [ ] and [X].
+    * [X] All list's subitems should be toggled on/off appropriately.
+    * [X] Toggle child subitems only if current line is list item
+    * [X] Parent list item should be toggled depending on it's child items.
+  * [X] Make numbered list items toggleable too
+  * [X] Add highlighting to list item boxes
+  * [X] Add [ ] to the next created with o, O and <CR> list item.
 
 
 Pressing <C-Space> on the first list item will toggle it and all of it's child
 items:
 = Toggleable list of todo items =
   * [ ] Toggle list item on/off.
-    * [ ] Simple toggling between [ ] and [x].
+    * [ ] Simple toggling between [ ] and [X].
     * [ ] All list's subitems should be toggled on/off appropriately.
     * [ ] Toggle child subitems only if current line is list item
     * [ ] Parent list item should be toggled depending on it's child items.
-  * [x] Make numbered list items toggleable too
-  * [x] Add highlighting to list item boxes
-  * [x] Add [ ] to the next created with o, O and <CR> list item.
+  * [X] Make numbered list items toggleable too
+  * [X] Add highlighting to list item boxes
+  * [X] Add [ ] to the next created with o, O and <CR> list item.
 
 Pressing <C-Space> on the third list item will toggle it and all of it's
 parent items:
 = Toggleable list of todo items =
   * [.] Toggle list item on/off.
-    * [ ] Simple toggling between [ ] and [x].
-    * [x] All list's subitems should be toggled on/off appropriately.
+    * [ ] Simple toggling between [ ] and [X].
+    * [X] All list's subitems should be toggled on/off appropriately.
     * [ ] Toggle child subitems only if current line is list item
     * [ ] Parent list item should be toggled depending on it's child items.
   * [ ] Make numbered list items toggleable too
@@ -626,9 +626,9 @@ Parent items could be toggled by its child items. Symbol inside [ ] depends on
 percentage of toggled child items: >
     [ ] -- 0%
     [.] -- 1-33%
-    [:] -- 34-66%
-    [o] -- 67-99%
-    [x] -- 100%
+    [o] -- 34-66%
+    [O] -- 67-99%
+    [X] -- 100%
 
 
 ==============================================================================
@@ -803,11 +803,11 @@ Default: 0
 
 Checked list items could be highlighted with a color:
 
-  * [x] the whole line could be highlighted with the option set to 1.
+  * [X] the whole line could be highlighted with the option set to 1.
   * [ ] I wish vim could use strikethru.
 
 Value           Description~
-1               Highlight checked [x] check box with |group-name| "Comment".
+1               Highlight checked [X] check box with |group-name| "Comment".
 0               Don't.
 
 Default: 0
@@ -881,7 +881,7 @@ You can change it to a <space> for example: >
 ------------------------------------------------------------------------------
 *g:vimwiki_badsyms*
 
-Consider you do not like spaces or in filenames (as some vimwiki users do).
+Consider you do not like spaces in filenames (as some vimwiki users do).
 In that case you can set up bad symbols that would be converted to
 |g:vimwiki_stripsym|: >
     let g:vimwiki_badsyms = ' '
@@ -890,6 +890,15 @@ Now files for all [[links with spaces]] would be created like
 'links_with_spaces'.
 
 This option is a complement one to |g:vimwiki_stripsym|.
+
+------------------------------------------------------------------------------
+*g:vimwiki_listsyms*
+
+String of 5 symbols for list items with checkboxes.
+Default value is ' .oOX'.
+
+g:vimwiki_listsyms[0] is for 0% done items.
+g:vimwiki_listsyms[4] is for 100% done items.
 
 ------------------------------------------------------------------------------
 *g:vimwiki_use_mouse*
@@ -991,6 +1000,11 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 ==============================================================================
 11. Changelog                                              *vimwiki-changelog*
 
+0.9.7
+    * NEW: Default checkbox symbols are changed to [ ], [.], [o], [O], [X].
+      You can change them using |g:vimwiki-listsyms| variable. TODO: Html
+      export isn't ready yet.
+
 0.9.6
     * NEW: You can have multiline list items. See |vimwiki-syntax-lists|.
     * NEW: You can ignore newlines in multiline list items when do export to
@@ -1020,7 +1034,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       wikies in dirs that are not listed in |g:vimwiki_list|.
     * NEW: Added |g:vimwiki_hl_headers| to highlight headers with different
       predefined colors.
-    * NEW: Checked [x] items are not highlighted with Comment syntax group by
+    * NEW: Checked [X] items are not highlighted with Comment syntax group by
       default. Use |g:vimwiki_hl_cb_checked| to turn it on.
     * NEW: Added new syntax for links: [[link address][link description]].
     * NEW: Added <C-@> allias of <C-Space> mapping for *nix systems.

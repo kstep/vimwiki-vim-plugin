@@ -21,7 +21,8 @@ import mkvimball as vba
 
 
 # Settings
-VERSION = "0_9_6"
+# TODO: get version from the vimwiki help file
+VERSION = "0_9_7"
 VIMF_DIR = os.path.expanduser("~/vimfiles/")
 DEPLOY_DIR = os.path.expanduser("~/work/vimwiki/deploy/")
 TRUNK_DIR = os.path.expanduser("~/work/vimwiki/src/")
