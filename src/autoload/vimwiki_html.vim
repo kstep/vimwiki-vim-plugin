@@ -263,7 +263,7 @@ function! s:process_tag_list(line, lists) "{{{
     let st_tag = a:st_tag
     let en_tag = a:en_tag
     " apply strikethrough for checked list items
-    if a:line =~ '^\s\+\%(\*\|#\)\s*\[x]'
+    if a:line =~ '^\s\+\%(\*\|#\)\s*\['.g:vimwiki_listsyms[4].']'
       let st_tag = a:st_tag.'<span class="strike">'
       let en_tag = '</span>'.a:en_tag
     endif
@@ -276,7 +276,7 @@ function! s:process_tag_list(line, lists) "{{{
 
     let chk = matchlist(a:line, a:rx_list)
     if len(chk) > 0
-      if chk[1] == 'x'
+      if chk[1] == g:vimwiki_listsyms[4]
         let st_tag .= '<input type="checkbox" checked />'
       else
         let st_tag .= '<input type="checkbox" />'

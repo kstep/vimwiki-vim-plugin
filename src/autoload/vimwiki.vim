@@ -311,17 +311,17 @@ function! vimwiki#WikiHighlightWords() "{{{
   for word in g:vimwiki_wikiwords
     if g:vimwiki_camel_case && 
           \ word =~ g:vimwiki_word1 && !s:is_link_to_non_wiki_file(word)
-      execute 'syntax match wikiWord /\%(^\|[^!]\)\zs\<'.word.'\>/'
+      execute 'syntax match VimwikiWord /\%(^\|[^!]\)\zs\<'.word.'\>/'
     endif
-    execute 'syntax match wikiWord /\[\[\<'.
+    execute 'syntax match VimwikiWord /\[\[\<'.
           \ vimwiki#unsafe_link(word).
           \ '\>\%(|\+.*\)*\]\]/'
-    execute 'syntax match wikiWord /\[\[\<'.
+    execute 'syntax match VimwikiWord /\[\[\<'.
           \ vimwiki#unsafe_link(word).
           \ '\>\]\[.\+\]\]/'
   endfor
-  execute 'syntax match wikiWord /\[\[.\+\.\%(jpg\|png\|gif\)\%(|\+.*\)*\]\]/'
-  execute 'syntax match wikiWord /\[\[.\+\.\%(jpg\|png\|gif\)\]\[.\+\]\]/'
+  execute 'syntax match VimwikiWord /\[\[.\+\.\%(jpg\|png\|gif\)\%(|\+.*\)*\]\]/'
+  execute 'syntax match VimwikiWord /\[\[.\+\.\%(jpg\|png\|gif\)\]\[.\+\]\]/'
 endfunction
 " }}}
 

@@ -373,12 +373,12 @@ By default all headers are highlighted using |hl-Title| highlight group.
 
 == Header level 2 ==~
 You can set up different colors for each header level: >
-  :hi wikiHeader1 guifg=#FF0000
-  :hi wikiHeader2 guifg=#00FF00
-  :hi wikiHeader3 guifg=#0000FF
-  :hi wikiHeader4 guifg=#FF00FF
-  :hi wikiHeader5 guifg=#00FFFF
-  :hi wikiHeader6 guifg=#FFFF00
+  :hi VimwikiHeader1 guifg=#FF0000
+  :hi VimwikiHeader2 guifg=#00FF00
+  :hi VimwikiHeader3 guifg=#0000FF
+  :hi VimwikiHeader4 guifg=#FF00FF
+  :hi VimwikiHeader5 guifg=#00FFFF
+  :hi VimwikiHeader6 guifg=#FFFF00
 Set up colors for all 6 header levels or none at all.
 
 === Header level 3 ===~
@@ -792,8 +792,8 @@ Highlight headers with =Reddish=, ==Greenish==, ===Blueish=== colors.
 
 Value           Description~
 1               Use predefined colors to highlight different header levels.
-0               Use |hl-Title| or  wikiHeader1-wikiHeader6 (if defined in a
-                colorscheme)
+0               Use |hl-Title| or  VimwikiHeader1-VimwikiHeader6 (if defined
+                in a colorscheme)
 
 Default: 0
 
@@ -985,7 +985,7 @@ I live in Moscow and you may believe me -- there are no polar bears (no brown
 too) here in the streets.
 
 I do not do programming for a living. So don't blame me for an ugly
-ineffective code.
+ineffective code. Improvements are welcome.
 
 Many thanks to all of you for voting vimwiki up on www.vim.org. I do vimwiki
 in my spare time I could use to dance argentine tango with beautiful women.
@@ -1002,8 +1002,9 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 
 0.9.7
     * NEW: Default checkbox symbols are changed to [ ], [.], [o], [O], [X].
-      You can change them using |g:vimwiki-listsyms| variable. TODO: Html
-      export isn't ready yet.
+      You can change them using |g:vimwiki-listsyms| variable.
+    * NEW: Color group names are renamed from wikiBold, wikiItalic, etc to
+      VimwikiBold, VimwikiItalic, etc.
 
 0.9.6
     * NEW: You can have multiline list items. See |vimwiki-syntax-lists|.

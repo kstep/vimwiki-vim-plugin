@@ -92,19 +92,19 @@ function! s:setup_colors()"{{{
   endif
 
   if &background == 'light'
-    hi def wikiHeader1 guibg=bg guifg=#e03010 gui=bold ctermfg=Magenta
-    hi def wikiHeader2 guibg=bg guifg=#309010 gui=bold ctermfg=Magenta
-    hi def wikiHeader3 guibg=bg guifg=#1030a0 gui=bold ctermfg=Blue
-    hi def wikiHeader4 guibg=bg guifg=#103040 gui=bold ctermfg=Black
-    hi def wikiHeader5 guibg=bg guifg=#001020 gui=bold ctermfg=Black
-    hi def wikiHeader6 guibg=bg guifg=#000000 gui=bold ctermfg=Black
+    hi def VimwikiHeader1 guibg=bg guifg=#e03010 gui=bold ctermfg=Magenta
+    hi def VimwikiHeader2 guibg=bg guifg=#309010 gui=bold ctermfg=Magenta
+    hi def VimwikiHeader3 guibg=bg guifg=#1030a0 gui=bold ctermfg=Blue
+    hi def VimwikiHeader4 guibg=bg guifg=#103040 gui=bold ctermfg=Black
+    hi def VimwikiHeader5 guibg=bg guifg=#001020 gui=bold ctermfg=Black
+    hi def VimwikiHeader6 guibg=bg guifg=#000000 gui=bold ctermfg=Black
   else
-    hi def wikiHeader1 guibg=bg guifg=#ff8090 gui=bold ctermfg=Magenta
-    hi def wikiHeader2 guibg=bg guifg=#20f040 gui=bold ctermfg=Green
-    hi def wikiHeader3 guibg=bg guifg=#6090f0 gui=bold ctermfg=Yellow
-    hi def wikiHeader4 guibg=bg guifg=#c0c0f0 gui=bold ctermfg=White
-    hi def wikiHeader5 guibg=bg guifg=#e0e0f0 gui=bold ctermfg=White
-    hi def wikiHeader6 guibg=bg guifg=#f0f0f0 gui=bold ctermfg=White
+    hi def VimwikiHeader1 guibg=bg guifg=#ff8090 gui=bold ctermfg=Magenta
+    hi def VimwikiHeader2 guibg=bg guifg=#20f040 gui=bold ctermfg=Green
+    hi def VimwikiHeader3 guibg=bg guifg=#6090f0 gui=bold ctermfg=Yellow
+    hi def VimwikiHeader4 guibg=bg guifg=#c0c0f0 gui=bold ctermfg=White
+    hi def VimwikiHeader5 guibg=bg guifg=#e0e0f0 gui=bold ctermfg=White
+    hi def VimwikiHeader6 guibg=bg guifg=#f0f0f0 gui=bold ctermfg=White
   endif
 endfunction"}}}
 
@@ -237,7 +237,7 @@ augroup vimwiki
     execute 'autocmd BufEnter *'.ext.' call s:setup_buffer_enter()'
     execute 'autocmd BufLeave,BufHidden *'.ext.' call s:setup_buffer_leave()'
 
-    " ColorScheme could have or could have not a wikiHeader1..wikiHeader6
+    " ColorScheme could have or could have not a VimwikiHeader1..VimwikiHeader6
     " highlight groups. We need to refresh syntax after colorscheme change.
     execute 'autocmd ColorScheme *'.ext.' call s:setup_colors() | set syntax=vimwiki'
   endfor
