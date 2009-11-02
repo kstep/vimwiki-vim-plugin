@@ -32,13 +32,17 @@ setlocal isfname-=[,]
 " COMMENTS: autocreate list items {{{
 " for list items, and list items with checkboxes
 if VimwikiGet('syntax') == 'default'
-  setl comments=b:\ *\ [\ ],b:\ *[\ ],b:\ *\ [],b:\ *[],b:\ *\ [x],b:\ *[x]
-  setl comments+=b:\ #\ [\ ],b:\ #[\ ],b:\ #\ [],b:\ #[],b:\ #\ [x],b:\ #[x]
+  exe 'setl comments=b:\ *\ ['.escape(g:vimwiki_listsyms[0], ' ').
+        \ '],b:\ *\ ['.g:vimwiki_listsyms[4].']'
+  exe 'setl comments+=b:\ #\ ['.escape(g:vimwiki_listsyms[0], ' ').
+        \ '],b:\ #\ ['.g:vimwiki_listsyms[4].']'
   setl comments+=b:\ *,b:\ #
   setl formatlistpat=^\\s\\+[*#]\\s*
 else
-  setl comments=n:*\ [\ ],n:*[\ ],n:*\ [],n:*[],n:*\ [x],n:*[x]
-  setl comments+=n:#\ [\ ],n:#[\ ],n:#\ [],n:#[],n:#\ [x],n:#[x]
+  exe 'setl comments=n:*\ ['.escape(g:vimwiki_listsyms[0], ' ').
+        \ '],n:*\ ['.g:vimwiki_listsyms[4].']'
+  exe 'setl comments+=n:#\ ['.escape(g:vimwiki_listsyms[0], ' ').
+        \ '],n:#\ ['.g:vimwiki_listsyms[4].']'
   setl comments+=n:*,n:#
 endif
 setlocal formatoptions=tnro
