@@ -154,6 +154,24 @@ endfunction "}}}
 
 " }}}
 
+" CALLBACK function "{{{
+" User can redefine it.
+if !exists("*VimwikiWeblinkHandler") "{{{
+  function VimwikiWeblinkHandler(weblink) 
+    for browser in g:vimwiki_browsers
+      if executable(browser)
+        if has("win32")
+          execute '!start "'.browser.'" ' . a:weblink
+        else
+          execute '!'.browser.' ' . a:weblink
+        endif
+        return
+      endif
+    endfor
+  endfunction 
+endif "}}}
+" CALLBACK }}}
+
 " DEFAULT wiki {{{
 let s:vimwiki_defaults = {}
 let s:vimwiki_defaults.path = '~/vimwiki/'
@@ -169,6 +187,7 @@ let s:vimwiki_defaults.html_footer = ''
 "}}}
 
 " DEFAULT options {{{
+call s:default('list', [s:vimwiki_defaults])
 if &encoding == 'utf-8'
   call s:default('upper', 'A-Z\u0410-\u042f')
   call s:default('lower', 'a-z\u0430-\u044f')
@@ -185,14 +204,31 @@ call s:default('folding', 1)
 call s:default('fold_empty_lines', 0)
 call s:default('fold_lists', 1)
 call s:default('menu', 'Vimwiki')
-call s:default('current_idx', 0)
-call s:default('list', [s:vimwiki_defaults])
 call s:default('global_ext', 1)
 call s:default('hl_headers', 0)
 call s:default('hl_cb_checked', 0)
 call s:default('camel_case', 1)
 call s:default('list_ignore_newline', 1)
 call s:default('listsyms', ' .oOX')
+if has("win32")
+  call s:default('browsers', 
+        \ [
+        \  expand('~').'\Local Settings\Application Data\Google\Chrome\Application\chrome.exe',
+        \  'C:\Program Files\Firefox\firefox.exe',
+        \  'C:\Program Files\Opera\opera.exe',
+        \  'C:\Program Files\Internet Explorer\iexplore.exe',
+        \ ])
+else
+  "XXX: I am sure this doesn't work. Ask for a help.
+  call s:default('browsers', 
+        \ [
+        \  'firefox',
+        \  'opera',
+        \  'konqueror',
+        \ ])
+endif
+
+call s:default('current_idx', 0)
 
 let upp = g:vimwiki_upper
 let low = g:vimwiki_lower

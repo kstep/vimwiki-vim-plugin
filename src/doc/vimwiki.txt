@@ -968,6 +968,13 @@ Value           Description~
 
 Default: 1
 
+------------------------------------------------------------------------------
+*g:vimwiki_browsers* *VimwikiWeblinkHandler*
+
+TODO: add description here.
+There is a list of browsers
+g:vimwiki_
+
 
 ==============================================================================
 9. Help                                                         *vimwiki-help*
@@ -1005,6 +1012,9 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       You can change them using |g:vimwiki-listsyms| variable.
     * NEW: Color group names are renamed from wikiBold, wikiItalic, etc to
       VimwikiBold, VimwikiItalic, etc.
+    * NEW: Open external links in a browser. There are default browsers
+      defined in |g:vimwiki_browsers| list. You can also redefine
+      |VimwikiWeblinkHandler| function to open weblinks in other programs.
 
 0.9.6
     * NEW: You can have multiline list items. See |vimwiki-syntax-lists|.

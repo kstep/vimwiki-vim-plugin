@@ -339,12 +339,12 @@ endfunction
 "}}}
 " WIKI functions {{{
 function! vimwiki#WikiNextWord() "{{{
-  call s:search_word(g:vimwiki_rxWikiWord, '')
+  call s:search_word(g:vimwiki_rxWikiWord.'\|'.g:vimwiki_rxWeblink, '')
 endfunction
 " }}}
 
 function! vimwiki#WikiPrevWord() "{{{
-  call s:search_word(g:vimwiki_rxWikiWord, 'b')
+  call s:search_word(g:vimwiki_rxWikiWord.'\|'.g:vimwiki_rxWeblink, 'b')
 endfunction
 " }}}
 
@@ -356,17 +356,23 @@ function! vimwiki#WikiFollowWord(split) "{{{
   else
     let cmd = ":e "
   endif
+
   let word = s:strip_word(s:get_word_at_cursor(g:vimwiki_rxWikiWord))
   if word == ""
-    execute "normal! \n"
+    let weblink = s:strip_word(s:get_word_at_cursor(g:vimwiki_rxWeblink))
+    if weblink != ""
+      call VimwikiWeblinkHandler(weblink)
+    else
+      execute "normal! \n"
+    endif
     return
   endif
+
   if s:is_link_to_non_wiki_file(word)
     call s:edit_file(cmd, word)
   else
     let vimwiki_prev_word = [expand('%:p'), getpos('.')]
     let subdir = vimwiki#current_subdir()
-    echomsg VimwikiGet('path').subdir.word.VimwikiGet('ext')
     call s:edit_file(cmd, VimwikiGet('path').subdir.word.VimwikiGet('ext'))
     let b:vimwiki_prev_word = vimwiki_prev_word
   endif

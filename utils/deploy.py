@@ -21,7 +21,6 @@ import mkvimball as vba
 
 
 # Settings
-# TODO: get version from the vimwiki help file
 VIMF_DIR = os.path.expanduser("~/vimfiles/")
 DEPLOY_DIR = os.path.expanduser("~/work/vimwiki/deploy/")
 SRC_DIR = os.path.expanduser("~/work/vimwiki/src/")
@@ -67,10 +66,10 @@ def make_vba_file(src_dir, vba_file_name):
 def set_ff_unix(vw_file):
     """Set unix line endings."""
     fname_tmp = vw_file + ".#tmp#"
-    with open(fname_tmp, "w", newline='\n') as file_to:
-        with open(vw_file, "r") as file_from:
-            for line in file_from:
-                file_to.write(line.rstrip('\r\n') + '\n')
+    with open(fname_tmp, "w", newline='\n') as file_to, \
+            open(vw_file, "r") as file_from:
+        for line in file_from:
+            file_to.write(line.rstrip('\r\n') + '\n')
     os.remove(vw_file)
     os.rename(fname_tmp, vw_file)
 
