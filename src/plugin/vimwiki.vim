@@ -225,7 +225,7 @@ if has("win32")
         \ [
         \  expand('~').'\Local Settings\Application Data\Google\Chrome\Application\chrome.exe',
         \  'C:\Program Files\Opera\opera.exe',
-        \  'C:\Program Files\Firefox\firefox.exe',
+        \  'C:\Program Files\Mozilla Firefox\firefox.exe',
         \  'C:\Program Files\Internet Explorer\iexplore.exe',
         \ ])
 else
