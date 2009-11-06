@@ -552,7 +552,7 @@ function! vimwiki#TO_header(inner) "{{{
     return
   endif
   let level = vimwiki#count_first_sym(getline(line('.')))
-  normal V
+  normal! V
   if search('^\(=\{1,'.level.'}\)[^=]\+\1\s*$', 'W')
     call cursor(line('.') - 1, 0)
   else

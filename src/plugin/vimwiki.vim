@@ -84,6 +84,16 @@ function! s:setup_buffer_enter() "{{{
   else
     setlocal syntax=vimwiki
   endif
+
+  " Settings foldmethod, foldexpr and foldtext are local to window. Thus in a
+  " new tab with the same buffer folding is reset to vim defaults. So we
+  " insist vimwiki folding here.
+  " TODO: remove the same from ftplugin.
+  if g:vimwiki_folding == 1 && &fdm != 'expr'
+    setlocal fdm=expr
+    setlocal foldexpr=VimwikiFoldLevel(v:lnum)
+    setlocal foldtext=VimwikiFoldText()
+  endif
 endfunction "}}}
 
 function! s:setup_colors()"{{{
@@ -214,16 +224,15 @@ if has("win32")
   call s:default('browsers', 
         \ [
         \  expand('~').'\Local Settings\Application Data\Google\Chrome\Application\chrome.exe',
-        \  'C:\Program Files\Firefox\firefox.exe',
         \  'C:\Program Files\Opera\opera.exe',
+        \  'C:\Program Files\Firefox\firefox.exe',
         \  'C:\Program Files\Internet Explorer\iexplore.exe',
         \ ])
 else
-  "XXX: I am sure this doesn't work. Ask for a help.
   call s:default('browsers', 
         \ [
-        \  'firefox',
         \  'opera',
+        \  'firefox',
         \  'konqueror',
         \ ])
 endif

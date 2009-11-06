@@ -51,8 +51,9 @@ setlocal formatoptions=tnro
 " FOLDING for headers and list items using expr fold method. {{{
 if g:vimwiki_folding == 1
   setlocal fdm=expr
+  setlocal foldexpr=VimwikiFoldLevel(v:lnum)
+  setlocal foldtext=VimwikiFoldText()
 endif
-setlocal foldexpr=VimwikiFoldLevel(v:lnum)
 
 function! VimwikiFoldLevel(lnum) "{{{
   let line = getline(a:lnum)
@@ -171,7 +172,6 @@ function! s:get_li_level_last(lnum) "{{{
   endif
 endfunction "}}}
 
-setlocal foldtext=VimwikiFoldText()
 function! VimwikiFoldText() "{{{
   let line = getline(v:foldstart)
   return line.' ['.(v:foldend - v:foldstart).'] '

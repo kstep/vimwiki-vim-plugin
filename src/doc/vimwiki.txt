@@ -971,9 +971,22 @@ Default: 1
 ------------------------------------------------------------------------------
 *g:vimwiki_browsers* *VimwikiWeblinkHandler*
 
-TODO: add description here.
-There is a list of browsers
-g:vimwiki_
+You can open external weblinks in a webbrowser. Webbrowsers are listed in
+|g:vimwiki_browsers|.
+
+For win32 it is: chrome, opera, firefox and explorer.
+For other OSes it is: opera, firefox and konqueror.
+
+The first available browser from the list is used to open weblink.
+If you have opera and firefox and want weblinks to be opened in the latter
+just: >
+ let g:vimwiki_browsers=['C:\Program Files\Firefox\firefox.exe']
+
+or redefine VimwikiWeblinkHandler function: >
+  function! VimwikiWeblinkHandler(weblink) 
+    let browser = 'C:\Program Files\Firefox\firefox.exe'
+    execute '!start "'.browser.'" ' . a:weblink
+  endfunction 
 
 
 ==============================================================================
@@ -1015,6 +1028,8 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * NEW: Open external links in a browser. There are default browsers
       defined in |g:vimwiki_browsers| list. You can also redefine
       |VimwikiWeblinkHandler| function to open weblinks in other programs.
+    * FIX: Folding settings are reset to vim defaults in a new tab (think of
+      \wt) so you cannot hide things in folds.
 
 0.9.6
     * NEW: You can have multiline list items. See |vimwiki-syntax-lists|.
