@@ -61,7 +61,7 @@ function! vimwiki#current_subdir()"{{{
   return vimwiki#subdir(VimwikiGet('path'), expand('%:p'))
 endfunction"}}}
 
-function! s:msg(message) "{{{
+function! vimwiki#msg(message) "{{{
   echohl WarningMsg
   echomsg 'vimwiki: '.a:message
   echohl None
@@ -97,7 +97,7 @@ endfunction
 function! s:search_word(wikiRx, cmd) "{{{
   let match_line = search(a:wikiRx, 's'.a:cmd)
   if match_line == 0
-    call s:msg('WikiWord not found')
+    call vimwiki#msg('WikiWord not found')
   endif
 endfunction
 " }}}
@@ -420,7 +420,7 @@ function! vimwiki#WikiDeleteWord() "{{{
   try
     call delete(fname)
   catch /.*/
-    call s:msg('Cannot delete "'.expand('%:t:r').'"!')
+    call vimwiki#msg('Cannot delete "'.expand('%:t:r').'"!')
     return
   endtry
   execute "bdelete! ".escape(fname, " ")
@@ -439,7 +439,7 @@ function! vimwiki#WikiRenameWord() "{{{
 
   " there is no file (new one maybe)
   if glob(expand('%:p')) == ''
-    call s:msg('Cannot rename "'.expand('%:p').
+    call vimwiki#msg('Cannot rename "'.expand('%:p').
           \ '". It does not exist! (New file? Save it before renaming.)')
     return
   endif
@@ -453,7 +453,7 @@ function! vimwiki#WikiRenameWord() "{{{
 
   if new_link =~ '[/\\]'
     " It is actually doable but I do not have free time to do it.
-    call s:msg('Cannot rename to a filename with path!')
+    call vimwiki#msg('Cannot rename to a filename with path!')
     return
   endif
 
@@ -461,11 +461,11 @@ function! vimwiki#WikiRenameWord() "{{{
 
   " check new_fname - it should be 'good', not empty
   if substitute(new_link, '\s', '', 'g') == ''
-    call s:msg('Cannot rename to an empty filename!')
+    call vimwiki#msg('Cannot rename to an empty filename!')
     return
   endif
   if s:is_link_to_non_wiki_file(new_link)
-    call s:msg('Cannot rename to a filename with extension (ie .txt .html)!')
+    call vimwiki#msg('Cannot rename to a filename with extension (ie .txt .html)!')
     return
   endif
 
@@ -475,7 +475,7 @@ function! vimwiki#WikiRenameWord() "{{{
   " do not rename if word with such name exists
   let fname = glob(new_fname)
   if fname != ''
-    call s:msg('Cannot rename to "'.new_fname.
+    call vimwiki#msg('Cannot rename to "'.new_fname.
           \ '". File with that name exist!')
     return
   endif
@@ -487,7 +487,7 @@ function! vimwiki#WikiRenameWord() "{{{
       throw "Cannot rename!"
     end
   catch /.*/
-    call s:msg('Cannot rename "'.expand('%:t:r').'" to "'.new_fname.'"')
+    call vimwiki#msg('Cannot rename "'.expand('%:t:r').'" to "'.new_fname.'"')
     return
   endtry
 

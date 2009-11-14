@@ -112,8 +112,8 @@ hi def link VimwikiNoExistsWord Error
 
 hi def link VimwikiPre PreProc
 hi def link VimwikiLink Underlined
-hi def link VimwikiList Statement
-" hi def link VimwikiList Identifier
+" hi def link VimwikiList Statement
+hi def link VimwikiList Identifier
 hi def link VimwikiCheckBox VimwikiList
 hi def link VimwikiCheckBoxDone Comment
 hi def link VimwikiTable PreProc
