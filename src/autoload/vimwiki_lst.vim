@@ -69,7 +69,7 @@ function! s:prev_list_item(lnum) "{{{
   return 0
 endfunction "}}}
 
-" Get next list item.
+" Get next list item in the list.
 " Returns: line number or 0.
 function! s:next_list_item(lnum) "{{{
   let c_lnum = a:lnum + 1
@@ -80,6 +80,20 @@ function! s:next_list_item(lnum) "{{{
     endif
     if line =~ '^\s*$'
       return 0
+    endif
+    let c_lnum += 1
+  endwhile
+  return 0
+endfunction "}}}
+
+" Find next list item in the buffer.
+" Returns: line number or 0.
+function! s:find_next_list_item(lnum) "{{{
+  let c_lnum = a:lnum + 1
+  while c_lnum <= line('$')
+    let line = getline(c_lnum)
+    if line =~ s:rx_list_item()
+      return c_lnum
     endif
     let c_lnum += 1
   endwhile
@@ -265,18 +279,42 @@ function! s:TLI_switch_parent_state(lnum) "{{{
   endwhile
 endfunction "}}}
 
+function! s:TLI_toggle(lnum) "{{{
+  if !s:TLI_create_checkbox(a:lnum)
+    call s:TLI_switch_child_state(a:lnum)
+  endif
+  call s:TLI_switch_parent_state(a:lnum)
+endfunction "}}}
+
 " Script functions }}}
 
 " Toggle list item between [ ] and [x]
-function! vimwiki_lst#ToggleListItem() "{{{
-  let current_lnum = line('.')
-  let li_lnum = s:is_list_item(current_lnum)
+function! vimwiki_lst#ToggleListItem(line1, line2) "{{{
+  let line1 = a:line1
+  let line2 = a:line2
 
-  if !s:TLI_create_checkbox(li_lnum)
-    call s:TLI_switch_child_state(li_lnum)
+  if line1 != line2 && !s:is_list_item(line1)
+    let line1 = s:find_next_list_item(line1)
   endif
 
-  call s:TLI_switch_parent_state(li_lnum)
+  let c_lnum = line1
+  while c_lnum != 0 && c_lnum <= line2
+    let li_lnum = s:is_list_item(c_lnum)
+
+    if li_lnum
+      let li_level = s:get_level(li_lnum)
+      if c_lnum == line1
+        let start_li_level = li_level
+      endif
+
+      if li_level <= start_li_level
+        call s:TLI_toggle(li_lnum)
+        let start_li_level = li_level
+      endif
+    endif
+
+    let c_lnum = s:find_next_list_item(c_lnum)
+  endwhile
 
 endfunction "}}}
 

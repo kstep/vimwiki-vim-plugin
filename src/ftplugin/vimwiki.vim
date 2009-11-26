@@ -195,7 +195,7 @@ command! -buffer VimwikiGoBackWord call vimwiki#WikiGoBackWord()
 command! -buffer VimwikiSplitWord call vimwiki#WikiFollowWord('split')
 command! -buffer VimwikiVSplitWord call vimwiki#WikiFollowWord('vsplit')
 
-command! -buffer VimwikiToggleListItem call vimwiki_lst#ToggleListItem()
+command! -buffer -range VimwikiToggleListItem call vimwiki_lst#ToggleListItem(<line1>, <line2>)
 " COMMANDS }}}
 
 " KEYBINDINGS {{{
@@ -258,6 +258,7 @@ noremap <silent><script><buffer>
 
 if !hasmapto('<Plug>VimwikiToggleListItem')
   nmap <silent><buffer> <C-Space> <Plug>VimwikiToggleListItem
+  vmap <silent><buffer> <C-Space> <Plug>VimwikiToggleListItem
   if has("unix")
     nmap <silent><buffer> <C-@> <Plug>VimwikiToggleListItem
   endif

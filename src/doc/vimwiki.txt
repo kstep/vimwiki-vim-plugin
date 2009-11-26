@@ -623,13 +623,14 @@ parent items:
   * [ ] Add [ ] to the next created with o, O and <CR> list item.
 
 Parent items could be toggled by its child items. Symbol inside [ ] depends on
-percentage of toggled child items: >
+percentage of toggled child items(see also |g:vimwiki_listsyms|): >
     [ ] -- 0%
     [.] -- 1-33%
     [o] -- 34-66%
     [O] -- 67-99%
     [X] -- 100%
 
+It is possible to toggle several list items using visual mode.
 
 ==============================================================================
 8. Options                                                   *vimwiki-options*
@@ -1028,6 +1029,8 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * NEW: Open external links in a browser. There are default browsers
       defined in |g:vimwiki_browsers| list. You can also redefine
       |VimwikiWeblinkHandler| function to open weblinks in other programs.
+    * NEW: Issue 25: Toggle the states of multiple TODO list items at a time
+      (in VISUAL and in VISUAL LINE modes)
     * FIX: Folding settings are reset to vim defaults in a new tab (think of
       \wt) so you cannot hide things in folds.
 
