@@ -524,6 +524,9 @@ Result of HTML export: >
 This might be useful for coloring some programming code with external js tools
 like google syntax highlighter.
 
+You can setup vimwiki to highlight code snippets in preformatted text.
+See |vimwiki-option-nested_syntaxes|
+
 ------------------------------------------------------------------------------
 5.8. Blockquotes                                  *vimwiki-syntax-blockquotes*
 
@@ -659,6 +662,9 @@ Empty |Dictionary| in the g:vimwiki_list is the wiki with default options: >
             \ {'path': '~/my_docs/', 'ext': '.mdox'}]
 
 <
+Per wiki options
+----------------
+
 *vimwiki-option-path*
 Key             Default value~
 path            ~/vimwiki/
@@ -786,6 +792,34 @@ it set maxhi to 0: >
 
 This disables filesystem checks for WikiWords.
 
+*vimwiki-option-nested_syntaxes*
+Key             Default value     Values~
+nested_syntaxes []                list of filetypes
+Description~
+You can add list of filetypes to be highlighted inside preformatted text.
+For example the following set: >
+  let wiki = {}
+  let wiki.path = '~/my_site/'
+  let wiki.nested_syntaxes = ['python', 'c++', 'ruby']
+  let vimwiki_list = [wiki]
+
+would give you python, c++ or ruby highlighting in: >
+ {{{class="brush: python"
+ for i in range(1, 5):
+     print(i)
+ }}}
+
+ {{{class="brush: c++"
+ #include "helloworld.h"
+ int helloworld()
+ {
+    printf("hello world");
+ }
+ }}}
+
+
+
+Global options
 ------------------------------------------------------------------------------
 *g:vimwiki_hl_headers*
 
@@ -1031,8 +1065,12 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       |VimwikiWeblinkHandler| function to open weblinks in other programs.
     * NEW: Issue 25: Toggle the states of multiple TODO list items at a time
       (in VISUAL and in VISUAL LINE modes)
+    * NEW: Issue 26: Highlight code snippets in vimwiki's pre. See
+      |vimwiki-option-nested_syntaxes|. Thanks kriomant.
     * FIX: Folding settings are reset to vim defaults in a new tab (think of
       \wt) so you cannot hide things in folds.
+    * FIX: https links in form of [https://hello.world.com] are not exported
+      into html. Thanks Saurabh Sarpal for the patch.
 
 0.9.6
     * NEW: You can have multiline list items. See |vimwiki-syntax-lists|.

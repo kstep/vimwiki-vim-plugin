@@ -90,6 +90,7 @@ else
   execute 'syntax match VimwikiHeader6 /'.g:vimwiki_rxH6.'/'
 endif
 
+" group names "{{{
 if !vimwiki#hl_exists("VimwikiHeader1")
   hi def link VimwikiHeader Title
 else
@@ -110,7 +111,7 @@ hi def link VimwikiCode PreProc
 hi def link VimwikiWord Underlined
 hi def link VimwikiNoExistsWord Error
 
-hi def link VimwikiPre PreProc
+hi def link VimwikiPre SpecialComment
 hi def link VimwikiLink Underlined
 hi def link VimwikiList Function
 hi def link VimwikiCheckBox VimwikiList
@@ -122,5 +123,25 @@ hi def link VimwikiSuperScript Number
 hi def link VimwikiSubScript Number
 hi def link VimwikiTodo Todo
 hi def link VimwikiComment Comment
+"}}}
 
 let b:current_syntax="vimwiki"
+
+" EMBEDDED syntax setup "{{{
+let nested = VimwikiGet('nested_syntaxes')
+if !empty(nested)
+  " Syntax highlighter -> Vim file type language name diffs 
+  let syn_diffs = {
+        \ 'cpp': 'c++',
+        \ 'cs': 'c#',
+        \}
+
+  for ctx in nested
+    let hl_ctx = get(syn_diffs, ctx, ctx)
+    call vimwiki#nested_syntax(ctx, 
+          \'{{{class=\"brush: '
+          \.hl_ctx.'\"',
+          \'}}}', 'VimwikiPre')
+  endfor
+endif
+"}}}

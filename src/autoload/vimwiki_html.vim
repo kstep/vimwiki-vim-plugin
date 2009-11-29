@@ -32,7 +32,7 @@ function! s:remove_blank_lines(lines) " {{{
 endfunction "}}}
 
 function! s:is_web_link(lnk) "{{{
-  if a:lnk =~ '^\%(http://\|www.\|ftp://\)'
+  if a:lnk =~ '^\%(https://\|http://\|www.\|ftp://\)'
     return 1
   endif
   return 0
