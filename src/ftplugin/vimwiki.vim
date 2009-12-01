@@ -179,6 +179,23 @@ endfunction "}}}
 
 " FOLDING }}}
 
+" FORMAT expression "{{{
+setlocal formatexpr=VimwikiFormatExpr()
+function! VimwikiFormatExpr()
+    if mode() =~# '[iR]'
+        return 1
+    endif
+    exec v:lnum. "mark ["
+    exec (v:lnum + v:count - 1). "mark ]"
+    '[,']s/^=.*=\s*$/&\r/
+    setlocal fex=
+    normal! '[gq']
+    setlocal fex=VimwikiFormatExpr()
+    '[,']s/^=.*=\s*\zs\n$//
+    return
+endfunction
+"}}}
+
 " COMMANDS {{{
 command! -buffer Vimwiki2HTML
       \ call vimwiki_html#Wiki2HTML(expand(VimwikiGet('path_html')),

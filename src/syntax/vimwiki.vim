@@ -130,18 +130,11 @@ let b:current_syntax="vimwiki"
 " EMBEDDED syntax setup "{{{
 let nested = VimwikiGet('nested_syntaxes')
 if !empty(nested)
-  " Syntax highlighter -> Vim file type language name diffs 
-  let syn_diffs = {
-        \ 'cpp': 'c++',
-        \ 'cs': 'c#',
-        \}
-
-  for ctx in nested
-    let hl_ctx = get(syn_diffs, ctx, ctx)
-    call vimwiki#nested_syntax(ctx, 
-          \'{{{class=\"brush: '
-          \.hl_ctx.'\"',
-          \'}}}', 'VimwikiPre')
+  for [hl_syntax, vim_syntax] in items(nested)
+    call vimwiki#nested_syntax(vim_syntax, 
+          \ '^{{{\%(.*[[:blank:][:punct:]]\)\?'.
+          \ hl_syntax.'\%([[:blank:][:punct:]].*\)\?',
+          \ '^}}}', 'VimwikiPre')
   endfor
 endif
 "}}}

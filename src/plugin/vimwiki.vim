@@ -194,7 +194,7 @@ let s:vimwiki_defaults.syntax = 'default'
 let s:vimwiki_defaults.gohome = 'split'
 let s:vimwiki_defaults.html_header = ''
 let s:vimwiki_defaults.html_footer = ''
-let s:vimwiki_defaults.nested_syntaxes = []
+let s:vimwiki_defaults.nested_syntaxes = {}
 "}}}
 
 " DEFAULT options {{{

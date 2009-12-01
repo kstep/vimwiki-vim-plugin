@@ -169,6 +169,17 @@ function! s:safe_html(line) "{{{
   return line
 endfunction "}}}
 
+function! s:delete_html_files(path) "{{{
+  let htmlfiles = split(glob(a:path.'**/*.html'), '\n')
+  for fname in htmlfiles
+    try
+      call delete(fname)
+    catch
+      vimwiki#msg('Can not delete '.fname)
+    endtry
+  endfor
+endfunction "}}}
+
 function! s:remove_comments(lines) "{{{
   let res = []
   let multiline_comment = 0
@@ -229,6 +240,12 @@ function! s:subst_func(line, regexp, func) " {{{
   endfor
   return res_line
 endfunction " }}}
+
+function! s:save_vimwiki_buffer() "{{{
+  if &filetype == 'vimwiki'
+    silent update
+  endif
+endfunction "}}}
 
 "}}}
 
@@ -956,9 +973,18 @@ function! vimwiki_html#WikiAll2HTML(path) "{{{
     return
   endif
 
+  echomsg 'Saving vimwiki files...'
+  let cur_buf = bufname('%')
+  bufdo call s:save_vimwiki_buffer()
+  exe 'buffer '.cur_buf
+
   let path = expand(a:path)
   call vimwiki#mkdir(path)
 
+  echomsg 'Deleting old html files...'
+  call s:delete_html_files(path)
+
+  echomsg 'Converting wiki to html files...'
   let setting_more = &more
   setlocal nomore
 

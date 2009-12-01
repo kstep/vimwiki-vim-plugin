@@ -219,12 +219,12 @@ function! s:update_wiki_links_dir(dir, old_fname, new_fname) " {{{
 endfunction
 " }}}
 
-function! s:tail_name(fname)
+function! s:tail_name(fname) "{{{
   let result = substitute(a:fname, ":", "__colon__", "g")
   let result = fnamemodify(result, ":t:r")
   let result = substitute(result, "__colon__", ":", "g")
   return result
-endfunction
+endfunction "}}}
 
 function! s:update_wiki_links(old_fname, new_fname) " {{{
   let old_fname = s:tail_name(a:old_fname)

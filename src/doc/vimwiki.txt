@@ -582,7 +582,7 @@ NOTE: Whether you use default syntax, folding on list items should work
 properly only if all of them are indented using current |shiftwidth|.
 For MediaWiki * or # should be in the first column.
 
-To turn folding on/off check |g:vimwiki-folding|.
+To turn folding on/off check |g:vimwiki_folding|.
 
 ==============================================================================
 7. Todo lists                                             *vimwiki-todo-lists*
@@ -663,19 +663,22 @@ Empty |Dictionary| in the g:vimwiki_list is the wiki with default options: >
 
 <
 Per wiki options
-----------------
 
 *vimwiki-option-path*
+---------------------
 Key             Default value~
 path            ~/vimwiki/
+
 Description~
 Wiki files location: >
   let g:vimwiki_list = [{'path': '~/my_site/'}]
 <
 
 *vimwiki-option-path_html*
+--------------------------
 Key             Default value~
 path_html       ~/vimwiki_html/
+
 Description~
 HTML files converted from wiki files location: >
   let g:vimwiki_list = [{'path': '~/my_site/',
@@ -688,8 +691,10 @@ ie, path_html = '~/okidoki_html/'
 
 
 *vimwiki-option-index*
+----------------------
 Key             Default value~
 index           index
+
 Description~
 Name of wiki index file: >
   let g:vimwiki_list = [{'path': '~/my_site/', 'index': 'main'}]
@@ -698,8 +703,10 @@ NOTE: Do not add extension.
 
 
 *vimwiki-option-ext*
+--------------------
 Key             Default value~
 ext             .wiki
+
 Description~
 Extension of wiki files: >
   let g:vimwiki_list = [{'path': '~/my_site/',
@@ -707,8 +714,10 @@ Extension of wiki files: >
 
 <
 *vimwiki-option-syntax*
+-----------------------
 Key             Default value     Values~
 syntax          default           default, media
+
 Description~
 Wiki syntax.
 You can use different markup languages (currently default vimwiki and
@@ -719,8 +728,10 @@ To use MediaWiki's wiki markup: >
 <
 
 *vimwiki-option-html_header*
+----------------------------
 Key             Default value~
 html_header
+
 Description~
 Set up file name for html header template: >
   let g:vimwiki_list = [{'path': '~/my_site/',
@@ -744,8 +755,10 @@ where
 
 
 *vimwiki-option-html_footer*
+----------------------------
 Key             Default value~
 html_footer
+
 Description~
 Set up file name for html footer template: >
   let g:vimwiki_list = [{'path': '~/my_site/',
@@ -758,8 +771,10 @@ This footer.tpl could look like: >
 <
 
 *vimwiki-option-css_name*
+-------------------------
 Key             Default value~
 css_name        style.css
+
 Description~
 Set up css file name: >
   let g:vimwiki_list = [{'path': '~/my_pages/',
@@ -771,8 +786,10 @@ or even >
 <
 
 *vimwiki-option-gohome*
+-----------------------
 Key             Default value     Values~
 gohome          split             split, vsplit, tabe
+
 Description~
 This option controls the way |:VimwikiGoHome| command works.
 For instance you have 'No write since last change' buffer. After <Leader>ww
@@ -783,8 +800,10 @@ Ex: >
 <
 
 *vimwiki-option-maxhi*
+----------------------
 Key             Default value     Values~
 maxhi           1                 0, 1
+
 Description~
 Non-existent WikiWord highlighting could be quite slow and if you don't want
 it set maxhi to 0: >
@@ -792,18 +811,22 @@ it set maxhi to 0: >
 
 This disables filesystem checks for WikiWords.
 
+
 *vimwiki-option-nested_syntaxes*
+--------------------------------
 Key             Default value     Values~
-nested_syntaxes []                list of filetypes
+nested_syntaxes {}                pairs of highlight keyword and vim filetype
+
 Description~
-You can add list of filetypes to be highlighted inside preformatted text.
-For example the following set: >
+You can make preformatted text to be highlighted with a different syntaxes
+available for vim.
+For example the following setup: >
   let wiki = {}
   let wiki.path = '~/my_site/'
-  let wiki.nested_syntaxes = ['python', 'c++', 'ruby']
+  let wiki.nested_syntaxes = {'python': 'python', 'c++': 'cpp'}
   let vimwiki_list = [wiki]
 
-would give you python, c++ or ruby highlighting in: >
+would give you python and c++ highlighting in: >
  {{{class="brush: python"
  for i in range(1, 5):
      print(i)
@@ -815,6 +838,20 @@ would give you python, c++ or ruby highlighting in: >
  {
     printf("hello world");
  }
+ }}}
+
+or in: >
+ {{{c++
+ #include "helloworld.h"
+ int helloworld()
+ {
+    printf("hello world");
+ }
+ }}}
+
+ {{{python
+ for i in range(1, 5):
+     print(i)
  }}}
 
 
@@ -1067,6 +1104,9 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       (in VISUAL and in VISUAL LINE modes)
     * NEW: Issue 26: Highlight code snippets in vimwiki's pre. See
       |vimwiki-option-nested_syntaxes|. Thanks kriomant.
+    * NEW: Issue 27: Automatic garbage deletion from html directory.
+    * NEW: Save all open vimwiki buffers before export to html.
+    * NEW: gq do not kill =headers=. Thank Andy Wokula.
     * FIX: Folding settings are reset to vim defaults in a new tab (think of
       \wt) so you cannot hide things in folds.
     * FIX: https links in form of [https://hello.world.com] are not exported
