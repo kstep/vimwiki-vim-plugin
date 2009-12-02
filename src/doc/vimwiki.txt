@@ -255,6 +255,8 @@ You can 'vah' to select a header with its contents or 'dah' to delete it or
     Toggle list item on/off (checked/unchecked)
     See |vimwiki-todo-lists|.
 
+*:Search* /pattern/
+    Search for /pattern/ in current wiki.
 
 
 ==============================================================================
@@ -1106,7 +1108,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       |vimwiki-option-nested_syntaxes|. Thanks kriomant.
     * NEW: Issue 27: Automatic garbage deletion from html directory.
     * NEW: Save all open vimwiki buffers before export to html.
-    * NEW: gq do not kill =headers=. Thank Andy Wokula.
+    * NEW: Issue 29: Custom :Search command.
     * FIX: Folding settings are reset to vim defaults in a new tab (think of
       \wt) so you cannot hide things in folds.
     * FIX: https links in form of [https://hello.world.com] are not exported

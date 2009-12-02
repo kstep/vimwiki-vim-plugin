@@ -179,23 +179,6 @@ endfunction "}}}
 
 " FOLDING }}}
 
-" FORMAT expression "{{{
-setlocal formatexpr=VimwikiFormatExpr()
-function! VimwikiFormatExpr()
-    if mode() =~# '[iR]'
-        return 1
-    endif
-    exec v:lnum. "mark ["
-    exec (v:lnum + v:count - 1). "mark ]"
-    '[,']s/^=.*=\s*$/&\r/
-    setlocal fex=
-    normal! '[gq']
-    setlocal fex=VimwikiFormatExpr()
-    '[,']s/^=.*=\s*\zs\n$//
-    return
-endfunction
-"}}}
-
 " COMMANDS {{{
 command! -buffer Vimwiki2HTML
       \ call vimwiki_html#Wiki2HTML(expand(VimwikiGet('path_html')),
@@ -213,6 +196,10 @@ command! -buffer VimwikiSplitWord call vimwiki#WikiFollowWord('split')
 command! -buffer VimwikiVSplitWord call vimwiki#WikiFollowWord('vsplit')
 
 command! -buffer -range VimwikiToggleListItem call vimwiki_lst#ToggleListItem(<line1>, <line2>)
+
+exe 'command! -buffer -nargs=* Search vimgrep <args> '.
+      \ VimwikiGet('path').'**/*'.VimwikiGet('ext')
+
 " COMMANDS }}}
 
 " KEYBINDINGS {{{
