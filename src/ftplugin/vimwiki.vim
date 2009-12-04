@@ -272,11 +272,11 @@ noremap <silent><script><buffer>
 
 
 " Text objects {{{
-omap <silent><buffer> ah :<C-U>call vimwiki#TO_header(0)<CR>
-vmap <silent><buffer> ah :<C-U>call vimwiki#TO_header(0)<CR>
+omap <silent><buffer> ah :<C-U>call vimwiki#TO_header(0, 0)<CR>
+vmap <silent><buffer> ah :<C-U>call vimwiki#TO_header(0, 1)<CR>
 
-omap <silent><buffer> ih :<C-U>call vimwiki#TO_header(1)<CR>
-vmap <silent><buffer> ih :<C-U>call vimwiki#TO_header(1)<CR>
+omap <silent><buffer> ih :<C-U>call vimwiki#TO_header(1, 0)<CR>
+vmap <silent><buffer> ih :<C-U>call vimwiki#TO_header(1, 1)<CR>
 
 nmap <silent><buffer> = :call vimwiki#AddHeaderLevel()<CR>
 nmap <silent><buffer> - :call vimwiki#RemoveHeaderLevel()<CR>

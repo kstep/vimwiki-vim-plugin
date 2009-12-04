@@ -573,17 +573,39 @@ endfunction
 " }}}
 " TEXT OBJECTS functions {{{
 
-function! vimwiki#TO_header(inner) "{{{
+function! vimwiki#TO_header(inner, visual) "{{{
   if !search('^\(=\+\)[^=]\+\1\s*$', 'bcW')
     return
   endif
-  let level = vimwiki#count_first_sym(getline(line('.')))
+  
+  let sel_start = line("'<")
+  let sel_end = line("'>")
+  let block_start = line(".")
+  let advance = 0
+
+  let level = vimwiki#count_first_sym(getline('.'))
+
+  if a:visual && sel_start == block_start
+    if level > 1
+      let level -= 1
+      call search('^\(=\{'.level.'\}\)[^=]\+\1\s*$', 'bcW')
+    else
+      let advance = 1
+    endif
+  endif
+
   normal! V
+
+  if a:visual && sel_start == block_start
+    call cursor(sel_end + advance, 0)
+  endif
+
   if search('^\(=\{1,'.level.'}\)[^=]\+\1\s*$', 'W')
     call cursor(line('.') - 1, 0)
   else
     call cursor(line('$'), 0)
   endif
+
   if a:inner && getline(line('.')) =~ '^\s*$'
     let lnum = prevnonblank(line('.') - 1)
     call cursor(lnum, 0)

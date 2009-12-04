@@ -1109,6 +1109,9 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * NEW: Issue 27: Automatic garbage deletion from html directory.
     * NEW: Save all open vimwiki buffers before export to html.
     * NEW: Issue 29: Custom :Search command.
+    * NEW: Header text objects are now expandable in VISUAL mode. Tap 'vah' to
+      select a header. Tap again 'ah' to expand selection further. Thanks
+      Andy Wokula.
     * FIX: Folding settings are reset to vim defaults in a new tab (think of
       \wt) so you cannot hide things in folds.
     * FIX: https links in form of [https://hello.world.com] are not exported
