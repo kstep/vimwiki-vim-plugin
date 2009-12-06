@@ -14,6 +14,7 @@ else
 endif
 
 let s:badsymbols = '['.g:vimwiki_badsyms.g:vimwiki_stripsym.'<>|?*:"]'
+
 " MISC helper functions {{{
 
 " This function is double defined.
@@ -285,6 +286,7 @@ endfunction
 " }}}
 
 " }}}
+
 " SYNTAX highlight {{{
 function! vimwiki#WikiHighlightWords() "{{{
   " search all wiki files in 'path' and its subdirs.
@@ -346,11 +348,20 @@ function! vimwiki#nested_syntax(filetype, start, end, textSnipHl) abort "{{{
     " do nothing if b:current_syntax is defined.
     unlet b:current_syntax
   endif
+
+  " Some syntax files set up iskeyword which might scratch vimwiki a bit.
+  " Let us save and restore it later.
+  " let b:skip_set_iskeyword = 1
+  let is_keyword = &iskeyword
+
   execute 'syntax include @'.group.' syntax/'.a:filetype.'.vim'
   try
     execute 'syntax include @'.group.' after/syntax/'.a:filetype.'.vim'
   catch
   endtry
+
+  let &iskeyword = is_keyword
+
   if exists('s:current_syntax')
     let b:current_syntax=s:current_syntax
   else
@@ -363,6 +374,7 @@ function! vimwiki#nested_syntax(filetype, start, end, textSnipHl) abort "{{{
 endfunction "}}}
 
 "}}}
+
 " WIKI functions {{{
 function! vimwiki#WikiNextWord() "{{{
   call s:search_word(g:vimwiki_rxWikiWord.'\|'.g:vimwiki_rxWeblink, '')
@@ -571,6 +583,7 @@ endfunction
 "}}}
 
 " }}}
+
 " TEXT OBJECTS functions {{{
 
 function! vimwiki#TO_header(inner, visual) "{{{
