@@ -598,7 +598,10 @@ function! vimwiki#TO_header(inner, visual) "{{{
 
   let level = vimwiki#count_first_sym(getline('.'))
 
-  if a:visual && sel_start == block_start
+  let is_header_selected = sel_start == block_start 
+        \ && sel_start != sel_end
+
+  if a:visual && is_header_selected
     if level > 1
       let level -= 1
       call search('^\(=\{'.level.'\}\)[^=]\+\1\s*$', 'bcW')
@@ -609,7 +612,7 @@ function! vimwiki#TO_header(inner, visual) "{{{
 
   normal! V
 
-  if a:visual && sel_start == block_start
+  if a:visual && is_header_selected
     call cursor(sel_end + advance, 0)
   endif
 
