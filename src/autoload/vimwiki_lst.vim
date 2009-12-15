@@ -224,7 +224,8 @@ function! s:create_cb_list_item(lnum) "{{{
   let line = getline(a:lnum)
   let m = matchstr(line, s:rx_list_item())
   if m != ''
-    let line = m.' [ ]'.strpart(line, len(m))
+    let li_content = substitute(strpart(line, len(m)), '^\s*', '', '')
+    let line = m.'[ ] '.li_content
     call setline(a:lnum, line)
   endif
 endfunction "}}}

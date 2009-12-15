@@ -85,8 +85,8 @@ function! s:create_default_CSS(path) " {{{
     call add(lines, 'blockquote {padding: 0.4em; background-color: #f6f5eb;}')
     call add(lines, 'td {border: 1px solid #ccc; padding: 0.3em;}')
     call add(lines, 'hr {border: none; border-top: 1px solid #ccc; width: 100%;}')
+    call add(lines, 'del {text-decoration: line-through; color: #777777;}')
     call add(lines, '.todo {font-weight: bold; background-color: #f0ece8; color: #a03020;}')
-    call add(lines, '.strike {text-decoration: line-through; color: #777777;}')
     call add(lines, '.justleft {text-align: left;}')
     call add(lines, '.justright {text-align: right;}')
     call add(lines, '.justcenter {text-align: center;}')
@@ -110,8 +110,8 @@ function! s:get_html_header(wikifile, subdir, charset) "{{{
       return lines
     catch /E484/
       let s:warn_html_header = 1
-      call vimwiki#msg("Header template ".VimwikiGet('html_header').
-            \ " does not exist!")
+      echoerr 'vimwiki: Header template '.VimwikiGet('html_header').
+            \ ' does not exist!'
     endtry
   endif
 
@@ -146,8 +146,8 @@ function! s:get_html_footer() "{{{
       return lines
     catch /E484/
       let s:warn_html_footer = 1
-      call vimwiki#msg("Footer template ".VimwikiGet('html_footer').
-            \ " does not exist!")
+      echoerr 'vimwiki: Footer template '.VimwikiGet('html_footer').
+            \ ' does not exist!'
     endtry
   endif
 
@@ -175,7 +175,7 @@ function! s:delete_html_files(path) "{{{
     try
       call delete(fname)
     catch
-      vimwiki#msg('Can not delete '.fname)
+      echoerr 'vimwiki: Cannot delete '.fname
     endtry
   endfor
 endfunction "}}}
@@ -263,7 +263,7 @@ function! s:tag_todo(value) "{{{
 endfunction "}}}
 
 function! s:tag_strike(value) "{{{
-  return '<span class="strike">'.s:mid(a:value, 2).'</span>'
+  return '<del>'.s:mid(a:value, 2).'</del>'
 endfunction "}}}
 
 function! s:tag_super(value) "{{{
@@ -515,7 +515,8 @@ function! s:process_tag_quote(line, quote) "{{{
   let lines = []
   let quote = a:quote
   let processed = 0
-  if a:line =~ '^\s\{4,}[^[:blank:]*#]'
+  " if a:line =~ '^\s\{4,}[^[:blank:]*#]'
+  if a:line =~ '^\s\{4,}\S'
     if !quote
       call add(lines, "<blockquote>")
       let quote = 1
@@ -534,17 +535,6 @@ endfunction "}}}
 
 function! s:process_tag_list(line, lists) "{{{
 
-  function! s:add_strike(line, st_tag, en_tag) "{{{
-    let st_tag = a:st_tag
-    let en_tag = a:en_tag
-    " apply strikethrough for checked list items
-    if a:line =~ '^\s\+\%(\*\|#\)\s*\['.g:vimwiki_listsyms[4].']'
-      let st_tag = a:st_tag.'<span class="strike">'
-      let en_tag = '</span>'.a:en_tag
-    endif
-    return [st_tag, en_tag]
-  endfunction "}}}
-
   function! s:add_checkbox(line, rx_list, st_tag, en_tag) "{{{
     let st_tag = a:st_tag
     let en_tag = a:en_tag
@@ -552,7 +542,8 @@ function! s:process_tag_list(line, lists) "{{{
     let chk = matchlist(a:line, a:rx_list)
     if len(chk) > 0
       if chk[1] == g:vimwiki_listsyms[4]
-        let st_tag .= '<input type="checkbox" checked />'
+        let st_tag .= '<del><input type="checkbox" checked />'
+        let en_tag = '</del>'.a:en_tag
       else
         let st_tag .= '<input type="checkbox" />'
       endif
@@ -560,19 +551,25 @@ function! s:process_tag_list(line, lists) "{{{
     return [st_tag, en_tag]
   endfunction "}}}
 
+  " Do not process line that starts from *bold* text as list item.
+  let pos = match(a:line, g:vimwiki_rxBold)
+  if pos != -1 && strpart(a:line, 0, pos) =~ '^\s*$'
+    return [0, []]
+  endif
+
   let lines = []
   let processed = 0
 
-  if a:line =~ '^\s\+\*'
-    let lstSym = '*'
+  if a:line =~ g:vimwiki_rxListBullet
+    let lstSym = matchstr(a:line, '[*-]')
     let lstTagOpen = '<ul>'
     let lstTagClose = '</ul>'
-    let lstRegExp = '^\s\+\*\s*'
-  elseif a:line =~ '^\s\+#'
+    let lstRegExp = g:vimwiki_rxListBullet
+  elseif a:line =~ g:vimwiki_rxListNumber
     let lstSym = '#'
     let lstTagOpen = '<ol>'
     let lstTagClose = '</ol>'
-    let lstRegExp = '^\s\+#\s*'
+    let lstRegExp = g:vimwiki_rxListNumber
   else
     let lstSym = ''
     let lstTagOpen = ''
@@ -587,10 +584,9 @@ function! s:process_tag_list(line, lists) "{{{
     let line = substitute(a:line, '\t', repeat(' ', &tabstop), 'g')
     let indent = stridx(line, lstSym)
 
-    let checkbox = '\s*\[\(.\?\)]\s*'
-    let [st_tag, en_tag] = s:add_strike(line, '<li>', '</li>')
+    let checkbox = '\s*\[\(.\?\)\]\s*'
     let [st_tag, en_tag] = s:add_checkbox(line,
-          \ lstRegExp.checkbox, st_tag, en_tag)
+          \ lstRegExp.checkbox, '<li>', '</li>')
 
     if !in_list
       call add(a:lists, [lstTagClose, indent])
@@ -660,7 +656,7 @@ function! s:process_tag_para(line, para) "{{{
   let lines = []
   let para = a:para
   let processed = 0
-  if a:line =~ '^\S'
+  if a:line =~ '^\s\{,3}\S'
     if !para
       call add(lines, "<p>")
       let para = 1
@@ -692,9 +688,22 @@ function! s:process_tag_h(line) "{{{
     let h_level = 1
   endif
   if h_level > 0
+    let centered = 0
+    if a:line =~ '^\s\+'
+      let centered = 1
+    endif
+
+    " ltrim
+    let line = substitute(a:line, '^\s\+', '', 'g')
     " rtrim
-    let line = substitute(a:line, '\s\+$', '', 'g')
-    let line = '<h'.h_level.'>'.
+    let line = substitute(line, '\s\+$', '', 'g')
+
+    if centered
+      let hpart = '<h'.h_level.' class="justcenter">'
+    else
+      let hpart = '<h'.h_level.'>'
+    endif
+    let line = hpart.
           \ strpart(line, h_level, len(line) - h_level * 2).
           \'</h'.h_level.'>'
     let processed = 1
@@ -773,7 +782,8 @@ function! s:wiki2html(line, state) " {{{
   let line = s:safe_html(a:line)
 
   let processed = 0
-  "" pre
+
+  " pres
   if !processed
     let [processed, lines, state.pre] = s:process_tag_pre(line, state.pre)
     if processed && len(state.lists)
@@ -794,7 +804,7 @@ function! s:wiki2html(line, state) " {{{
     call extend(res_lines, lines)
   endif
 
-  "" list
+  " lists
   if !processed
     let [processed, lines] = s:process_tag_list(line, state.lists)
     if processed && state.quote
@@ -818,7 +828,18 @@ function! s:wiki2html(line, state) " {{{
     call extend(res_lines, lines)
   endif
 
-  "" quote
+  " headers
+  if !processed
+    let [processed, line] = s:process_tag_h(line)
+    if processed
+      call s:close_tag_list(state.lists, res_lines)
+      let state.table = s:close_tag_table(state.table, res_lines)
+      let state.pre = s:close_tag_pre(state.pre, res_lines)
+      call add(res_lines, line)
+    endif
+  endif
+
+  " quotes
   if !processed
     let [processed, lines, state.quote] = s:process_tag_quote(line, state.quote)
     if processed && len(state.lists)
@@ -837,10 +858,12 @@ function! s:wiki2html(line, state) " {{{
       let state.para = s:close_tag_para(state.para, lines)
     endif
 
+    call map(lines, 's:process_inline_tags(v:val)')
+
     call extend(res_lines, lines)
   endif
 
-  "" definition lists
+  " definition lists
   if !processed
     let [processed, lines, state.deflist] = s:process_tag_def_list(line, state.deflist)
 
@@ -849,7 +872,7 @@ function! s:wiki2html(line, state) " {{{
     call extend(res_lines, lines)
   endif
 
-  "" table
+  " tables
   if !processed
     let [processed, lines, state.table] = s:process_tag_table(line, state.table)
 
@@ -858,16 +881,7 @@ function! s:wiki2html(line, state) " {{{
     call extend(res_lines, lines)
   endif
 
-  if !processed
-    let [processed, line] = s:process_tag_h(line)
-    if processed
-      call s:close_tag_list(state.lists, res_lines)
-      let state.table = s:close_tag_table(state.table, res_lines)
-      let state.pre = s:close_tag_pre(state.pre, res_lines)
-      call add(res_lines, line)
-    endif
-  endif
-
+  " horizontal lines
   if !processed
     let [processed, line] = s:process_tag_hr(line)
     if processed
@@ -911,7 +925,7 @@ endfunction " }}}
 function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
 
   if !s:syntax_supported()
-    call vimwiki#msg('Only vimwiki_default syntax supported!!!')
+    echoerr 'vimwiki: Only vimwiki_default syntax supported!!!'
     return
   endif
 
@@ -969,7 +983,7 @@ endfunction "}}}
 
 function! vimwiki_html#WikiAll2HTML(path) "{{{
   if !s:syntax_supported()
-    call vimwiki#msg('Only vimwiki_default syntax supported!!!')
+    echoerr 'vimwiki: Only vimwiki_default syntax supported!!!'
     return
   endif
 

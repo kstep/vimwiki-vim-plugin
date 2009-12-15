@@ -32,12 +32,14 @@ setlocal isfname-=[,]
 " COMMENTS: autocreate list items {{{
 " for list items, and list items with checkboxes
 if VimwikiGet('syntax') == 'default'
-  exe 'setl comments=b:\ *\ ['.escape(g:vimwiki_listsyms[0], ' ').
-        \ '],b:\ *\ ['.g:vimwiki_listsyms[4].']'
-  exe 'setl comments+=b:\ #\ ['.escape(g:vimwiki_listsyms[0], ' ').
-        \ '],b:\ #\ ['.g:vimwiki_listsyms[4].']'
-  setl comments+=b:\ *,b:\ #
-  setl formatlistpat=^\\s\\+[*#]\\s*
+  exe 'setl comments=b:*\ ['.escape(g:vimwiki_listsyms[0], ' ').
+        \ '],b:*\ ['.g:vimwiki_listsyms[4].']'
+  exe 'setl comments=b:-\ ['.escape(g:vimwiki_listsyms[0], ' ').
+        \ '],b:-\ ['.g:vimwiki_listsyms[4].']'
+  exe 'setl comments+=b:#\ ['.escape(g:vimwiki_listsyms[0], ' ').
+        \ '],b:#\ ['.g:vimwiki_listsyms[4].']'
+  setl comments+=b:*,b:#,b:-
+  setl formatlistpat=^\\s*[*#-]\\s*
 else
   exe 'setl comments=n:*\ ['.escape(g:vimwiki_listsyms[0], ' ').
         \ '],n:*\ ['.g:vimwiki_listsyms[4].']'
@@ -101,7 +103,7 @@ function! VimwikiFoldLevel(lnum) "{{{
         endif
 
         let [nnum, nline] = s:find_next_item(rx_list_item, pnum)
-        if nline !~ rx_list_item && nnum-a:lnum == 1
+        if nline !~ rx_list_item && nnum - a:lnum == 1
           " last multi-lined list item in a list
           let level = s:get_li_level_last(pnum)
           return s:fold_marker(level)
@@ -168,7 +170,11 @@ function! s:get_li_level_last(lnum) "{{{
   if VimwikiGet('syntax') == 'media'
     return -(vimwiki#count_first_sym(getline(a:lnum)) - 1)
   else
-    return -(indent(a:lnum) / &sw - 1)
+    if indent(a:lnum) != &sw && indent(a:lnum) != 0
+      return -(indent(a:lnum) / &sw - 1)
+    else
+      return -1
+    endif
   endif
 endfunction "}}}
 

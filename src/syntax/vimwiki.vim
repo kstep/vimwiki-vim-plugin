@@ -29,8 +29,7 @@ endif
 
 execute 'syntax match VimwikiLink `'.g:vimwiki_rxWeblink.'`'
 
-" Emoticons: must come after the Textilisms, as later rules take precedence
-" over earlier ones. This match is an approximation for the ~70 distinct
+" Emoticons
 syntax match VimwikiEmoticons /\%((.)\|:[()|$@]\|:-[DOPS()\]|$@]\|;)\|:'(\)/
 
 let g:vimwiki_rxTodo = '\C\%(TODO:\|DONE:\|FIXME:\|FIXED:\|XXX:\)'
@@ -41,6 +40,11 @@ execute 'runtime! syntax/vimwiki_'.VimwikiGet('syntax').'.vim'
 
 " Tables
 execute 'syntax match VimwikiTable /'.g:vimwiki_rxTable.'/'
+
+" List items
+execute 'syntax match VimwikiList /'.g:vimwiki_rxListBullet.'/'
+execute 'syntax match VimwikiList /'.g:vimwiki_rxListNumber.'/'
+execute 'syntax match VimwikiList /'.g:vimwiki_rxListDefine.'/'
 
 execute 'syntax match VimwikiBold /'.g:vimwiki_rxBold.'/'
 
@@ -60,11 +64,6 @@ execute 'syntax match VimwikiCode /'.g:vimwiki_rxCode.'/'
 
 " <hr> horizontal rule
 execute 'syntax match VimwikiHR /'.g:vimwiki_rxHR.'/'
-
-" List items
-execute 'syntax match VimwikiList /'.g:vimwiki_rxListBullet.'/'
-execute 'syntax match VimwikiList /'.g:vimwiki_rxListNumber.'/'
-execute 'syntax match VimwikiList /'.g:vimwiki_rxListDefine.'/'
 
 execute 'syntax region VimwikiPre start=/'.g:vimwiki_rxPreStart.
       \ '/ end=/'.g:vimwiki_rxPreEnd.'/ contains=VimwikiComment'

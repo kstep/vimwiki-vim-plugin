@@ -8,7 +8,7 @@
        \ `\___/ /\_____\\ \_\\ \_\ `\___x___/ /\_____\\ \_\ \_\ /\_____\~
         `\/__/  \/_____/ \/_/ \/_/'\/__//__/  \/_____/ \/_/\/_/ \/_____/~
 
-                               Version: 0.9.701 ~
+                               Version: 0.9.8 ~
 
 ==============================================================================
 CONTENTS                                                    *vimwiki-contents*
@@ -390,6 +390,12 @@ Check |g:vimwiki_hl_headers|.
 ===== Header level 5 =====~
 ====== Header level 6 ======~
 
+
+You can center your headers in html by placing spaces before the first '=':
+                     = Centered Header L1 =~
+
+
+
 Note: before vimwiki 0.8.2, header's markup syntax used exclamation marks:
 ! Header level 1
 !! Header level 2
@@ -417,7 +423,6 @@ two lines.
 ------------------------------------------------------------------------------
 5.5. Lists                                              *vimwiki-syntax-lists*
 
-Indent list items with at least one space.
 Unordered lists: >
   * Bulleted list item 1
   * Bulleted list item 2
@@ -426,6 +431,27 @@ Unordered lists: >
     * more ...
       * and more ...
       * ...
+    * Bulleted list sub item 3
+    * etc.
+or: >
+  - Bulleted list item 1
+  - Bulleted list item 2
+    - Bulleted list sub item 1
+    - Bulleted list sub item 2
+    - more ...
+      - and more ...
+      - ...
+    - Bulleted list sub item 3
+    - etc.
+
+or mix: >
+  - Bulleted list item 1
+  - Bulleted list item 2
+    * Bulleted list sub item 1
+    * Bulleted list sub item 2
+    * more ...
+      - and more ...
+      - ...
     * Bulleted list sub item 3
     * etc.
 
@@ -445,6 +471,8 @@ It is possible to mix bulleted and numbered lists: >
   * Bulleted list item 2
     # Numbered list sub item 1
     # Numbered list sub item 2
+
+Note that space after *, - or # is essential.
 
 Multiline list items: >
   * Bulleted list item 1
@@ -1094,10 +1122,21 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 ==============================================================================
 11. Changelog                                              *vimwiki-changelog*
 
-0.9.701
+0.9.8~
+    * NEW: List items could be started from the first column. As a result a
+      space after * or # for a list item is mandatory.
+    * NEW: One can use '-' along with '*' to start unordered list item.
+    * NEW: Centered headers. Start header with at least one space to make it
+      html centered.
+    * FIX: Use <del> tag instead of custom <span class="strike"> in html.
+    * FIX: There are no text styling in htmlized quoted text.
+    * FIX: set default value of g:vimwiki_fold_lists to 0 as written in this
+      help.
+
+0.9.701~
     * FIX: Issue 30: Highlighting doesn't work for checked list item.
 
-0.9.7
+0.9.7~
     * NEW: Default checkbox symbols are changed to [ ], [.], [o], [O], [X].
       You can change them using |g:vimwiki_listsyms| variable.
     * NEW: Color group names are renamed from wikiBold, wikiItalic, etc to
@@ -1113,14 +1152,14 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * NEW: Save all open vimwiki buffers before export to html.
     * NEW: Issue 29: Custom :Search command.
     * NEW: Header text objects are now expandable in VISUAL mode. Tap 'vah' to
-      select a header. Tap again 'ah' to expand selection further. Thanks
-      Andy Wokula.
+      select a header. Tap again 'ah' to expand selection further. Thanks Andy
+      Wokula.
     * FIX: Folding settings are reset to vim defaults in a new tab (think of
       \wt) so you cannot hide things in folds.
     * FIX: https links in form of [https://hello.world.com] are not exported
       into html. Thanks Saurabh Sarpal for the patch.
 
-0.9.6
+0.9.6~
     * NEW: You can have multiline list items. See |vimwiki-syntax-lists|.
     * NEW: You can ignore newlines in multiline list items when do export to
       html. See |g:vimwiki_list_ignore_newline| option.
@@ -1144,7 +1183,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * FIX: Command |:VimwikiToggleListItem| do not switch right if there are
       list items without checkboxes in the list.
 
-0.9.5
+0.9.5~
     * NEW: Added |g:vimwiki_global_ext| to control creation of temporary
       wikies in dirs that are not listed in |g:vimwiki_list|.
     * NEW: Added |g:vimwiki_hl_headers| to highlight headers with different
@@ -1164,7 +1203,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       error. Thanks Klaus Ethgen for report.
     * FIX: Some html export fixes.
 
-0.9.4
+0.9.4~
     * NEW: Links with directories: [[dir1/dir2/Link|Text]]. Thanks Jie Wu.
     * NEW: Added %root_path% template variable to get relative root dir of
       path_html. See |vimwiki-option-html_header|.
@@ -1177,7 +1216,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * FIX: Weblinks with commas are not highlighted.
     * MISC: Some changes in default css file.
 
-0.9.3
+0.9.3~
     * NEW: g:vimwiki_menu option is a string which is menu path. So one can
       use let g:vimwiki_menu = 'Plugin.Vimwiki' to set the menu to the right
       place.
@@ -1186,10 +1225,10 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * FIX: Encoding error when running vimwiki in Windows XP Japanese.
       Thanks KarasAya.
 
-0.9.2c
+0.9.2c~
     * FIX: Regression: Export HTML link error with [[Link|Text]].
 
-0.9.2b
+0.9.2b~
     * FIX: Installation on Linux doesn't work. (Dos line endings in Vimball
       archive file).
     * FIX: Clear out FlexWiki ftplugin's setup. Now you don't have to hack
@@ -1197,11 +1236,11 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       ftplugin.
     * FIX: When write done: it will show another done: in html file.
 
-0.9.2a
+0.9.2a~
     * FIX: Installation on Linux doesn't work. (Dos line endings in
       autoload/vimwiki_lst.vim and indent/vimwiki.vim).
 
-0.9.2
+0.9.2~
     * NEW: Option 'folding' added to turn folding on/off.
     * NEW: Header text object. See |vimwiki-text-objects|.
     * NEW: Add/remove Header levels with '=' and '-'. See |vimwiki_=|.
@@ -1214,7 +1253,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       parentheses.
     * MISC: Renamed vimwiki_gtd to vimwiki_lst.
 
-0.9.1
+0.9.1~
     * NEW: HTML Table cell text alignment, see |vimwiki-syntax-tables|
     * NEW: Wikipage history simplified. Each vimwiki buffer now holds
       b:vimwiki_prev_word which is list of [PrevWord, getpos()].
@@ -1225,7 +1264,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * FIX: Bold and Italic aren't highlighted in tables without spaces
       between || and * or _. ||*bold*||_asdf_ || (Thanks Brett Stahlman)
 
-0.9.0
+0.9.0~
     * NEW: You can add classes to 'pre' tag -- |vimwiki-syntax-preformatted|.
       This might be useful for coloring some programming code with external js
       tools like google syntax highlighter.
@@ -1241,7 +1280,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * FIX: Pressing ESC while |:VimwikiUISelect| opens current wiki index
       file.  Should cancel wiki selection.
 
-0.8.3
+0.8.3~
     * NEW: <C-Space> on a list item creates checkbox.
     * FIX: With * in the first column, <CR> shouldn't insert more * (default
       syntax).
@@ -1249,7 +1288,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * FIX: HTML export should use 'fileencoding' instead of 'encoding'.
     * FIX: Code cleanup.
 
-0.8.2
+0.8.2~
     * DEL: Removed google syntax file.
     * NEW: Default vimwiki syntax is a subset of google's one. Header's has
       been changed from !Header to =Header=. It is easier to maintain only 2
@@ -1261,7 +1300,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * FIX: The last item in List sometimes fold-in incorrectly.
     * FIX: Minor tweaks on default css.
 
-0.8.1
+0.8.1~
     * NEW: Vimwiki's foldmethod changed from syntax to expr. Foldtext is
       changed to be nicer with folded list items.
     * NEW: Fold/outline list items.
@@ -1272,7 +1311,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * NEW: Added |g:vimwiki_use_mouse|. It is off by default.
     * FIX: Removed <C-h> mapping.
 
-0.8.0
+0.8.0~
     * NEW: Multiple wikies support. A lot of options have been changed, see
       |vimwiki-options|
     * NEW: Auto create directories.
@@ -1280,7 +1319,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * FIX: Multiple 'set ft=vimwiki' for each buffer disabled. Vimwiki should
       load its buffers a bit faster now.
 
-0.7.1
+0.7.1~
     * NEW: <Plug>VimwikiToggleListItem added to be able to remap <C-Space> to
       anything user prefers more.
     * FIX: Toggleable list items do not work with MediaWiki markup.
@@ -1288,13 +1327,13 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       loaded gives errors for HTML export.
     * DEL: Command :VimwikiExploreHome.
 
-0.7.0
+0.7.0~
     * NEW: GTD stuff -- toggleable list items. See |vimwiki-todo-lists|.
     * FIX: Headers do not fold inner headers. (Thanks Brett Stahlman)
     * FIX: Remove last blank lines from preformatted text at the end of file.
     * DEL: Removed g:vimwiki_smartCR option.
 
-0.6.2
+0.6.2~
     * NEW: [[link|description]] is available now.
     * FIX: Barebone links (ie: http://bla-bla-bla.org/h.pl?id=98) get extra
       escaping of ? and friends so they become invalid in HTML.
@@ -1304,24 +1343,24 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * FIX: Remove setlocal encoding and fileformat from vimwiki ftplugin.
     * FIX: Some tweaks on default style.css
 
-0.6.1
+0.6.1~
     * FIX: [blablabla bla] shouldn't be converted to a link.
     * FIX: Remove extra annoing empty strings from PRE tag made from
       whitespaces in HTML export.
     * FIX: Moved functions related to HTML converting to new autoload module
       to increase a bit vimwiki startup time.
 
-0.6
+0.6~
     * NEW: Header and footer templates. See|g:vimwiki_html_header| and
       |g:vimwiki_html_footer|.
     * FIX: |:Vimwiki2HTML| does not recognize ~ as part of a valid path.
 
-0.5.3
+0.5.3~
     * FIX: Fixed |:VimwikiRenameWord|. Error when g:vimwiki_home had
       whitespaces in path.
     * FIX: |:VimwikiSplitWord| and |:VimwikiVSplitWord| didn't work.
 
-0.5.2
+0.5.2~
     * NEW: Added |:VimwikiGoHome|, |:VimwikiTabGoHome| and
       |:VimwikiExploreHome| commands.
     * NEW: Added <Leader>wt mapping to open vimwiki index file in a new tab.
@@ -1335,7 +1374,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       |:VimwikiAll2HTML| commands.
     * FIX: Help file corrections.
 
-0.5.1
+0.5.1~
     * NEW: This help is created.
     * NEW: Now you can fold headers.
     * NEW: <Plug>VimwikiGoHome and <Plug>VimwikiExploreHome were added.
@@ -1343,39 +1382,39 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * DEL: Sync option removed from: Syntax highlighting for preformatted
       text {{{ }}}.
 
-0.5
+0.5~
     * NEW: vimwiki default markup to HTML conversion improved.
     * NEW: Added basic GoogleWiki and MediaWiki markup languages.
     * NEW: Chinese [[complex wiki words]].
 
-0.4
+0.4~
     * NEW: vimwiki=>HTML converter in plain Vim language.
     * NEW: Plugin autoload.
 
-0.3.4
+0.3.4~
     * FIX: Backup files (.wiki~) caused a bunch of errors while opening wiki
       files.
 
-0.3.3
+0.3.3~
     * FIX: [[wiki word with dots at the end...]] didn't work.
     * NEW: Added error handling for delete wiki word function.
     * NEW: Added keybindings o and O for list items when g:vimwiki_smartCR=1.
     * NEW: Added keybinding <Leader>wh to visit wiki home directory.
 
-0.3.2
+0.3.2~
     * FIX: Renaming -- error if complex wiki word contains %.
     * FIX: Syntax highlighting for preformatted text {{{ }}}. Sync option
       added.
     * FIX: smartCR bug fix.
 
-0.3.1
+0.3.1~
     * FIX: Renaming -- [[hello world?]] to [[hello? world]] links are not
       updated.
     * FIX: Buffers menu is a bit awkward after renaming.
     * NEW: Use mouse to follow links. Left double-click to follow WikiWord,
       Rightclick then Leftclick to go back.
 
-0.3
+0.3~
     * NEW: Highlight non-existent WikiWords.
     * NEW: Delete current WikiWord (<Leader>wd).
     * NEW: g:vimwiki_smartCR=2 => use Vim comments (see :h comments :h
@@ -1393,14 +1432,14 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       bla bla]] [[dodo dodo dodo.
 
 
-0.2.2
+0.2.2~
     * NEW: Added keybinding <S-CR> -- split WikiWord
     * NEW: Added keybinding <C-CR> -- vertical split WikiWord
 
-0.2.1
+0.2.1~
     * NEW: Install on Linux now works.
 
-0.2
+0.2~
     * NEW: Added part of Google's Wiki syntax.
     * NEW: Added auto insert # with ENTER.
     * NEW: On/Off auto insert bullet with ENTER.
@@ -1409,7 +1448,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * NEW: Links to non-wiki files. Non wiki files are files with extensions
       ie [[hello world.txt]] or [[my homesite.html]]
 
-0.1
+0.1~
     * First public version.
 
 ==============================================================================
