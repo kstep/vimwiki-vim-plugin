@@ -69,12 +69,12 @@ function! s:create_default_CSS(path) " {{{
 
     call add(lines, 'body {font-family: Arial, sans-serif; margin: 1em 2em 1em 2em; font-size: 100%; line-height: 130%;}')
     call add(lines, 'h1, h2, h3, h4, h5, h6 {font-family: Trebuchet MS, serif; margin-top: 1.5em; margin-bottom: 0.5em;}')
-    call add(lines, 'h1 {font-size: 2.0em; color: #3366aa;}')
-    call add(lines, 'h2 {font-size: 1.6em; color: #335588;}')
-    call add(lines, 'h3 {font-size: 1.2em; color: #224466;}')
-    call add(lines, 'h4 {font-size: 1.1em; color: #113344;}')
-    call add(lines, 'h5 {font-size: 1.0em; color: #112233;}')
-    call add(lines, 'h6 {font-size: 1.0em; color: #111111;}')
+    call add(lines, 'h1 {font-size: 2.0em; color: #bb9999;}')
+    call add(lines, 'h2 {font-size: 1.6em; color: #779977;}')
+    call add(lines, 'h3 {font-size: 1.3em; color: #555577;}')
+    call add(lines, 'h4 {font-size: 1.2em; color: #222244;}')
+    call add(lines, 'h5 {font-size: 1.1em; color: #222244;}')
+    call add(lines, 'h6 {font-size: 1.0em; color: #222244;}')
     call add(lines, 'p, pre, blockquote, table, ul, ol, dl {margin-top: 1em; margin-bottom: 1em;}')
     call add(lines, 'ul ul, ul ol, ol ol, ol ul {margin-top: 0.5em; margin-bottom: 0.5em;}')
     call add(lines, 'li {margin: 0.3em auto;}')
@@ -110,7 +110,7 @@ function! s:get_html_header(wikifile, subdir, charset) "{{{
       return lines
     catch /E484/
       let s:warn_html_header = 1
-      echoerr 'vimwiki: Header template '.VimwikiGet('html_header').
+      echomsg 'vimwiki: Header template '.VimwikiGet('html_header').
             \ ' does not exist!'
     endtry
   endif
@@ -146,7 +146,7 @@ function! s:get_html_footer() "{{{
       return lines
     catch /E484/
       let s:warn_html_footer = 1
-      echoerr 'vimwiki: Footer template '.VimwikiGet('html_footer').
+      echomsg 'vimwiki: Footer template '.VimwikiGet('html_footer').
             \ ' does not exist!'
     endtry
   endif
@@ -175,7 +175,7 @@ function! s:delete_html_files(path) "{{{
     try
       call delete(fname)
     catch
-      echoerr 'vimwiki: Cannot delete '.fname
+      echomsg 'vimwiki: Cannot delete '.fname
     endtry
   endfor
 endfunction "}}}
@@ -835,6 +835,7 @@ function! s:wiki2html(line, state) " {{{
       call s:close_tag_list(state.lists, res_lines)
       let state.table = s:close_tag_table(state.table, res_lines)
       let state.pre = s:close_tag_pre(state.pre, res_lines)
+      let state.quote = s:close_tag_quote(state.quote, res_lines)
       call add(res_lines, line)
     endif
   endif
@@ -925,7 +926,7 @@ endfunction " }}}
 function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
 
   if !s:syntax_supported()
-    echoerr 'vimwiki: Only vimwiki_default syntax supported!!!'
+    echomsg 'vimwiki: Only vimwiki_default syntax supported!!!'
     return
   endif
 
@@ -983,7 +984,7 @@ endfunction "}}}
 
 function! vimwiki_html#WikiAll2HTML(path) "{{{
   if !s:syntax_supported()
-    echoerr 'vimwiki: Only vimwiki_default syntax supported!!!'
+    echomsg 'vimwiki: Only vimwiki_default syntax supported!!!'
     return
   endif
 

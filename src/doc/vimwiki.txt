@@ -99,10 +99,10 @@ See also|:VimwikiGoHome|
 
 <Leader>wt or <Plug>VimwikiTabGoHome
         Open index file of the [count]'s wiki in a new tab.
-        <Leader>ww tabopens first wiki from |g:vimwiki_list|.
-        1<Leader>ww as above tabopens first wiki from |g:vimwiki_list|.
-        2<Leader>ww tabopens second wiki from |g:vimwiki_list|.
-        3<Leader>ww tabopens third wiki from |g:vimwiki_list|.
+        <Leader>wt tabopens first wiki from |g:vimwiki_list|.
+        1<Leader>wt as above tabopens first wiki from |g:vimwiki_list|.
+        2<Leader>wt tabopens second wiki from |g:vimwiki_list|.
+        3<Leader>wt tabopens third wiki from |g:vimwiki_list|.
         etc.
         To remap: >
         :map <Leader>t <Plug>VimwikiTabGoHome
@@ -1023,7 +1023,7 @@ Value           Description~
 0               Disable folding.
 1               Enable folding.
 
-Default: 1
+Default: 0
 
 ------------------------------------------------------------------------------
 *g:vimwiki_fold_lists*
@@ -1037,13 +1037,13 @@ Value           Description~
 Default: 0
 
 ------------------------------------------------------------------------------
-*g:vimwiki_fold_empty_lines*
+*g:vimwiki_fold_trailing_empty_lines*
 
 Fold or do not fold empty lines between folded headers.
 
 Value           Description~
-0               Do not fold in empty lines.
-1               Fold in empty lines.
+0               Fold only one empty line. The rest empty lines are unfolded.
+1               Fold in all empty lines.
 
 Default: 0
 
@@ -1123,15 +1123,26 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 11. Changelog                                              *vimwiki-changelog*
 
 0.9.8~
-    * NEW: List items could be started from the first column. As a result a
-      space after * or # for a list item is mandatory.
+    * NEW: Rename |g:vimwiki_fold_empty_lines| to
+      |g:vimwiki_fold_trailing_empty_lines|.
     * NEW: One can use '-' along with '*' to start unordered list item.
+    * NEW: List items could be started from the first column. 
+      As a result some limitations appeared:
+        - a space after *, - or # for a list item is mandatory.
+        - |g:vimwiki_fold_trailing_empty_lines| if set to 0 folds all empty
+          lines except the first one.
+    * NEW: Folding is off by default. Use |g:vimwiki_folding| to enable it.
+    * NEW: Speed up vimwiki's folding a bit. Should lag a bit less in a long
+      todo lists.
     * NEW: Centered headers. Start header with at least one space to make it
       html centered.
+    * NEW: Change in default css: header's colors.
     * FIX: Use <del> tag instead of custom <span class="strike"> in html.
     * FIX: There are no text styling in htmlized quoted text.
     * FIX: set default value of g:vimwiki_fold_lists to 0 as written in this
       help.
+    * FIX: Issue 33: Folded list items have wrong indentation when 'tabs' are
+      used.
 
 0.9.701~
     * FIX: Issue 30: Highlighting doesn't work for checked list item.

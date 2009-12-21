@@ -14,7 +14,7 @@ endif
 if VimwikiGet('maxhi')
   " Every WikiWord is nonexistent
   if g:vimwiki_camel_case
-    execute 'syntax match VimwikiNoExistsWord /\%(^\|[^!]\)\zs'.g:vimwiki_word1.'/'
+    execute 'syntax match VimwikiNoExistsWord /\%(^\|[^!]\)\@<='.g:vimwiki_word1.'/'
   endif
   execute 'syntax match VimwikiNoExistsWord /'.g:vimwiki_word2.'/'
   execute 'syntax match VimwikiNoExistsWord /'.g:vimwiki_word3.'/'
@@ -22,7 +22,7 @@ if VimwikiGet('maxhi')
   call vimwiki#WikiHighlightWords()
 else
   " A WikiWord (unqualifiedWikiName)
-  execute 'syntax match VimwikiWord /\%(^\|[^!]\)\zs\<'.g:vimwiki_word1.'\>/'
+  execute 'syntax match VimwikiWord /\%(^\|[^!]\)\@<=\<'.g:vimwiki_word1.'\>/'
   " A [[bracketed wiki word]]
   execute 'syntax match VimwikiWord /'.g:vimwiki_word2.'/'
 endif

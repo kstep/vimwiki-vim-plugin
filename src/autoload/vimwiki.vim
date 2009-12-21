@@ -91,7 +91,7 @@ endfunction
 function! s:search_word(wikiRx, cmd) "{{{
   let match_line = search(a:wikiRx, 's'.a:cmd)
   if match_line == 0
-    echoerr "vimwiki: Wiki link not found."
+    echomsg "vimwiki: Wiki link not found."
   endif
 endfunction
 " }}}
@@ -153,7 +153,7 @@ function! s:print_wiki_list() "{{{
   while idx < len(g:vimwiki_list)
     if idx == g:vimwiki_current_idx
       let sep = ' * '
-      echohl TablineSel
+      echohl PmenuSel
     else
       let sep = '   '
       echohl None
@@ -451,7 +451,7 @@ function! vimwiki#WikiDeleteWord() "{{{
   try
     call delete(fname)
   catch /.*/
-    echoerr 'vimwiki: Cannot delete "'.expand('%:t:r').'"!'
+    echomsg 'vimwiki: Cannot delete "'.expand('%:t:r').'"!'
     return
   endtry
   execute "bdelete! ".escape(fname, " ")
@@ -470,7 +470,7 @@ function! vimwiki#WikiRenameWord() "{{{
 
   " there is no file (new one maybe)
   if glob(expand('%:p')) == ''
-    echoerr 'vimwiki: Cannot rename "'.expand('%:p').
+    echomsg 'vimwiki: Cannot rename "'.expand('%:p').
           \'". It does not exist! (New file? Save it before renaming.)'
     return
   endif
@@ -484,7 +484,7 @@ function! vimwiki#WikiRenameWord() "{{{
 
   if new_link =~ '[/\\]'
     " It is actually doable but I do not have free time to do it.
-    echoerr 'vimwiki: Cannot rename to a filename with path!'
+    echomsg 'vimwiki: Cannot rename to a filename with path!'
     return
   endif
 
@@ -492,11 +492,11 @@ function! vimwiki#WikiRenameWord() "{{{
 
   " check new_fname - it should be 'good', not empty
   if substitute(new_link, '\s', '', 'g') == ''
-    echoerr 'vimwiki: Cannot rename to an empty filename!'
+    echomsg 'vimwiki: Cannot rename to an empty filename!'
     return
   endif
   if s:is_link_to_non_wiki_file(new_link)
-    echoerr 'vimwiki: Cannot rename to a filename with extension (ie .txt .html)!'
+    echomsg 'vimwiki: Cannot rename to a filename with extension (ie .txt .html)!'
     return
   endif
 
@@ -506,7 +506,7 @@ function! vimwiki#WikiRenameWord() "{{{
   " do not rename if word with such name exists
   let fname = glob(new_fname)
   if fname != ''
-    echoerr 'vimwiki: Cannot rename to "'.new_fname.
+    echomsg 'vimwiki: Cannot rename to "'.new_fname.
           \ '". File with that name exist!'
     return
   endif
@@ -518,7 +518,7 @@ function! vimwiki#WikiRenameWord() "{{{
       throw "Cannot rename!"
     end
   catch /.*/
-    echoerr 'vimwiki: Cannot rename "'.expand('%:t:r').'" to "'.new_fname.'"'
+    echomsg 'vimwiki: Cannot rename "'.expand('%:t:r').'" to "'.new_fname.'"'
     return
   endtry
 
@@ -635,10 +635,16 @@ function! vimwiki#AddHeaderLevel() "{{{
     return
   endif
 
-  let level = vimwiki#count_first_sym(line)
-  if level < 6
-    let line = substitute(line, '\(=\+\).\+\1', '=&=', '')
-    call setline(lnum, line)
+  if line =~ '^\s*\(=\+\).\+\1\s*$'
+    let level = vimwiki#count_first_sym(line)
+    if level < 6
+      let line = substitute(line, '\(=\+\).\+\1', '=&=', '')
+      call setline(lnum, line)
+    endif
+  else
+      let line = substitute(line, '^\s*', '&= ', '')
+      let line = substitute(line, '\s*$', ' =&', '')
+      call setline(lnum, line)
   endif
 endfunction
 "}}}
@@ -651,14 +657,18 @@ function! vimwiki#RemoveHeaderLevel() "{{{
     return
   endif
 
-  " TODO: This doesn't work for centered headers! Fix it!
   if line =~ '^\s*\(=\+\).\+\1\s*$'
-    let line = strpart(line, 1, len(line) - 2)
-    if line =~ '^\s'
-      let line = strpart(line, 1, len(line))
-    endif
-    if line =~ '\s$'
-      let line = strpart(line, 0, len(line) - 1)
+    let level = vimwiki#count_first_sym(line)
+    let old = repeat('=', level)
+    let new = repeat('=', level - 1)
+
+    let chomp = line =~ '=\s'
+
+    let line = substitute(line, old, new, 'g')
+
+    if level == 1 && chomp
+      let line = substitute(line, '^\s', '', 'g')
+      let line = substitute(line, '\s$', '', 'g')
     endif
     call setline(lnum, line)
   endif
