@@ -39,6 +39,7 @@ endfunction "}}}
 
 " Get regexp of the list item with checkbox.
 function! s:rx_cb_list_item() "{{{
+  " return s:rx_list_item().'\s*\zs\[.\?\]'
   return s:rx_list_item().'\s*\zs\[.\?\]'
 endfunction "}}}
 
@@ -289,7 +290,7 @@ endfunction "}}}
 
 " Script functions }}}
 
-" Toggle list item between [ ] and [x]
+" Toggle list item between [ ] and [X]
 function! vimwiki_lst#ToggleListItem(line1, line2) "{{{
   let line1 = a:line1
   let line2 = a:line2
@@ -317,5 +318,37 @@ function! vimwiki_lst#ToggleListItem(line1, line2) "{{{
     let c_lnum = s:find_next_list_item(c_lnum)
   endwhile
 
+endfunction "}}}
+
+function! vimwiki_lst#insertCR() "{{{
+  " This function is heavily relies on proper 'set comments' option.
+  let cr = "\<CR>"
+  if getline('.') =~ s:rx_cb_list_item()
+    let cr .= '[ ] '
+  endif
+  return cr
+endfunction "}}}
+
+function! vimwiki_lst#insertOo(cmd) "{{{
+  " This function is heavily relies on proper 'set comments' option.
+  " cmd should be 'o' or 'O'
+
+  let line = getline('.')
+  let lnum = line('.')
+  let res = ''
+  if line =~ s:rx_cb_list_item()
+    let res = matchstr(line, s:rx_list_item()).'[ ] '
+  elseif line =~ s:rx_list_item()
+    let res = matchstr(line, s:rx_list_item())
+  elseif &autoindent || &smartindent
+    let res = matchstr(line, '^\s*')
+  endif
+  if a:cmd ==# 'o'
+    call append(lnum, res)
+    call cursor(lnum + 1, col('$'))
+  else
+    call append(lnum - 1, res)
+    call cursor(lnum, col('$'))
+  endif
 endfunction "}}}
 

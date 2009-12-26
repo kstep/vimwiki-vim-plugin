@@ -29,25 +29,20 @@ execute 'setlocal suffixesadd='.VimwikiGet('ext')
 setlocal isfname-=[,]
 " gf}}}
 
-" COMMENTS: autocreate list items {{{
+" Autocreate list items {{{
 " for list items, and list items with checkboxes
 if VimwikiGet('syntax') == 'default'
-  exe 'setl comments=b:*\ ['.escape(g:vimwiki_listsyms[0], ' ').
-        \ '],b:*\ ['.g:vimwiki_listsyms[4].']'
-  exe 'setl comments=b:-\ ['.escape(g:vimwiki_listsyms[0], ' ').
-        \ '],b:-\ ['.g:vimwiki_listsyms[4].']'
-  exe 'setl comments+=b:#\ ['.escape(g:vimwiki_listsyms[0], ' ').
-        \ '],b:#\ ['.g:vimwiki_listsyms[4].']'
-  setl comments+=b:*,b:#,b:-
+  setl comments=b:*,b:#,b:-
   setl formatlistpat=^\\s*[*#-]\\s*
 else
-  exe 'setl comments=n:*\ ['.escape(g:vimwiki_listsyms[0], ' ').
-        \ '],n:*\ ['.g:vimwiki_listsyms[4].']'
-  exe 'setl comments+=n:#\ ['.escape(g:vimwiki_listsyms[0], ' ').
-        \ '],n:#\ ['.g:vimwiki_listsyms[4].']'
-  setl comments+=n:*,n:#
+  setl comments=n:*,n:#
 endif
 setlocal formatoptions=tnro
+
+inoremap <expr> <CR> vimwiki_lst#insertCR()
+noremap o :call vimwiki_lst#insertOo('o')<CR>a
+noremap O :call vimwiki_lst#insertOo('O')<CR>a
+
 " COMMENTS }}}
 
 " FOLDING for headers and list items using expr fold method. {{{

@@ -19,9 +19,9 @@ let s:badsymbols = '['.g:vimwiki_badsyms.g:vimwiki_stripsym.'<>|?*:"]'
 
 " This function is double defined.
 " TODO: refactor common functions into new module.
-function! s:chomp_slash(str)"{{{
+function! s:chomp_slash(str) "{{{
   return substitute(a:str, '[/\\]\+$', '', '')
-endfunction"}}}
+endfunction "}}}
 
 function! vimwiki#mkdir(path) "{{{
   let path = expand(a:path)
@@ -425,7 +425,8 @@ function! vimwiki#WikiGoHome(index) "{{{
   call vimwiki#mkdir(VimwikiGet('path'))
 
   try
-    execute ':e '.VimwikiGet('path').VimwikiGet('index').VimwikiGet('ext')
+    execute ':e '.fnameescape(
+          \ VimwikiGet('path').VimwikiGet('index').VimwikiGet('ext'))
   catch /E37/ " catch 'No write since last change' error
     " this is really unsecure!!!
     execute ':'.VimwikiGet('gohome').' '.

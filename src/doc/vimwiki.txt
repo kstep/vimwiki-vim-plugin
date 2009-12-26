@@ -1129,20 +1129,25 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * NEW: List items could be started from the first column. 
       As a result some limitations appeared:
         - a space after *, - or # for a list item is mandatory.
-        - |g:vimwiki_fold_trailing_empty_lines| if set to 0 folds all empty
-          lines except the first one.
+        - |g:vimwiki_fold_trailing_empty_lines| if set to 0 folds one trailing
+          empty line.
     * NEW: Folding is off by default. Use |g:vimwiki_folding| to enable it.
     * NEW: Speed up vimwiki's folding a bit. Should lag a bit less in a long
       todo lists.
     * NEW: Centered headers. Start header with at least one space to make it
       html centered.
     * NEW: Change in default css: header's colors.
+    * NEW: Vimwiki is aware of |GetLatestVimScripts| now. 
     * FIX: Use <del> tag instead of custom <span class="strike"> in html.
     * FIX: There are no text styling in htmlized quoted text.
     * FIX: set default value of g:vimwiki_fold_lists to 0 as written in this
       help.
     * FIX: Issue 33: Folded list items have wrong indentation when 'tabs' are
       used.
+    * FIX: Issue 34: vimwiki#subdir got wrong dir when VimwikiGet('path') is a
+      symbolic link. Thanks lilydjwg for the patch.
+    * FIX: Issue 28: todo-list auto-indent enhancement. New item should always
+      be unchecked.
 
 0.9.701~
     * FIX: Issue 30: Highlighting doesn't work for checked list item.

@@ -1,6 +1,7 @@
 " Vimwiki plugin file
 " Author: Maxim Kim <habamax@gmail.com>
 " Home: http://code.google.com/p/vimwiki/
+" GetLatestVimScripts: 2226 1 :AutoInstall: vimwiki
 
 if exists("loaded_vimwiki") || &cp
   finish
@@ -142,9 +143,10 @@ function! VimwikiGet(option, ...) "{{{
   " then add it
   if a:option == 'path' || a:option == 'path_html'
     let p = g:vimwiki_list[idx][a:option]
-    if p !~ '[\/]$'
-      let g:vimwiki_list[idx][a:option] = p.'/'
-    endif
+    " resolve doesn't work quite right with symlinks ended with / or \
+    let p = substitute(p, '[/\\]\+$', '', '')
+    let p = resolve(expand(p))
+    let g:vimwiki_list[idx][a:option] = p.'/'
   endif
 
   return g:vimwiki_list[idx][a:option]
