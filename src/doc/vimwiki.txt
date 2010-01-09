@@ -255,7 +255,8 @@ You can 'vah' to select a header with its contents or 'dah' to delete it or
     Toggle list item on/off (checked/unchecked)
     See |vimwiki-todo-lists|.
 
-*:Search* /pattern/
+*:VimwikiSearch* /pattern/
+*:VWS* /pattern/
     Search for /pattern/ in current wiki.
 
 
@@ -1148,6 +1149,8 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       symbolic link. Thanks lilydjwg for the patch.
     * FIX: Issue 28: todo-list auto-indent enhancement. New item should always
       be unchecked.
+    * Issue 36: Change the name of the Search command to VimwikiSearch as it
+      conflicts with MultipleSearch. Alias :VWS is also available.
 
 0.9.701~
     * FIX: Issue 30: Highlighting doesn't work for checked list item.
