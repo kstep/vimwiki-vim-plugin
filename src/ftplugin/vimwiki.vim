@@ -205,8 +205,11 @@ command! -buffer VimwikiVSplitWord call vimwiki#WikiFollowWord('vsplit')
 
 command! -buffer -range VimwikiToggleListItem call vimwiki_lst#ToggleListItem(<line1>, <line2>)
 
-exe 'command! -buffer -nargs=* Search vimgrep <args> '.
-      \ VimwikiGet('path').'**/*'.VimwikiGet('ext')
+exe 'command! -buffer -nargs=* VimwikiSearch vimgrep <args> '.
+      \ escape(VimwikiGet('path').'**/*'.VimwikiGet('ext'), ' ')
+
+exe 'command! -buffer -nargs=* VWS vimgrep <args> '.
+      \ escape(VimwikiGet('path').'**/*'.VimwikiGet('ext'), ' ')
 
 " COMMANDS }}}
 
