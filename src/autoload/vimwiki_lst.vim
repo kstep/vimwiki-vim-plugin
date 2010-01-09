@@ -322,7 +322,6 @@ endfunction "}}}
 
 function! vimwiki_lst#insertCR() "{{{
   " This function is heavily relies on proper 'set comments' option.
-  " TODO: we could remove that dependency.
   let cr = "\<CR>"
   if getline('.') =~ s:rx_cb_list_item()
     let cr .= '[ ] '

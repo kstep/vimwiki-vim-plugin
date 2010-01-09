@@ -288,6 +288,12 @@ augroup vimwiki
     " ColorScheme could have or could have not a VimwikiHeader1..VimwikiHeader6
     " highlight groups. We need to refresh syntax after colorscheme change.
     execute 'autocmd ColorScheme *'.ext.' call s:setup_colors() | set syntax=vimwiki'
+    
+    " Refresh folding -- foldexpr function is written that way -- it needs
+    " full refresh after leaving insert mode.
+    if g:vimwiki_folding
+      execute 'autocmd InsertLeave *'.ext.' setl fdm=expr'
+    endif
   endfor
 augroup END
 "}}}

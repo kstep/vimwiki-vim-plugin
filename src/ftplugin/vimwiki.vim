@@ -53,11 +53,20 @@ if g:vimwiki_folding == 1
 endif
 
 function! VimwikiFoldLevel(lnum) "{{{
+  " You have to setup InsertLeave autocmd in order this function to work
+  " properly. Ie:
+  " autocmd! InsertLeave *.wiki setl fdm=expr
+
+  if a:lnum == 1
+    let b:vimwiki_base_fold_level = 0
+  endif
+
   let line = getline(a:lnum)
 
   " Header folding...
   if line =~ g:vimwiki_rxHeader
     let n = vimwiki#count_first_sym(line)
+    let b:vimwiki_base_fold_level = n
     return '>'.n
   endif
 
@@ -73,7 +82,7 @@ function! VimwikiFoldLevel(lnum) "{{{
 
   " List item folding...
   if g:vimwiki_fold_lists
-    let base_level = s:get_base_level(a:lnum)
+    let base_level = b:vimwiki_base_fold_level
     
     let rx_list_item = '\('.
           \ g:vimwiki_rxListBullet.'\|'.g:vimwiki_rxListNumber.
@@ -85,13 +94,12 @@ function! VimwikiFoldLevel(lnum) "{{{
       let level = s:get_li_level(a:lnum)
       let leveln = s:get_li_level(nnum)
       let adj = s:get_li_level(s:get_start_list(rx_list_item, a:lnum))
-
+      
       if leveln > level
         return ">".(base_level+leveln-adj)
       else
         return (base_level+level-adj)
       endif
-
     else
       " process multilined list items
       let [pnum, pline] = s:find_backward(rx_list_item, a:lnum)
@@ -112,7 +120,6 @@ function! VimwikiFoldLevel(lnum) "{{{
         endif
       endif
     endif
-
 
     return base_level
   endif
@@ -158,20 +165,6 @@ function! s:get_li_level(lnum) "{{{
     let level = (indent(a:lnum) / &sw)
   endif
   return level
-endfunction "}}}
-
-function! s:get_base_level(lnum) "{{{
-  let lnum = a:lnum
-  while lnum >= 1
-    let line = getline(lnum)
-    if line =~ g:vimwiki_rxHeader
-      return vimwiki#count_first_sym(line)
-    endif
-    let lnum -= 1
-  endwhile
-  return 0
-  " let lnum = search(g:vimwiki_rxHeader, 'nbW')
-  " return vimwiki#count_first_sym(getline(lnum))
 endfunction "}}}
 
 function! s:get_start_list(rx_item, lnum) "{{{
