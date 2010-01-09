@@ -669,6 +669,13 @@ It is possible to toggle several list items using visual mode.
 ==============================================================================
 8. Options                                                   *vimwiki-options*
 
+There are global and per wiki(local) options available to tune vimwiki.
+All global options are set using the following template: >
+    let g:option_name=option_value
+
+All per wiki options are |Dictionary|'s pairs in a list of wikies
+(dictionaries). See |g:vimwiki_list| option for more details.
+
 ------------------------------------------------------------------------------
 *g:vimwiki_list* *vimwiki-multiple-wikies*
 
@@ -693,6 +700,8 @@ Empty |Dictionary| in the g:vimwiki_list is the wiki with default options: >
             \ {'path': '~/my_docs/', 'ext': '.mdox'}]
 
 <
+
+
 Per wiki options
 
 *vimwiki-option-path*
@@ -888,6 +897,10 @@ or in: >
 
 
 Global options
+Use: >
+    let g:option_name=option_value
+to set them.
+
 ------------------------------------------------------------------------------
 *g:vimwiki_hl_headers*
 
