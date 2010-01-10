@@ -343,6 +343,10 @@ function! vimwiki_lst#insertOo(cmd) "{{{
     let res = matchstr(line, '^\s*')
   endif
   if a:cmd ==# 'o'
+    let folded_lnum = foldclosedend(lnum)
+    if folded_lnum != -1
+      let lnum = folded_lnum
+    endif
     call append(lnum, res)
     call cursor(lnum + 1, col('$'))
   else
