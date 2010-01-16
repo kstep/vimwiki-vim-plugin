@@ -332,8 +332,16 @@ endfunction "}}}
 function! vimwiki_lst#insertOo(cmd) "{{{
   " cmd should be 'o' or 'O'
 
-  let line = getline('.')
-  let lnum = line('.')
+  let beg_lnum = foldclosed('.')
+  let end_lnum = foldclosedend('.')
+  if end_lnum != -1 && a:cmd ==# 'o'
+    let lnum = end_lnum
+    let line = getline(beg_lnum)
+  else
+    let line = getline('.')
+    let lnum = line('.')
+  endif
+
   let res = ''
   if line =~ s:rx_cb_list_item()
     let res = matchstr(line, s:rx_list_item()).'[ ] '
@@ -343,10 +351,6 @@ function! vimwiki_lst#insertOo(cmd) "{{{
     let res = matchstr(line, '^\s*')
   endif
   if a:cmd ==# 'o'
-    let folded_lnum = foldclosedend(lnum)
-    if folded_lnum != -1
-      let lnum = folded_lnum
-    endif
     call append(lnum, res)
     call cursor(lnum + 1, col('$'))
   else

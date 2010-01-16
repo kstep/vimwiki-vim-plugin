@@ -40,8 +40,8 @@ endif
 setlocal formatoptions=tnro
 
 inoremap <expr> <CR> vimwiki_lst#insertCR()
-noremap o :call vimwiki_lst#insertOo('o')<CR>a
-noremap O :call vimwiki_lst#insertOo('O')<CR>a
+nnoremap o :call vimwiki_lst#insertOo('o')<CR>a
+nnoremap O :call vimwiki_lst#insertOo('O')<CR>a
 
 " COMMENTS }}}
 
@@ -53,20 +53,11 @@ if g:vimwiki_folding == 1
 endif
 
 function! VimwikiFoldLevel(lnum) "{{{
-  " You have to setup InsertLeave autocmd in order this function to work
-  " properly. Ie:
-  " autocmd! InsertLeave *.wiki setl fdm=expr
-
-  if a:lnum == 1
-    let b:vimwiki_base_fold_level = 0
-  endif
-
   let line = getline(a:lnum)
 
   " Header folding...
   if line =~ g:vimwiki_rxHeader
     let n = vimwiki#count_first_sym(line)
-    let b:vimwiki_base_fold_level = n
     return '>'.n
   endif
 
@@ -82,7 +73,7 @@ function! VimwikiFoldLevel(lnum) "{{{
 
   " List item folding...
   if g:vimwiki_fold_lists
-    let base_level = b:vimwiki_base_fold_level
+    let base_level = s:get_base_level(a:lnum)
     
     let rx_list_item = '\('.
           \ g:vimwiki_rxListBullet.'\|'.g:vimwiki_rxListNumber.
@@ -125,6 +116,17 @@ function! VimwikiFoldLevel(lnum) "{{{
   endif
 
   return -1
+endfunction "}}}
+
+function! s:get_base_level(lnum) "{{{
+  let lnum = a:lnum - 1
+  while lnum > 0
+    if getline(lnum) =~ g:vimwiki_rxHeader
+      return vimwiki#count_first_sym(getline(lnum))
+    endif
+    let lnum -= 1
+  endwhile
+  return 0
 endfunction "}}}
 
 function! s:find_forward(rx_item, lnum) "{{{

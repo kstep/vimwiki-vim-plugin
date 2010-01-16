@@ -33,12 +33,14 @@ CONTENTS                                                    *vimwiki-contents*
     5.8. Blockquotes .........................|vimwiki-syntax-blockquotes|
     5.9. Comments ............................|vimwiki-syntax-comments|
   6. Folding/Outline .........................|vimwiki-folding|
-  7. Todo lists...............................|vimwiki-todo-lists|
-  8. Options .................................|vimwiki-options|
-  9. Help ....................................|vimwiki-help|
-  10. Author .................................|vimwiki-author|
-  11. Changelog ..............................|vimwiki-changelog|
-  12. License ................................|vimwiki-license|
+  7. Placeholders ............................|vimwiki-placeholders|
+    7.1 Table of Contents ....................|vimwiki-table-of-contents|
+  8. Todo lists...............................|vimwiki-todo-lists|
+  9. Options .................................|vimwiki-options|
+  10. Help ...................................|vimwiki-help|
+  11. Author .................................|vimwiki-author|
+  12. Changelog ..............................|vimwiki-changelog|
+  13. License ................................|vimwiki-license|
 
 
 ==============================================================================
@@ -616,7 +618,28 @@ For MediaWiki * or # should be in the first column.
 To turn folding on/off check |g:vimwiki_folding|.
 
 ==============================================================================
-7. Todo lists                                             *vimwiki-todo-lists*
+7. Placeholders                                           *vimwiki-todo-lists*
+
+------------------------------------------------------------------------------
+7.1. Table of Contents               *vimwiki-toc* *vimwiki-table-of-contents*
+
+You can add 'table of contents' to your html page generated from wiki one.
+Just place >
+
+%toc
+
+into your wiki page.
+You can also add caption to your 'toc': >
+
+%toc Table of Contents
+
+or >
+
+%toc Whatever
+
+
+==============================================================================
+8. Todo lists                                             *vimwiki-todo-lists*
 
 You can have todo lists -- lists of items you can check/uncheck.
 
@@ -667,7 +690,7 @@ percentage of toggled child items(see also |g:vimwiki_listsyms|): >
 It is possible to toggle several list items using visual mode.
 
 ==============================================================================
-8. Options                                                   *vimwiki-options*
+9. Options                                                   *vimwiki-options*
 
 There are global and per wiki(local) options available to tune vimwiki.
 All global options are set using the following template: >
@@ -1106,7 +1129,7 @@ or redefine VimwikiWeblinkHandler function: >
 
 
 ==============================================================================
-9. Help                                                         *vimwiki-help*
+10. Help                                                        *vimwiki-help*
 
 As you could see I am not native English speaker (not a writer as well).
 Please send me correct phrases instead of that incorrect stuff I have used
@@ -1115,7 +1138,7 @@ here.
 Any help is really appreciated!
 
 ==============================================================================
-10. Author                                                    *vimwiki-author*
+11. Author                                                    *vimwiki-author*
 
 I live in Moscow and you may believe me -- there are no polar bears (no brown
 too) here in the streets.
@@ -1134,7 +1157,7 @@ Vimwiki's website: http://code.google.com/p/vimwiki/
 Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 
 ==============================================================================
-11. Changelog                                              *vimwiki-changelog*
+12. Changelog                                              *vimwiki-changelog*
 
 0.9.8~
     * NEW: Rename |g:vimwiki_fold_empty_lines| to
@@ -1164,6 +1187,8 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       be unchecked.
     * Issue 36: Change the name of the Search command to VimwikiSearch as it
       conflicts with MultipleSearch. Alias :VWS is also available.
+    * NEW: You can generate 'Table of contents' of your wiki page. See
+      |vimwiki-toc| for details.
 
 0.9.701~
     * FIX: Issue 30: Highlighting doesn't work for checked list item.
@@ -1484,7 +1509,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * First public version.
 
 ==============================================================================
-12. License                                                   *vimwiki-license*
+13. License                                                  *vimwiki-license*
 
 The MIT Licence
 http://www.opensource.org/licenses/mit-license.php

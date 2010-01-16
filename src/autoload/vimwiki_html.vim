@@ -69,7 +69,7 @@ function! s:create_default_CSS(path) " {{{
 
     call add(lines, 'body {font-family: Arial, sans-serif; margin: 1em 2em 1em 2em; font-size: 100%; line-height: 130%;}')
     call add(lines, 'h1, h2, h3, h4, h5, h6 {font-family: Trebuchet MS, serif; margin-top: 1.5em; margin-bottom: 0.5em;}')
-    call add(lines, 'h1 {font-size: 2.0em; color: #aa8888;}')
+    call add(lines, 'h1 {font-size: 2.0em; color: #a77070;}')
     call add(lines, 'h2 {font-size: 1.6em; color: #779977;}')
     call add(lines, 'h3 {font-size: 1.3em; color: #555577;}')
     call add(lines, 'h4 {font-size: 1.2em; color: #222244;}')
@@ -244,6 +244,51 @@ endfunction " }}}
 function! s:save_vimwiki_buffer() "{{{
   if &filetype == 'vimwiki'
     silent update
+  endif
+endfunction "}}}
+
+function! s:trim(string) "{{{
+  let res = substitute(a:string, '^\s\+', '', '')
+  let res = substitute(res, '\s\+$', '', '')
+  return res
+endfunction "}}}
+
+" toc_list is list of [level, header_text, header_id]
+" ex: [[1, "Header", "toc1"], [2, "Header2", "toc2"], ...]
+function! s:get_html_toc(toc_list) "{{{
+  let toc = []
+  let level = 0
+  let plevel = 0
+  for [level, text, id] in a:toc_list
+    if level > plevel
+      call add(toc, '<ul>')
+    elseif level < plevel
+      call add(toc, '</ul>')
+    endif
+    call add(toc, '<li><a href="#'.id.'">'.text.'</a></li>')
+    let plevel = level
+  endfor
+  while level > 0
+    call add(toc, '</ul>')
+    let level -= 1
+  endwhile
+  return toc
+endfunction "}}}
+
+" insert placeholder's contents into dest.
+function! s:process_placeholders(dest, placeholders, type, ins_content) "{{{
+  if !empty(a:placeholders)
+    for [placeholder, row, idx] in a:placeholders
+      let [type, param] = placeholder
+      if type == a:type
+        let ins_content = a:ins_content[:]
+        if !empty(param)
+          call insert(ins_content, '<h1>'.param.'</h1>')
+        endif
+        let shift = idx * len(ins_content)
+        call extend(a:dest, ins_content, row + shift)
+      endif
+    endfor
   endif
 endfunction "}}}
 
@@ -670,10 +715,12 @@ function! s:process_tag_para(line, para) "{{{
   return [processed, lines, para]
 endfunction "}}}
 
-function! s:process_tag_h(line) "{{{
+function! s:process_tag_h(line, id) "{{{
   let line = a:line
   let processed = 0
   let h_level = 0
+  let h_text = ''
+  let h_id = ''
   if a:line =~ g:vimwiki_rxH6
     let h_level = 6
   elseif a:line =~ g:vimwiki_rxH5
@@ -693,22 +740,21 @@ function! s:process_tag_h(line) "{{{
       let centered = 1
     endif
 
-    " ltrim
-    let line = substitute(a:line, '^\s\+', '', 'g')
-    " rtrim
-    let line = substitute(line, '\s\+$', '', 'g')
+    let line = s:trim(line)
+
+    let h_text = s:trim(strpart(line, h_level, len(line) - h_level * 2))
+    let h_id = 'toc'.a:id
+    let h_part = '<h'.h_level.' id="'.h_id.'"'
 
     if centered
-      let hpart = '<h'.h_level.' class="justcenter">'
+      let h_part .= ' class="justcenter">'
     else
-      let hpart = '<h'.h_level.'>'
+      let h_part .= '>'
     endif
-    let line = hpart.
-          \ strpart(line, h_level, len(line) - h_level * 2).
-          \'</h'.h_level.'>'
+    let line = h_part.h_text.'</h'.h_level.'>'
     let processed = 1
   endif
-  return [processed, line]
+  return [processed, line, h_level, h_text, h_id]
 endfunction "}}}
 
 function! s:process_tag_hr(line) "{{{
@@ -776,12 +822,24 @@ function! s:wiki2html(line, state) " {{{
   let state.table = a:state.table
   let state.lists = a:state.lists[:]
   let state.deflist = a:state.deflist
+  let state.placeholder = a:state.placeholder
+  let state.toc = a:state.toc
+  let state.toc_id = a:state.toc_id
 
   let res_lines = []
 
   let line = s:safe_html(a:line)
 
   let processed = 0
+
+  " toc -- placeholder
+  if !processed
+    if line =~ '^\s*%toc'
+      let processed = 1
+      let param = matchstr(line, '^\s*%toc\s\zs.*')
+      let state.placeholder = ['toc', param]
+    endif
+  endif
 
   " pres
   if !processed
@@ -830,13 +888,17 @@ function! s:wiki2html(line, state) " {{{
 
   " headers
   if !processed
-    let [processed, line] = s:process_tag_h(line)
+    let [processed, line, h_level, h_text, h_id] = s:process_tag_h(line, state.toc_id)
     if processed
       call s:close_tag_list(state.lists, res_lines)
       let state.table = s:close_tag_table(state.table, res_lines)
       let state.pre = s:close_tag_pre(state.pre, res_lines)
       let state.quote = s:close_tag_quote(state.quote, res_lines)
       call add(res_lines, line)
+
+      " gather information for table of contents
+      call add(state.toc, [h_level, h_text, h_id])
+      let state.toc_id += 1
     endif
   endif
 
@@ -939,7 +1001,10 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
   let lsource = s:remove_comments(readfile(wikifile))
   let ldest = s:get_html_header(wikifile, subdir, &fileencoding)
 
+  " for table of contents placeholders.
+  let placeholders = []
 
+  " current state of converter
   let state = {}
   let state.para = 0
   let state.quote = 0
@@ -947,6 +1012,9 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
   let state.table = 0
   let state.deflist = 0
   let state.lists = []
+  let state.placeholder = []
+  let state.toc = []
+  let state.toc_id = 1
 
   for line in lsource
     let oldquote = state.quote
@@ -959,8 +1027,17 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
       call s:remove_blank_lines(ldest)
     endif
 
+    if !empty(state.placeholder)
+      call add(placeholders, [state.placeholder, len(ldest), len(placeholders)])
+      let state.placeholder = []
+    endif
+
     call extend(ldest, lines)
   endfor
+
+
+  let toc = s:get_html_toc(state.toc)
+  call s:process_placeholders(ldest, placeholders, 'toc', toc)
 
   call s:remove_blank_lines(ldest)
 

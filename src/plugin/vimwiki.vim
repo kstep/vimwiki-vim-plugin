@@ -103,7 +103,7 @@ function! s:setup_colors()"{{{
   endif
 
   if &background == 'light'
-    hi def VimwikiHeader1 guibg=bg guifg=#c05050 gui=bold ctermfg=DarkRed
+    hi def VimwikiHeader1 guibg=bg guifg=#aa5858 gui=bold ctermfg=DarkRed
     hi def VimwikiHeader2 guibg=bg guifg=#309010 gui=bold ctermfg=DarkGreen
     hi def VimwikiHeader3 guibg=bg guifg=#1030a0 gui=bold ctermfg=DarkBlue
     hi def VimwikiHeader4 guibg=bg guifg=#103040 gui=bold ctermfg=Black
@@ -288,12 +288,6 @@ augroup vimwiki
     " ColorScheme could have or could have not a VimwikiHeader1..VimwikiHeader6
     " highlight groups. We need to refresh syntax after colorscheme change.
     execute 'autocmd ColorScheme *'.ext.' call s:setup_colors() | set syntax=vimwiki'
-    
-    " Refresh folding -- foldexpr function is written that way -- it needs
-    " full refresh after leaving insert mode.
-    if g:vimwiki_folding
-      execute 'autocmd InsertLeave *'.ext.' setl fdm=expr'
-    endif
   endfor
 augroup END
 "}}}
