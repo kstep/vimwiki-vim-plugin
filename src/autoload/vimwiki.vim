@@ -433,10 +433,7 @@ function! vimwiki#WikiGoHome(index) "{{{
           \ VimwikiGet('path').
           \ VimwikiGet('index').
           \ VimwikiGet('ext')
-  catch /E325/ " catch 'ATTENTION' error
-    " TODO: Hmmm, if open already opened index.wiki there is an error...
-    " Find out what is the reason and how to avoid it. Is it dangerous?
-    echoerr "vimwiki: Unknown error!"
+  catch /E325/ " catch 'ATTENTION' error (:h E325)
   endtry
 endfunction
 "}}}
