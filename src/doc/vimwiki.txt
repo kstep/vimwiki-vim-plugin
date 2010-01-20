@@ -46,27 +46,35 @@ CONTENTS                                                    *vimwiki-contents*
 ==============================================================================
 1. Intro                                                             *vimwiki*
 
-Vimwiki is a personal wiki for Vim. Using it you can organize text files with
-hyperlinks. To do a quick start press <Leader>ww (this is usually \ww) to go
-to your index wiki file. By default it is located in: >
-  ~/vimwiki/index.wiki
-You do not have to create it manually -- vimwiki can make it for you.
+Vimwiki is a personal wiki for Vim -- a number of linked text files that have
+it's own syntax highlighting.
+
+With vimwiki you can
+    - organize notes and ideas
+    - manage todo-lists
+    - write documentation
+
+To do a quick start press <Leader>ww (this is usually \ww) to go to your index
+wiki file. By default it is located in: >
+    ~/vimwiki/index.wiki
 
 Feed it with the following example:
+
 = My knowledge base =
-  * MyUrgentTasks -- things to be done _yesterday_!!!
-  * ProjectGutenberg -- good books are power.
-  * MusicILike, MusicIHate.
+    * MyUrgentTasks -- things to be done _yesterday_!!!
+    * ProjectGutenberg -- good books are power.
+    * ScratchPad -- various temporary stuff.
 
-Notice that ProjectGutenberg, MyUrgentTasks, MusicILike and MusicIHate
-highlighted as errors. These WikiWords (WikiWord or WikiPage -- capitalized
-word connected with other capitalized words) do not exist yet.
 
-Place cursor on ProjectGutenberg and press Enter. Now you are in
-ProjectGutenberg. Edit and save it, then press Backspace to return to previous
-WikiPage. You should see the difference in highlighting now.
+Notice that ProjectGutenberg, MyUrgentTasks and ScratchPad highlighted as
+errors. These are links in CamelCase form that do not exists yet. (CamelCase
+form -- capitalized word connected with other capitalized words)
 
-Now it is your turn...
+Place cursor on ProjectGutenberg and press <Enter>. Now you are in
+ProjectGutenberg. Edit and save it, then press Backspace to return to parent
+wiki page. You should see the difference now -- ProjectGutenberg is
+highlighted as a link.
+
 
 ==============================================================================
 2. Prerequisites                                       *vimwiki-prerequisites*

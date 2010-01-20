@@ -86,6 +86,7 @@ function! s:create_default_CSS(path) " {{{
     call add(lines, 'td {border: 1px solid #ccc; padding: 0.3em;}')
     call add(lines, 'hr {border: none; border-top: 1px solid #ccc; width: 100%;}')
     call add(lines, 'del {text-decoration: line-through; color: #777777;}')
+    call add(lines, '.toc li {list-style-type: none;}')
     call add(lines, '.todo {font-weight: bold; background-color: #f0ece8; color: #a03020;}')
     call add(lines, '.justleft {text-align: left;}')
     call add(lines, '.justright {text-align: right;}')
@@ -256,7 +257,11 @@ endfunction "}}}
 " toc_list is list of [level, header_text, header_id]
 " ex: [[1, "Header", "toc1"], [2, "Header2", "toc2"], ...]
 function! s:get_html_toc(toc_list) "{{{
-  let toc = []
+  if empty(a:toc_list)
+    return []
+  endif
+
+  let toc = ['<div class="toc">']
   let level = 0
   let plevel = 0
   for [level, text, id] in a:toc_list
@@ -272,6 +277,7 @@ function! s:get_html_toc(toc_list) "{{{
     call add(toc, '</ul>')
     let level -= 1
   endwhile
+  call add(toc, '</div>')
   return toc
 endfunction "}}}
 
