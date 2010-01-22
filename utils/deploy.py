@@ -108,20 +108,20 @@ if __name__ == "__main__":
     print("Getting vimwiki files into {}".format(SRC_DIR))
     get_vimwiki_files(VIMF_DIR, SRC_DIR, set_ff_unix)
 
-    ver = get_vimwiki_version().replace('.', '_')
+    ver = get_vimwiki_version().replace('.', '-')
     print("Getting vimwiki version: {}".format(ver))
 
-    vba_name = "vimwiki_{0}.vba".format(ver)
+    vba_name = "vimwiki-{0}.vba".format(ver)
     path_vba_name = os.path.join(DEPLOY_DIR, vba_name)
     print("Creating vba file: {}".format(path_vba_name))
     make_vba_file(SRC_DIR, path_vba_name)
 
-    zip_name = "vimwiki_{0}.zip".format(ver)
+    zip_name = "vimwiki-{0}.zip".format(ver)
     path_zip_name = os.path.join(DEPLOY_DIR, zip_name)
     print("Packing src files into: {}".format(path_zip_name))
     make_zip_folder(SRC_DIR, path_zip_name)
 
-    zip_vba_name = "vimwiki_{0}_vba.zip".format(ver)
+    zip_vba_name = "vimwiki-{0}-vba.zip".format(ver)
     path_zip_vba_name = os.path.join(DEPLOY_DIR, zip_vba_name)
     print("Packing vba file into: {}".format(path_zip_vba_name))
     make_zip_vba(vba_name, path_zip_vba_name)
