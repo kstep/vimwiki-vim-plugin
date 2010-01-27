@@ -197,6 +197,16 @@ let s:vimwiki_defaults.gohome = 'split'
 let s:vimwiki_defaults.html_header = ''
 let s:vimwiki_defaults.html_footer = ''
 let s:vimwiki_defaults.nested_syntaxes = {}
+
+" diary
+let s:vimwiki_defaults.diary_rel_path = 'diary/'
+let s:vimwiki_defaults.diary_index = 'diary'
+let s:vimwiki_defaults.diary_header = 'Diary'
+let s:vimwiki_defaults.diary_link_fmt = '%Y-%m-%d'
+let s:vimwiki_defaults.diary_link_prefix = '||'
+let s:vimwiki_defaults.diary_link_suffix = '||'
+let s:vimwiki_defaults.diary_link_count = 4
+
 "}}}
 
 " DEFAULT options {{{
@@ -298,6 +308,11 @@ command! -count VimwikiGoHome
       \ call vimwiki#WikiGoHome(v:count1)
 command! -count VimwikiTabGoHome tabedit <bar>
       \ call vimwiki#WikiGoHome(v:count1)
+
+command! -count VimwikiMakeDiaryNote
+      \ call vimwiki_diary#make_note(v:count1)
+command! -count VimwikiTabMakeDiaryNote tabedit <bar>
+      \ call vimwiki_diary#make_note(v:count1)
 "}}}
 
 " MAPPINGS {{{
@@ -315,6 +330,17 @@ if !hasmapto('<Plug>VimwikiUISelect')
   map <silent><unique> <Leader>ws <Plug>VimwikiUISelect
 endif
 noremap <unique><script> <Plug>VimwikiUISelect :VimwikiUISelect<CR>
+
+if !hasmapto('<Plug>VimwikiMakeDiaryNote')
+  map <silent><unique> <Leader>w<Leader>w <Plug>VimwikiMakeDiaryNote
+endif
+noremap <unique><script> <Plug>VimwikiMakeDiaryNote :VimwikiMakeDiaryNote<CR>
+
+if !hasmapto('<Plug>VimwikiTabMakeDiaryNote')
+  map <silent><unique> <Leader>w<Leader>t <Plug>VimwikiTabMakeDiaryNote
+endif
+noremap <unique><script> <Plug>VimwikiTabMakeDiaryNote
+      \ :VimwikiTabMakeDiaryNote<CR>
 
 "}}}
 

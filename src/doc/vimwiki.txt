@@ -8,7 +8,7 @@
        \ `\___/ /\_____\\ \_\\ \_\ `\___x___/ /\_____\\ \_\ \_\ /\_____\~
         `\/__/  \/_____/ \/_/ \/_/'\/__//__/  \/_____/ \/_/\/_/ \/_____/~
 
-                               Version: 0.9.801 ~
+                               Version: 0.9.9
 
 ==============================================================================
 CONTENTS                                                    *vimwiki-contents*
@@ -36,11 +36,12 @@ CONTENTS                                                    *vimwiki-contents*
   7. Placeholders ............................|vimwiki-placeholders|
     7.1 Table of Contents ....................|vimwiki-table-of-contents|
   8. Todo lists...............................|vimwiki-todo-lists|
-  9. Options .................................|vimwiki-options|
-  10. Help ...................................|vimwiki-help|
-  11. Author .................................|vimwiki-author|
-  12. Changelog ..............................|vimwiki-changelog|
-  13. License ................................|vimwiki-license|
+  9. Diary....................................|vimwiki-diary|
+  10. Options ................................|vimwiki-options|
+  11. Help ...................................|vimwiki-help|
+  12. Author .................................|vimwiki-author|
+  13. Changelog ..............................|vimwiki-changelog|
+  14. License ................................|vimwiki-license|
 
 
 ==============================================================================
@@ -71,8 +72,8 @@ errors. These are links in CamelCase form that do not exists yet. (CamelCase
 form -- capitalized word connected with other capitalized words)
 
 Place cursor on ProjectGutenberg and press <Enter>. Now you are in
-ProjectGutenberg. Edit and save it, then press Backspace to return to parent
-wiki page. You should see the difference now -- ProjectGutenberg is
+ProjectGutenberg. Edit and save it, then press Backspace to return to previous
+wiki file. You should see the difference now -- ProjectGutenberg is
 highlighted as a link.
 
 
@@ -697,8 +698,49 @@ percentage of toggled child items(see also |g:vimwiki_listsyms|): >
 
 It is possible to toggle several list items using visual mode.
 
+
+
 ==============================================================================
-9. Options                                                   *vimwiki-options*
+9. Diary                                                       *vimwiki-diary*
+
+Diary helps you make daily notes. You can really easy add information into
+vimwiki that should be sorted out later. Just hit <Leader>w<Leader>w to create
+new wiki file with name based on current date. The link to this newly created
+file is added to a diary wiki file (could be any file you set up).
+
+Usage example with default settings: >
+  Consider today is 2010-01-27.
+
+  Hit \w\w .
+  ~/vimwiki/diary.wiki is created.
+
+  2 following lines are added to ~/vimwiki/diary/diary.wiki :
+  = Diary =
+  || [[2010-01-27]] ||
+
+  ~/vimwiki/diary/2010-01-27.wiki is created.
+  You are ready to add your information there.
+  -------------------------------------------
+
+  On the next day.
+  Hit \w\w .
+
+  The first line after = Diary = is changed in ~/vimwiki/diary/diary.wiki :
+  = Diary =
+  || [[2010-01-28]] || [[2010-01-27]] ||
+
+  ~/vimwiki/diary/2010-01-28.wiki is created.
+  You are ready to add your information there.
+>
+
+TODO: add description.
+TODO: add keybindings.
+TODO: add commands.
+
+
+
+==============================================================================
+10. Options                                                  *vimwiki-options*
 
 There are global and per wiki(local) options available to tune vimwiki.
 All global options are set using the following template: >
@@ -1137,7 +1179,7 @@ or redefine VimwikiWeblinkHandler function: >
 
 
 ==============================================================================
-10. Help                                                        *vimwiki-help*
+11. Help                                                        *vimwiki-help*
 
 As you could see I am not native English speaker (not a writer as well).
 Please send me correct phrases instead of that incorrect stuff I have used
@@ -1146,7 +1188,7 @@ here.
 Any help is really appreciated!
 
 ==============================================================================
-11. Author                                                    *vimwiki-author*
+12. Author                                                    *vimwiki-author*
 
 I live in Moscow and you may believe me -- there are no polar bears (no brown
 too) here in the streets.
@@ -1165,7 +1207,13 @@ Vimwiki's website: http://code.google.com/p/vimwiki/
 Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 
 ==============================================================================
-12. Changelog                                              *vimwiki-changelog*
+13. Changelog                                              *vimwiki-changelog*
+
+0.9.9~
+    * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can
+      really easy add information into vimwiki that should be sorted out
+      later.
+
 
 0.9.8~
     * NEW: Rename |g:vimwiki_fold_empty_lines| to
@@ -1517,12 +1565,12 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * First public version.
 
 ==============================================================================
-13. License                                                  *vimwiki-license*
+14. License                                                  *vimwiki-license*
 
 The MIT Licence
 http://www.opensource.org/licenses/mit-license.php
 
-Copyright (c) 2009 Maxim Kim
+Copyright (c) 2010 Maxim Kim
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
