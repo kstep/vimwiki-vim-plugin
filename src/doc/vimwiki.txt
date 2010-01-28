@@ -716,7 +716,7 @@ Usage example with default settings: >
 
   2 following lines are added to ~/vimwiki/diary/diary.wiki :
   = Diary =
-  || [[2010-01-27]] ||
+  ||[[2010-01-27]]||
 
   ~/vimwiki/diary/2010-01-27.wiki is created.
   You are ready to add your information there.
@@ -727,15 +727,36 @@ Usage example with default settings: >
 
   The first line after = Diary = is changed in ~/vimwiki/diary/diary.wiki :
   = Diary =
-  || [[2010-01-28]] || [[2010-01-27]] ||
+  ||[[2010-01-28]]||[[2010-01-27]]||
 
   ~/vimwiki/diary/2010-01-28.wiki is created.
   You are ready to add your information there.
 >
 
-TODO: add description.
+Calendar integration                                        *vimwiki-calendar*
+------------------------------------------------------------------------------
+If you have Calendar.vim installed you can use it to create diary notes.
+Just open calendar with :Calendar and tap <Enter> on the date. Wiki file would
+be created in default wiki's diary.
+
+Get it from http://www.vim.org/scripts/script.php?script_id=52
+
 TODO: add keybindings.
 TODO: add commands.
+TODO: add options.
+
+g:vimwiki_hijack_calendar = 1
+" diary
+let s:vimwiki_defaults.diary_rel_path = 'diary/'
+let s:vimwiki_defaults.diary_index = 'diary'
+let s:vimwiki_defaults.diary_header = 'Diary'
+
+" Do not change this! Will wait till vim would be more datetime awareable.
+let s:vimwiki_defaults.diary_link_fmt = '%Y-%m-%d'
+
+let s:vimwiki_defaults.diary_link_prefix = '||'
+let s:vimwiki_defaults.diary_link_suffix = '||'
+let s:vimwiki_defaults.diary_link_count = 4
 
 
 
@@ -1213,7 +1234,6 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can
       really easy add information into vimwiki that should be sorted out
       later.
-
 
 0.9.8~
     * NEW: Rename |g:vimwiki_fold_empty_lines| to

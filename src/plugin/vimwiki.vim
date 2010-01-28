@@ -202,7 +202,10 @@ let s:vimwiki_defaults.nested_syntaxes = {}
 let s:vimwiki_defaults.diary_rel_path = 'diary/'
 let s:vimwiki_defaults.diary_index = 'diary'
 let s:vimwiki_defaults.diary_header = 'Diary'
+
+" Do not change this! Will wait till vim would be more datetime awareable.
 let s:vimwiki_defaults.diary_link_fmt = '%Y-%m-%d'
+
 let s:vimwiki_defaults.diary_link_prefix = '||'
 let s:vimwiki_defaults.diary_link_suffix = '||'
 let s:vimwiki_defaults.diary_link_count = 4
@@ -249,6 +252,8 @@ else
         \  'konqueror',
         \ ])
 endif
+
+call s:default('hijack_calendar', 1)
 
 call s:default('current_idx', 0)
 
@@ -358,5 +363,11 @@ if !empty(g:vimwiki_menu)
   call s:build_menu(g:vimwiki_menu)
 endif
 " }}}
+
+" CALENDAR Hook "{{{
+if g:vimwiki_hijack_calendar
+  let g:calendar_action = 'vimwiki_diary#calendar_action'
+endif
+"}}}
 
 let &cpo = s:old_cpo
