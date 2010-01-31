@@ -96,8 +96,9 @@ There are global and local mappings in vimwiki.
 ------------------------------------------------------------------------------
 3.1. Global mappings                                 *vimwiki-global-mappings*
 
-<Leader>ww or <Plug>VimwikiGoHome
+[count]<Leader>ww or <Plug>VimwikiGoHome
         Open index file of the [count]'s wiki.
+
         <Leader>ww opens first wiki from |g:vimwiki_list|.
         1<Leader>ww as above opens first wiki from |g:vimwiki_list|.
         2<Leader>ww opens second wiki from |g:vimwiki_list|.
@@ -108,8 +109,10 @@ There are global and local mappings in vimwiki.
 <
 See also|:VimwikiGoHome|
 
-<Leader>wt or <Plug>VimwikiTabGoHome
+
+[count]<Leader>wt or <Plug>VimwikiTabGoHome
         Open index file of the [count]'s wiki in a new tab.
+
         <Leader>wt tabopens first wiki from |g:vimwiki_list|.
         1<Leader>wt as above tabopens first wiki from |g:vimwiki_list|.
         2<Leader>wt tabopens second wiki from |g:vimwiki_list|.
@@ -120,12 +123,49 @@ See also|:VimwikiGoHome|
 <
 See also|:VimwikiTabGoHome|
 
+
 <Leader>ws or <Plug>VimwikiUISelect
         List and select available wikies.
         To remap: >
         :map <Leader>wq <Plug>VimwikiUISelect
 <
 See also|:VimwikiUISelect|
+
+
+[count]<Leader>w<Leader>w or <Plug>VimwikiMakeDiaryNote
+        Open diary wiki-file for today of the [count]'s wiki.
+
+        <Leader>w<Leader>w opens diary wiki-file for today in the first wiki
+        from |g:vimwiki_list|.
+        1<Leader>w<Leader>w as above opens diary wiki-file for today in the
+        first wiki from |g:vimwiki_list|.
+        2<Leader>w<Leader>w opens diary wiki-file for today in the second wiki
+        from |g:vimwiki_list|.
+        3<Leader>w<Leader>w opens diary wiki-file for today in the third wiki
+        from |g:vimwiki_list|.
+        etc.
+        To remap: >
+        :map <Leader>d <Plug>VimwikiMakeDiaryNote
+<
+See also|:VimwikiMakeDiaryNote|
+
+
+[count]<Leader>w<Leader>t or <Plug>VimwikiTabMakeDiaryNote
+        Open diary wiki-file for today of the [count]'s wiki in a new tab.
+
+        <Leader>w<Leader>t tabopens diary wiki-file for today in the first
+        wiki from |g:vimwiki_list|.
+        1<Leader>w<Leader>t as above tabopens diary wiki-file for today in the
+        first wiki from |g:vimwiki_list|.
+        2<Leader>w<Leader>t tabopens diary wiki-file for today in the second
+        wiki from |g:vimwiki_list|.
+        3<Leader>w<Leader>t tabopens diary wiki-file for today in the third
+        wiki from |g:vimwiki_list|.
+        etc.
+        To remap: >
+        :map <Leader>dt <Plug>VimwikiTabMakeDiaryNote
+<
+See also|:VimwikiTabMakeDiaryNote|
 
 
 ------------------------------------------------------------------------------
@@ -228,6 +268,12 @@ You can 'vah' to select a header with its contents or 'dah' to delete it or
 
 *:VimwikiUISelect*
     Open index file of the selected wiki.
+
+*:VimwikiMakeDiaryNote*
+    Open diary wiki-file for today of the current wiki.
+
+*:VimwikiTabMakeDiaryNote*
+    Open diary wiki-file for today of the current wiki in a new tab.
 
 ------------------------------------------------------------------------------
 4.2. Local commands                                   *vimwiki-local-commands*
@@ -716,7 +762,7 @@ Usage example with default settings: >
 
   2 following lines are added to ~/vimwiki/diary/diary.wiki :
   = Diary =
-  ||[[2010-01-27]]||
+  || [[2010-01-27]] ||
 
   ~/vimwiki/diary/2010-01-27.wiki is created.
   You are ready to add your information there.
@@ -727,11 +773,13 @@ Usage example with default settings: >
 
   The first line after = Diary = is changed in ~/vimwiki/diary/diary.wiki :
   = Diary =
-  ||[[2010-01-28]]||[[2010-01-27]]||
+  || [[2010-01-28]] || [[2010-01-27]] ||
 
   ~/vimwiki/diary/2010-01-28.wiki is created.
   You are ready to add your information there.
 >
+
+By default there are 4 links on the line. All links are sorted by their dates.
 
 Calendar integration                                        *vimwiki-calendar*
 ------------------------------------------------------------------------------
@@ -740,23 +788,6 @@ Just open calendar with :Calendar and tap <Enter> on the date. Wiki file would
 be created in default wiki's diary.
 
 Get it from http://www.vim.org/scripts/script.php?script_id=52
-
-TODO: add keybindings.
-TODO: add commands.
-TODO: add options.
-
-g:vimwiki_hijack_calendar = 1
-" diary
-let s:vimwiki_defaults.diary_rel_path = 'diary/'
-let s:vimwiki_defaults.diary_index = 'diary'
-let s:vimwiki_defaults.diary_header = 'Diary'
-
-" Do not change this! Will wait till vim would be more datetime awareable.
-let s:vimwiki_defaults.diary_link_fmt = '%Y-%m-%d'
-
-let s:vimwiki_defaults.diary_link_prefix = '||'
-let s:vimwiki_defaults.diary_link_suffix = '||'
-let s:vimwiki_defaults.diary_link_count = 4
 
 
 
@@ -796,7 +827,9 @@ Empty |Dictionary| in the g:vimwiki_list is the wiki with default options: >
 <
 
 
+------------------------------------------------------------------------------
 Per wiki options
+------------------------------------------------------------------------------
 
 *vimwiki-option-path*
 ---------------------
@@ -990,7 +1023,52 @@ or in: >
 
 
 
+*vimwiki-option-diary_rel_path*
+-------------------------------
+Key             Default value~
+diary_rel_path  diary/
+
+Description~
+Related to |vimwiki-option-path| path for diary wiki-files.
+
+
+*vimwiki-option-diary_index*
+----------------------------
+Key             Default value~
+diary_index     diary
+
+Description~
+Name of wiki-file that holds all links to dated wiki-files.
+
+
+*vimwiki-option-diary_header*
+-----------------------------
+Key             Default value~
+diary_header    Diary
+
+Description~
+Name of the header in |vimwiki-option-diary_index| where links to dated
+wiki-files are located.
+
+
+*vimwiki-option-diary_link_count*
+---------------------------------
+Key               Default value~
+diary_link_count  4
+
+Description~
+Number of maximum dated links placed on one line.
+Ex:
+= Diary =
+|| [[2010-01-30]] || [[2010-01-29]] || [[2010-01-28]] || [[2010-01-27]] ||
+|| [[2010-01-26]] || [[2010-01-25]] ||
+
+
+
+
+------------------------------------------------------------------------------
 Global options
+------------------------------------------------------------------------------
 Use: >
     let g:option_name=option_value
 to set them.
@@ -1175,6 +1253,18 @@ Convert newlines to <BR />s in multiline list items.
 Value           Description~
 0               Newlines in a list item are converted to <BR />s.
 1               Ignore newlines.
+
+Default: 1
+
+------------------------------------------------------------------------------
+*g:vimwiki_use_calendar*
+
+Create new or open existing diary wiki-file for the date selected in Calendar.
+See |vimwiki-calendar|.
+
+Value           Description~
+0               Do not use calendar.
+1               Use calendar.
 
 Default: 1
 

@@ -206,8 +206,8 @@ let s:vimwiki_defaults.diary_header = 'Diary'
 " Do not change this! Will wait till vim would be more datetime awareable.
 let s:vimwiki_defaults.diary_link_fmt = '%Y-%m-%d'
 
-let s:vimwiki_defaults.diary_link_prefix = '||'
-let s:vimwiki_defaults.diary_link_suffix = '||'
+let s:vimwiki_defaults.diary_link_prefix = '|| '
+let s:vimwiki_defaults.diary_link_suffix = ' || '
 let s:vimwiki_defaults.diary_link_count = 4
 
 "}}}
@@ -253,7 +253,7 @@ else
         \ ])
 endif
 
-call s:default('hijack_calendar', 1)
+call s:default('use_calendar', 1)
 
 call s:default('current_idx', 0)
 
@@ -365,7 +365,7 @@ endif
 " }}}
 
 " CALENDAR Hook "{{{
-if g:vimwiki_hijack_calendar
+if g:vimwiki_use_calendar
   let g:calendar_action = 'vimwiki_diary#calendar_action'
 endif
 "}}}
