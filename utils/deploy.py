@@ -13,6 +13,7 @@ import os
 import glob
 import shutil
 import re
+from datetime import date
 
 import zipfile
 import gzip
@@ -120,6 +121,11 @@ if __name__ == "__main__":
     path_zip_name = os.path.join(DEPLOY_DIR, zip_name)
     print("Packing src files into: {}".format(path_zip_name))
     make_zip_folder(SRC_DIR, path_zip_name)
+
+    zip_dev_name = "vimwiki-dev-{0}.zip".format(date.today().isoformat())
+    path_zip_dev_name = os.path.join(DEPLOY_DIR, zip_dev_name)
+    shutil.copy(path_zip_name, path_zip_dev_name)
+    print("Making dev package: {}".format(path_zip_dev_name))
 
     zip_vba_name = "vimwiki-{0}-vba.zip".format(ver)
     path_zip_vba_name = os.path.join(DEPLOY_DIR, zip_vba_name)
