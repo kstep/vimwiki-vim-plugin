@@ -80,15 +80,15 @@ endif
 syntax region VimwikiComment start='<!--' end='-->'
 
 if !vimwiki#hl_exists("VimwikiHeader1")
-  execute 'syntax match VimwikiHeader /'.g:vimwiki_rxHeader.'/'
+  execute 'syntax match VimwikiHeader /'.g:vimwiki_rxHeader.'/ contains=VimwikiTodo'
 else
   " Header levels, 1-6
-  execute 'syntax match VimwikiHeader1 /'.g:vimwiki_rxH1.'/'
-  execute 'syntax match VimwikiHeader2 /'.g:vimwiki_rxH2.'/'
-  execute 'syntax match VimwikiHeader3 /'.g:vimwiki_rxH3.'/'
-  execute 'syntax match VimwikiHeader4 /'.g:vimwiki_rxH4.'/'
-  execute 'syntax match VimwikiHeader5 /'.g:vimwiki_rxH5.'/'
-  execute 'syntax match VimwikiHeader6 /'.g:vimwiki_rxH6.'/'
+  execute 'syntax match VimwikiHeader1 /'.g:vimwiki_rxH1.'/ contains=VimwikiTodo'
+  execute 'syntax match VimwikiHeader2 /'.g:vimwiki_rxH2.'/ contains=VimwikiTodo'
+  execute 'syntax match VimwikiHeader3 /'.g:vimwiki_rxH3.'/ contains=VimwikiTodo'
+  execute 'syntax match VimwikiHeader4 /'.g:vimwiki_rxH4.'/ contains=VimwikiTodo'
+  execute 'syntax match VimwikiHeader5 /'.g:vimwiki_rxH5.'/ contains=VimwikiTodo'
+  execute 'syntax match VimwikiHeader6 /'.g:vimwiki_rxH6.'/ contains=VimwikiTodo'
 endif
 
 " group names "{{{

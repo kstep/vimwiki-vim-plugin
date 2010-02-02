@@ -251,7 +251,7 @@ ah                      A Header with leading empty lines.
 ih                      Inner Header without leading empty lines.
 
 You can 'vah' to select a header with its contents or 'dah' to delete it or
-'yah' to yank it or 'cah' to change it. ;)
+'yah' to yank it or 'cah' to change it.
 
 
 ==============================================================================
@@ -1324,6 +1324,10 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can
       really easy add information into vimwiki that should be sorted out
       later.
+    * NEW: Words TODO:, DONE:, XXX:, FIXME:, FIXED: are highlighed inside
+      headers.
+    * FIX: Menu is corrupted if wiki's path contains spaces.
+
 
 0.9.8~
     * NEW: Rename |g:vimwiki_fold_empty_lines| to

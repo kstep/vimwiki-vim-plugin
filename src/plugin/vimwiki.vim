@@ -350,10 +350,12 @@ noremap <unique><script> <Plug>VimwikiTabMakeDiaryNote
 "}}}
 
 " MENU {{{
-function! s:build_menu(path)
+function! s:build_menu(topmenu)
   let idx = 0
   while idx < len(g:vimwiki_list)
-    execute 'menu '.a:path.'.'.VimwikiGet('path', idx).
+    let norm_path = escape(VimwikiGet('path', idx), '\ ')
+    let norm_path = fnamemodify(norm_path, ':h')
+    execute 'menu '.a:topmenu.'.'.norm_path.
           \ ' :call vimwiki#WikiGoHome('.(idx + 1).')<CR>'
     let idx += 1
   endwhile
