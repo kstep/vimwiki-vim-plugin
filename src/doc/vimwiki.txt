@@ -50,10 +50,10 @@ CONTENTS                                                    *vimwiki-contents*
 Vimwiki is a personal wiki for Vim -- a number of linked text files that have
 their own syntax highlighting.
 
-With vimwiki you can
-    - organize notes and ideas
-    - manage todo-lists
-    - write documentation
+With vimwiki you can:
+    - organize notes and ideas;
+    - manage todo-lists;
+    - write documentation.
 
 To do a quick start press <Leader>ww (this is usually \ww) to go to your index
 wiki file. By default it is located in: >
@@ -1324,9 +1324,13 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can
       really easy add information into vimwiki that should be sorted out
       later.
-    * NEW: Words TODO:, DONE:, XXX:, FIXME:, FIXED: are highlighed inside
-      headers.
+    * NEW: Keyword STARTED: is added.
+    * NEW: Words TODO:, DONE:, STARTED:, XXX:, FIXME:, FIXED: are highlighed
+      inside headers.
     * FIX: Menu is corrupted if wiki's path contains spaces.
+    * FIX: Settings |wrap| and |linebreak| are removed from ftplugin. Add them
+      into your personal settings file `.vim/after/ftplugin/vimwiki.vim` if
+      needed.
 
 
 0.9.8~

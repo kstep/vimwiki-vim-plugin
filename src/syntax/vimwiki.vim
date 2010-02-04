@@ -32,7 +32,7 @@ execute 'syntax match VimwikiLink `'.g:vimwiki_rxWeblink.'`'
 " Emoticons
 syntax match VimwikiEmoticons /\%((.)\|:[()|$@]\|:-[DOPS()\]|$@]\|;)\|:'(\)/
 
-let g:vimwiki_rxTodo = '\C\%(TODO:\|DONE:\|FIXME:\|FIXED:\|XXX:\)'
+let g:vimwiki_rxTodo = '\C\%(TODO:\|DONE:\|STARTED:\|FIXME:\|FIXED:\|XXX:\)'
 execute 'syntax match VimwikiTodo /'. g:vimwiki_rxTodo .'/'
 
 " Load concrete Wiki syntax

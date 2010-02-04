@@ -900,6 +900,9 @@ function! s:wiki2html(line, state) " {{{
       let state.table = s:close_tag_table(state.table, res_lines)
       let state.pre = s:close_tag_pre(state.pre, res_lines)
       let state.quote = s:close_tag_quote(state.quote, res_lines)
+      
+      let line = s:make_tag(line, g:vimwiki_rxTodo, 's:tag_todo')
+      
       call add(res_lines, line)
 
       " gather information for table of contents

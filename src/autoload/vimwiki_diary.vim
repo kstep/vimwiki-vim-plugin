@@ -200,6 +200,9 @@ function! vimwiki_diary#calendar_action(day, month, year, week, dir) "{{{
     endif
   else
     wincmd p
+    if !&hidden && &modified
+      new
+    endif
   endif
 
   " Create diary note for a selected date in default wiki.
