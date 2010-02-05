@@ -211,6 +211,11 @@ exe 'command! -buffer -nargs=* VimwikiSearch vimgrep <args> '.
 exe 'command! -buffer -nargs=* VWS vimgrep <args> '.
       \ escape(VimwikiGet('path').'**/*'.VimwikiGet('ext'), ' ')
 
+" table commands
+command! -buffer -nargs=* VimwikiTable call vimwiki_tbl#create(<f-args>)
+command! -buffer VimwikiTableAlignQ call vimwiki_tbl#align_or_cmd('gqq')
+command! -buffer VimwikiTableAlignW call vimwiki_tbl#align_or_cmd('gww')
+
 " COMMANDS }}}
 
 " KEYBINDINGS {{{
@@ -280,6 +285,14 @@ if !hasmapto('<Plug>VimwikiToggleListItem')
 endif
 noremap <silent><script><buffer>
       \ <Plug>VimwikiToggleListItem :VimwikiToggleListItem<CR>
+
+
+" Table mappings
+inoremap <expr> <buffer> <CR> vimwiki_tbl#kbd_cr()
+inoremap <expr> <buffer> <Tab> vimwiki_tbl#kbd_tab()
+
+noremap <buffer> gqq :VimwikiTableAlignQ<CR>
+noremap <buffer> gww :VimwikiTableAlignW<CR>
 
 
 " Text objects {{{

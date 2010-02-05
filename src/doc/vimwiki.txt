@@ -36,12 +36,13 @@ CONTENTS                                                    *vimwiki-contents*
   7. Placeholders ............................|vimwiki-placeholders|
     7.1 Table of Contents ....................|vimwiki-table-of-contents|
   8. Todo lists...............................|vimwiki-todo-lists|
-  9. Diary....................................|vimwiki-diary|
-  10. Options ................................|vimwiki-options|
-  11. Help ...................................|vimwiki-help|
-  12. Author .................................|vimwiki-author|
-  13. Changelog ..............................|vimwiki-changelog|
-  14. License ................................|vimwiki-license|
+  9. Tables...................................|vimwiki-tables|
+  10. Diary...................................|vimwiki-diary|
+  11. Options ................................|vimwiki-options|
+  12. Help ...................................|vimwiki-help|
+  13. Author .................................|vimwiki-author|
+  14. Changelog ..............................|vimwiki-changelog|
+  15. License ................................|vimwiki-license|
 
 
 ==============================================================================
@@ -553,30 +554,31 @@ Term 2::
 ------------------------------------------------------------------------------
 5.6. Tables                                            *vimwiki-syntax-tables*
 
-Tables are created by entering the content of each cell separated by ||
+Tables are created by entering the content of each cell separated by |
 delimiters. You can insert other inline wiki syntax in table cells, including
 typeface formatting and links.
-For example:
+For example: >
 
-||*Year*s||*Temperature (low)*||*Temperature (high)*||
-||1900   ||-10                ||25                  ||
-||1910   ||-15                ||30                  ||
-||1920   ||-10                ||32                  ||
-||1930   ||_N/A_              ||_N/A_               ||
-||1940   ||-2                 ||40                  ||
+ | Year | Temperature (low) | Temperature (high) |
+ |------+-------------------+--------------------|
+ | 1900 | -10               | 25                 |
+ | 1910 | -15               | 30                 |
+ | 1920 | -10               | 32                 |
+ | 1930 | _N/A_             | _N/A_              |
+ | 1940 | -2                | 40                 |
+>
+
+In html the following part >
+ | Year | Temperature (low) | Temperature (high) |
+ |------+-------------------+--------------------|
+>
+is higlighted as a table header.
 
 
-For HTML, contents of table cell could be aligned to the right, left and
-center:
+See |vimwiki-tables| for more details on how to manage tables.
 
-|| Center || Center || Center ||
-||Left    || Center ||   Right||
-||   Right||Left    || Center ||
-|| Center ||   Right||Left    ||
-
-No spaces on the left side -- left alignment.
-No spaces on the right side -- right alignment.
-Spaces on the left and on the right -- center alignment.
+Note: You can not use [[link|description]] type of links in tables. Use
+[[link][description]] instead.
 
 
 ------------------------------------------------------------------------------
@@ -745,9 +747,16 @@ percentage of toggled child items(see also |g:vimwiki_listsyms|): >
 It is possible to toggle several list items using visual mode.
 
 
+==============================================================================
+9. Tables                                                     *vimwiki-tables*
+
+TODO: Add help on tables here.
+- description, examples
+- maps
+- commands
 
 ==============================================================================
-9. Diary                                                       *vimwiki-diary*
+10. Diary                                                      *vimwiki-diary*
 
 Diary helps you make daily notes. You can really easy add information into
 vimwiki that should be sorted out later. Just hit <Leader>w<Leader>w to create
@@ -762,7 +771,7 @@ Usage example with default settings: >
 
   2 following lines are added to ~/vimwiki/diary/diary.wiki :
   = Diary =
-  || [[2010-01-27]] ||
+  | [[2010-01-27]] |
 
   ~/vimwiki/diary/2010-01-27.wiki is created.
   You are ready to add your information there.
@@ -773,7 +782,7 @@ Usage example with default settings: >
 
   The first line after = Diary = is changed in ~/vimwiki/diary/diary.wiki :
   = Diary =
-  || [[2010-01-28]] || [[2010-01-27]] ||
+  | [[2010-01-28]] | [[2010-01-27]] |
 
   ~/vimwiki/diary/2010-01-28.wiki is created.
   You are ready to add your information there.
@@ -792,7 +801,7 @@ Get it from http://www.vim.org/scripts/script.php?script_id=52
 
 
 ==============================================================================
-10. Options                                                  *vimwiki-options*
+11. Options                                                  *vimwiki-options*
 
 There are global and per wiki(local) options available to tune vimwiki.
 All global options are set using the following template: >
@@ -1290,7 +1299,7 @@ or redefine VimwikiWeblinkHandler function: >
 
 
 ==============================================================================
-11. Help                                                        *vimwiki-help*
+12. Help                                                        *vimwiki-help*
 
 As you could see I am not native English speaker (not a writer as well).
 Please send me correct phrases instead of that incorrect stuff I have used
@@ -1299,7 +1308,7 @@ here.
 Any help is really appreciated!
 
 ==============================================================================
-12. Author                                                    *vimwiki-author*
+13. Author                                                    *vimwiki-author*
 
 I live in Moscow and you may believe me -- there are no polar bears (no brown
 too) here in the streets.
@@ -1318,12 +1327,15 @@ Vimwiki's website: http://code.google.com/p/vimwiki/
 Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 
 ==============================================================================
-13. Changelog                                              *vimwiki-changelog*
+14. Changelog                                              *vimwiki-changelog*
 
 0.9.9~
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can
       really easy add information into vimwiki that should be sorted out
       later.
+    * NEW: Tables are redesigned. Syntax is changed. They are
+      auto-formattable. You can navigate them with <tab> and <cr> in insert
+      mode. See |vimwiki-syntax-tables| and |vimwiki-tables| for more details. 
     * NEW: Keyword STARTED: is added.
     * NEW: Words TODO:, DONE:, STARTED:, XXX:, FIXME:, FIXED: are highlighed
       inside headers.
@@ -1332,6 +1344,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       into your personal settings file `.vim/after/ftplugin/vimwiki.vim` if
       needed.
 
+It is auto-formattable, you can navigate it with <tab> and <cr> in insert mode.
 
 0.9.8~
     * NEW: Rename |g:vimwiki_fold_empty_lines| to
@@ -1683,7 +1696,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * First public version.
 
 ==============================================================================
-14. License                                                  *vimwiki-license*
+15. License                                                  *vimwiki-license*
 
 The MIT Licence
 http://www.opensource.org/licenses/mit-license.php

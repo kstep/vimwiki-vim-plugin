@@ -39,7 +39,14 @@ execute 'syntax match VimwikiTodo /'. g:vimwiki_rxTodo .'/'
 execute 'runtime! syntax/vimwiki_'.VimwikiGet('syntax').'.vim'
 
 " Tables
-execute 'syntax match VimwikiTable /'.g:vimwiki_rxTable.'/'
+" execute 'syntax match VimwikiTable /'.g:vimwiki_rxTable.'/'
+syntax match VimwikiTableRow /\s*|.\+|\s*/ 
+      \ transparent contains=VimwikiCellSeparator,VimwikiWord,
+      \ VimwikiNoExistsWord,VimwikiEmoticons,VimwikiTodo,
+      \ VimwikiBold,VimwikiItalic,VimwikiBoldItalic,VimwikiItalicBold,
+      \ VimwikiDelText,VimwikiSuperScript,VimwikiSubScript,VimwikiCode
+syntax match VimwikiCellSeparator 
+      \ /\%(|\)\|\%(-\@<=+\-\@=\)\|\%([|+]\@<=-\+\)/ contained
 
 " List items
 execute 'syntax match VimwikiList /'.g:vimwiki_rxListBullet.'/'
@@ -117,13 +124,15 @@ hi def link VimwikiLink Underlined
 hi def link VimwikiList Function
 hi def link VimwikiCheckBox VimwikiList
 hi def link VimwikiCheckBoxDone Comment
-hi def link VimwikiTable PreProc
 hi def link VimwikiEmoticons Character
 hi def link VimwikiDelText Constant
 hi def link VimwikiSuperScript Number
 hi def link VimwikiSubScript Number
 hi def link VimwikiTodo Todo
 hi def link VimwikiComment Comment
+
+hi def link VimwikiCellSeparator Special
+" hi def link VimwikiTable PreProc
 "}}}
 
 let b:current_syntax="vimwiki"

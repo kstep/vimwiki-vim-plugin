@@ -206,8 +206,6 @@ let s:vimwiki_defaults.diary_header = 'Diary'
 " Do not change this! Will wait till vim would be more datetime awareable.
 let s:vimwiki_defaults.diary_link_fmt = '%Y-%m-%d'
 
-let s:vimwiki_defaults.diary_link_prefix = '|| '
-let s:vimwiki_defaults.diary_link_suffix = ' || '
 let s:vimwiki_defaults.diary_link_count = 4
 
 "}}}
@@ -278,7 +276,7 @@ let g:vimwiki_rxWeblink = '\%("[^"(]\+\((\([^)]\+\))\)\?":\)\?'.
       \'\%(\%(\%(//\)\|\%(\\\\\)\)\+[A-Za-z0-9:#@%/;,$~()_?+=.&\\\-]*\)'
 "}}}
 
-" FILETYPE setup for all known wiki extensions {{{
+" AUTOCOMMANDS for all known wiki extensions {{{
 " Getting all extensions that different wikies could have
 let extensions = {}
 for wiki in g:vimwiki_list
@@ -303,6 +301,9 @@ augroup vimwiki
     " ColorScheme could have or could have not a VimwikiHeader1..VimwikiHeader6
     " highlight groups. We need to refresh syntax after colorscheme change.
     execute 'autocmd ColorScheme *'.ext.' call s:setup_colors() | set syntax=vimwiki'
+
+    " Format tables when exit from insert mode.
+    execute 'autocmd InsertLeave *'.ext.' call vimwiki_tbl#format(line("."))'
   endfor
 augroup END
 "}}}

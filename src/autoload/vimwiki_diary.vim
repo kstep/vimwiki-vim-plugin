@@ -2,7 +2,6 @@
 " Desc: Handle diary notes
 " Author: Maxim Kim <habamax@gmail.com>
 " Home: http://code.google.com/p/vimwiki/
-" TODO: Refactor it!
 
 " Load only once {{{
 if exists("g:loaded_vimwiki_diary_auto") || &cp
@@ -108,16 +107,16 @@ endfunction "}}}
 function! s:sort_links(lines, ln_start) "{{{
   let [links, ln_end] = s:get_sorted_links(a:lines, a:ln_start)
   let link_lines = []
-  let line = VimwikiGet('diary_link_prefix')
+  let line = '| '
   let idx = 0
   let trigger = 0
   while idx < len(links)
     if idx/VimwikiGet('diary_link_count') > trigger
       let trigger = idx/VimwikiGet('diary_link_count')
       call add(link_lines, substitute(line, '\s\+$', '', ''))
-      let line = VimwikiGet('diary_link_prefix')
+      let line = '| '
     endif
-    let line .= links[idx].VimwikiGet('diary_link_suffix')
+    let line .= links[idx].' | '
     let idx += 1
   endwhile
   call add(link_lines, substitute(line, '\s\+$', '', ''))
