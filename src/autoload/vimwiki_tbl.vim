@@ -14,6 +14,8 @@ endif
 let g:loaded_vimwiki_tbl_auto = 1
 "}}}
 
+let s:textwidth = &tw
+
 " Misc functions {{{
 function! s:wide_len(str) "{{{
   return strlen(substitute(a:str, '.', 'x', 'g'))
@@ -273,6 +275,8 @@ function! vimwiki_tbl#format(lnum) "{{{
   for [lnum, row] in s:get_aligned_rows(a:lnum, max_lens)
     call setline(lnum, row)
   endfor
+  
+  let &tw = s:textwidth
 endfunction "}}}
 
 function! vimwiki_tbl#create(...) "{{{
@@ -316,6 +320,16 @@ function! vimwiki_tbl#align_or_cmd(cmd) "{{{
   else
     exe 'normal! '.a:cmd
   endif
+endfunction "}}}
+
+function! vimwiki_tbl#reset_tw(lnum) "{{{
+  let line = getline(a:lnum)
+  if !s:is_table(line)
+    return
+  endif
+  
+  let s:textwidth = &tw
+  let &tw = 0
 endfunction "}}}
 
 "}}}

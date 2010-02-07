@@ -295,15 +295,19 @@ augroup end
 augroup vimwiki
   autocmd!
   for ext in keys(extensions)
-    execute 'autocmd BufEnter *'.ext.' call s:setup_buffer_enter()'
-    execute 'autocmd BufLeave,BufHidden *'.ext.' call s:setup_buffer_leave()'
+    exe 'autocmd BufEnter *'.ext.' call s:setup_buffer_enter()'
+    exe 'autocmd BufLeave,BufHidden *'.ext.' call s:setup_buffer_leave()'
 
-    " ColorScheme could have or could have not a VimwikiHeader1..VimwikiHeader6
-    " highlight groups. We need to refresh syntax after colorscheme change.
-    execute 'autocmd ColorScheme *'.ext.' call s:setup_colors() | set syntax=vimwiki'
+    " ColorScheme could have or could have not a
+    " VimwikiHeader1..VimwikiHeader6 highlight groups. We need to refresh
+    " syntax after colorscheme change.
+    exe 'autocmd ColorScheme *'.ext.' call s:setup_colors()'.
+          \ ' | set syntax=vimwiki'
 
-    " Format tables when exit from insert mode.
-    execute 'autocmd InsertLeave *'.ext.' call vimwiki_tbl#format(line("."))'
+    " Format tables when exit from insert mode. Do not use textwidth to
+    " autowrap tables.
+    exe 'autocmd InsertLeave *'.ext.' call vimwiki_tbl#format(line("."))'
+    exe 'autocmd InsertEnter *'.ext.' call vimwiki_tbl#reset_tw(line("."))'
   endfor
 augroup END
 "}}}
