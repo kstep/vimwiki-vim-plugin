@@ -52,7 +52,6 @@ function! s:get_diary_range(lines, header) "{{{
   for line in a:lines
     if ln_start != -1 
       if line =~ '^\s*\(=\)\+.*\1\s*$' || (line !~ rx && line !~ '^\s*$')
-        let ln_end = idx - 1
         break
       endif
     endif
@@ -61,6 +60,8 @@ function! s:get_diary_range(lines, header) "{{{
     endif
     let idx += 1
   endfor
+
+  let ln_end = idx - 1
   return [ln_start, ln_end]
 endfunction "}}}
 
