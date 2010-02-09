@@ -802,7 +802,7 @@ Use :VimwikiTable command to create default table with 5 columns and 2 rows: >
  |   |   |   |   |   |
 <
 
-Tables are auto-formattable. Let's add some text at first cell: >
+Tables are auto-formattable. Let's add some text into first cell: >
 
  | First Name  |   |   |   |   |
  |---+---+---+---+---|
