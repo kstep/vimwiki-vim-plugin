@@ -131,8 +131,7 @@ hi def link VimwikiSubScript Number
 hi def link VimwikiTodo Todo
 hi def link VimwikiComment Comment
 
-hi def link VimwikiCellSeparator Special
-" hi def link VimwikiTable PreProc
+hi def link VimwikiCellSeparator SpecialKey
 "}}}
 
 let b:current_syntax="vimwiki"

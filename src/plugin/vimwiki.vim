@@ -48,6 +48,11 @@ function! s:setup_buffer_leave()"{{{
   if &filetype == 'vimwiki' && !exists("b:vimwiki_idx")
     let b:vimwiki_idx = g:vimwiki_current_idx
   endif
+
+  " Set up menu
+  if g:vimwiki_menu != ""
+    exe 'nmenu disable '.g:vimwiki_menu.'.Table'
+  endif
 endfunction"}}}
 
 function! s:setup_buffer_enter() "{{{
@@ -94,6 +99,11 @@ function! s:setup_buffer_enter() "{{{
     setlocal fdm=expr
     setlocal foldexpr=VimwikiFoldLevel(v:lnum)
     setlocal foldtext=VimwikiFoldText()
+  endif
+
+  " Set up menu
+  if g:vimwiki_menu != ""
+    exe 'nmenu enable '.g:vimwiki_menu.'.Table'
   endif
 endfunction "}}}
 
@@ -252,6 +262,7 @@ else
 endif
 
 call s:default('use_calendar', 1)
+call s:default('table_auto_fmt', 1)
 
 call s:default('current_idx', 0)
 
@@ -306,8 +317,10 @@ augroup vimwiki
 
     " Format tables when exit from insert mode. Do not use textwidth to
     " autowrap tables.
-    exe 'autocmd InsertLeave *'.ext.' call vimwiki_tbl#format(line("."))'
-    exe 'autocmd InsertEnter *'.ext.' call vimwiki_tbl#reset_tw(line("."))'
+    if g:vimwiki_table_auto_fmt
+      exe 'autocmd InsertLeave *'.ext.' call vimwiki_tbl#format(line("."))'
+      exe 'autocmd InsertEnter *'.ext.' call vimwiki_tbl#reset_tw(line("."))'
+    endif
   endfor
 augroup END
 "}}}
@@ -358,16 +371,26 @@ noremap <unique><script> <Plug>VimwikiTabMakeDiaryNote
 function! s:build_menu(topmenu)
   let idx = 0
   while idx < len(g:vimwiki_list)
-    let norm_path = escape(VimwikiGet('path', idx), '\ ')
-    let norm_path = fnamemodify(norm_path, ':h')
-    execute 'menu '.a:topmenu.'.'.norm_path.
+    let norm_path = fnamemodify(VimwikiGet('path', idx), ':h:t')
+    let norm_path = escape(norm_path, '\ ')
+    execute 'menu '.a:topmenu.'.Open\ index.'.norm_path.
           \ ' :call vimwiki#WikiGoHome('.(idx + 1).')<CR>'
+    execute 'menu '.a:topmenu.'.Open/Create\ diary\ note.'.norm_path.
+          \ ' :call vimwiki_diary#make_note('.(idx + 1).')<CR>'
     let idx += 1
   endwhile
 endfunction
 
+function! s:build_table_menu(topmenu)
+  exe 'menu '.a:topmenu.'.-Sep- :'
+  exe 'menu '.a:topmenu.'.Table.Create\ (enter\ cols\ rows) :VimwikiTable '
+  exe 'nmenu '.a:topmenu.'.Table.Format<tab>gqq gqq'
+  exe 'nmenu disable '.a:topmenu.'.Table'
+endfunction
+
 if !empty(g:vimwiki_menu)
   call s:build_menu(g:vimwiki_menu)
+  call s:build_table_menu(g:vimwiki_menu)
 endif
 " }}}
 

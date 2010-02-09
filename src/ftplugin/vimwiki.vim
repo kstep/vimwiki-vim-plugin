@@ -37,9 +37,9 @@ else
 endif
 setlocal formatoptions=tnro
 
-inoremap <expr> <CR> vimwiki_lst#insertCR()
-nnoremap o :call vimwiki_lst#insertOo('o')<CR>a
-nnoremap O :call vimwiki_lst#insertOo('O')<CR>a
+inoremap <buffer> <expr> <CR> vimwiki_lst#insertCR()
+nnoremap <buffer> o :call vimwiki_lst#insertOo('o')<CR>a
+nnoremap <buffer> O :call vimwiki_lst#insertOo('O')<CR>a
 
 " COMMENTS }}}
 
@@ -288,8 +288,10 @@ noremap <silent><script><buffer>
 
 
 " Table mappings
-inoremap <expr> <buffer> <CR> vimwiki_tbl#kbd_cr()
-inoremap <expr> <buffer> <Tab> vimwiki_tbl#kbd_tab()
+if g:vimwiki_table_auto_fmt
+  inoremap <expr> <buffer> <CR> vimwiki_tbl#kbd_cr()
+  inoremap <expr> <buffer> <Tab> vimwiki_tbl#kbd_tab()
+endif
 
 noremap <buffer> gqq :VimwikiTableAlignQ<CR>
 noremap <buffer> gww :VimwikiTableAlignW<CR>
