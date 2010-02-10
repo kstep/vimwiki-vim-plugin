@@ -158,9 +158,11 @@ function! s:add_link(page, header, link) "{{{
 
     if bufnr != -1
       exe 'buffer '.bufnr
-      1,$delete _
-      call append(1, lines)
-      1,1delete _
+      if !&readonly
+        1,$delete _
+        call append(1, lines)
+        1,1delete _
+      endif
     else
       call writefile(lines, expand(a:page))
     endif

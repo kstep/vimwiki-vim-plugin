@@ -30,7 +30,7 @@ function! s:is_separator(line) "{{{
 endfunction "}}}
 
 function! s:is_last_column(lnum, cnum) "{{{
-  return strpart(getline(a:lnum), a:cnum) =~ '^[^|]\+|\s*$'
+  return strpart(getline(a:lnum), a:cnum - 1) =~ '^[^|]*|\s*$'
 endfunction "}}}
 
 function! s:count_separators(lnum) "{{{
