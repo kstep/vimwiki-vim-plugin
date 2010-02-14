@@ -293,8 +293,8 @@ if g:vimwiki_table_auto_fmt
   inoremap <expr> <buffer> <Tab> vimwiki_tbl#kbd_tab()
 endif
 
-noremap <buffer> gqq :VimwikiTableAlignQ<CR>
-noremap <buffer> gww :VimwikiTableAlignW<CR>
+nnoremap <buffer> gqq :VimwikiTableAlignQ<CR>
+nnoremap <buffer> gww :VimwikiTableAlignW<CR>
 
 
 " Text objects {{{
