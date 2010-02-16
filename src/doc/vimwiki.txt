@@ -1423,6 +1423,8 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * NEW: Keyword STARTED: is added.
     * NEW: Words TODO:, DONE:, STARTED:, XXX:, FIXME:, FIXED: are highlighed
       inside headers.
+    * FIX: Export to html external links with 'file://' protocol. Ex:
+      [file:///home/user1/book.pdf my book].
     * FIX: Menu is corrupted if wiki's path contains spaces.
     * FIX: Settings |wrap| and |linebreak| are removed from ftplugin. Add them
       into your personal settings file `.vim/after/ftplugin/vimwiki.vim` if

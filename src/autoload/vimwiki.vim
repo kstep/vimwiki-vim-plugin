@@ -27,6 +27,9 @@ function! vimwiki#mkdir(path) "{{{
   let path = expand(a:path)
   if !isdirectory(path) && exists("*mkdir")
     let path = s:chomp_slash(path)
+    " if has("win32") && !empty(g:vimwiki_w32_dir_enc)
+      " let path = iconv(path, &enc, g:vimwiki_w32_dir_enc)
+    " endif
     call mkdir(path, "p")
   endif
 endfunction
