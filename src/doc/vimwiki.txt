@@ -1382,6 +1382,23 @@ Value           Description~
 Default: 1
 
 
+------------------------------------------------------------------------------
+*g:vimwiki_w32_dir_enc*
+
+Convert directory name from current |encoding| into 'g:vimwiki_w32_dir_enc'
+before it is created.
+
+If have 'enc=utf-8' and you set up >
+    let g:vimwiki_w32_dir_enc = 'cp1251'
+<
+then following the next link with <CR>: >
+    [[привет/мир]]
+>
+would convert utf-8 'привет' to cp1251 and create directory with that name.
+
+Default value: ''
+
+
 ==============================================================================
 12. Help                                                        *vimwiki-help*
 

@@ -23,13 +23,17 @@ function! s:chomp_slash(str) "{{{
   return substitute(a:str, '[/\\]\+$', '', '')
 endfunction "}}}
 
+function! s:is_windows()
+  return has("win32") || has("win64") || has("win95") || has("win16")
+endfunction
+
 function! vimwiki#mkdir(path) "{{{
   let path = expand(a:path)
   if !isdirectory(path) && exists("*mkdir")
     let path = s:chomp_slash(path)
-    " if has("win32") && !empty(g:vimwiki_w32_dir_enc)
-      " let path = iconv(path, &enc, g:vimwiki_w32_dir_enc)
-    " endif
+    if s:is_windows() && !empty(g:vimwiki_w32_dir_enc)
+      let path = iconv(path, &enc, g:vimwiki_w32_dir_enc)
+    endif
     call mkdir(path, "p")
   endif
 endfunction
