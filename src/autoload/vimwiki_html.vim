@@ -3,6 +3,8 @@
 " Author: Maxim Kim <habamax@gmail.com>
 " Home: http://code.google.com/p/vimwiki/
 
+" XXX: This file should be refactored!
+
 " Load only once {{{
 if exists("g:loaded_vimwiki_html_auto") || &cp
   finish
@@ -791,22 +793,8 @@ function! s:process_tag_table(line, table) "{{{
     endif
     let processed = 1
 
-    let pos1 = 0
-    let pos2 = 0
-    let done = 0
-    while !done
-      let pos1 = stridx(a:line, '|', pos2)
-      let pos2 = stridx(a:line, '|', pos1+1)
-      if pos1==-1 || pos2==-1
-        let done = 1
-        let pos2 = len(a:line)
-      endif
-      let line = strpart(a:line, pos1+1, pos2-pos1-1)
-      if line == ''
-        continue
-      endif
-      call add(table[-1], line)
-    endwhile
+    call extend(table[-1], split(a:line, '\s*|\s*'))
+
   elseif len(table)
     call add(lines, "<table>")
 
@@ -844,7 +832,7 @@ endfunction "}}}
 "}}}
 
 " WIKI2HTML "{{{
-function! s:wiki2html(line, state) " {{{
+function! s:parse_line(line, state) " {{{
   let state = {}
   let state.para = a:state.para
   let state.quote = a:state.quote
@@ -927,9 +915,9 @@ function! s:wiki2html(line, state) " {{{
       let state.table = s:close_tag_table(state.table, res_lines)
       let state.pre = s:close_tag_pre(state.pre, res_lines)
       let state.quote = s:close_tag_quote(state.quote, res_lines)
-      
+
       let line = s:make_tag(line, g:vimwiki_rxTodo, 's:tag_todo')
-      
+
       call add(res_lines, line)
 
       " gather information for table of contents
@@ -964,16 +952,6 @@ function! s:wiki2html(line, state) " {{{
   endif
   "}}}
 
-  " definition lists "{{{
-  if !processed
-    let [processed, lines, state.deflist] = s:process_tag_def_list(line, state.deflist)
-
-    call map(lines, 's:process_inline_tags(v:val)')
-
-    call extend(res_lines, lines)
-  endif
-  "}}}
-
   " tables "{{{
   if !processed
     let [processed, lines, state.table] = s:process_tag_table(line, state.table)
@@ -984,7 +962,7 @@ function! s:wiki2html(line, state) " {{{
   endif
   "}}}
 
-  " horizontal lines "{{{
+  " horizontal rules "{{{
   if !processed
     let [processed, line] = s:process_tag_hr(line)
     if processed
@@ -993,6 +971,16 @@ function! s:wiki2html(line, state) " {{{
       let state.pre = s:close_tag_pre(state.pre, res_lines)
       call add(res_lines, line)
     endif
+  endif
+  "}}}
+
+  " definition lists "{{{
+  if !processed
+    let [processed, lines, state.deflist] = s:process_tag_def_list(line, state.deflist)
+
+    call map(lines, 's:process_inline_tags(v:val)')
+
+    call extend(res_lines, lines)
   endif
   "}}}
 
@@ -1060,7 +1048,7 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
 
   for line in lsource
     let oldquote = state.quote
-    let [lines, state] = s:wiki2html(line, state)
+    let [lines, state] = s:parse_line(line, state)
 
     " Hack: There could be a lot of empty strings before s:process_tag_quote
     " find out `quote` is over. So we should delete them all. Think of the way

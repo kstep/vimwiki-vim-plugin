@@ -1163,7 +1163,7 @@ Value           Description~
 0               Use |hl-Title| or  VimwikiHeader1-VimwikiHeader6 (if defined
                 in a colorscheme)
 
-Default: 0
+Default: 1
 
 
 ------------------------------------------------------------------------------
@@ -1417,7 +1417,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can
       really easy add information into vimwiki that should be sorted out
       later.
-    * NEW: Tables are redesigned. Syntax is changed. They are
+    * NEW: Tables are redesigned. Syntax is changed. Now they are
       auto-formattable. You can navigate them with <tab> and <cr> in insert
       mode. See |vimwiki-syntax-tables| and |vimwiki-tables| for more details. 
     * NEW: Keyword STARTED: is added.
@@ -1429,6 +1429,8 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
     * FIX: Settings |wrap| and |linebreak| are removed from ftplugin. Add them
       into your personal settings file `.vim/after/ftplugin/vimwiki.vim` if
       needed.
+    * NEW: Headers are highlighted in different colors by default.
+      See *g:vimwiki_hl_headers* to turn it off.
 
 
 0.9.8~
