@@ -1447,7 +1447,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
       into your personal settings file `.vim/after/ftplugin/vimwiki.vim` if
       needed.
     * NEW: Headers are highlighted in different colors by default.
-      See *g:vimwiki_hl_headers* to turn it off.
+      See |g:vimwiki_hl_headers| to turn it off.
     * FIX: Issue 40: Links with russian subdirs don't work.
 
 
