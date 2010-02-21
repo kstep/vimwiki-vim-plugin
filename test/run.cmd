@@ -1,1 +1,1 @@
-vim -n -u test\vimrc -c 'normal \ww'
+vim -n -u test\vimrc -c "VimwikiGoHome"
