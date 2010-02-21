@@ -207,6 +207,7 @@ let s:vimwiki_defaults.gohome = 'split'
 let s:vimwiki_defaults.html_header = ''
 let s:vimwiki_defaults.html_footer = ''
 let s:vimwiki_defaults.nested_syntaxes = {}
+let s:vimwiki_defaults.auto_export = 0
 
 " diary
 let s:vimwiki_defaults.diary_rel_path = 'diary/'
