@@ -313,10 +313,10 @@ nmap <silent><buffer> - :call vimwiki#RemoveHeaderLevel()<CR>
 
 " AUTOCOMMANDS {{{
 if VimwikiGet('auto_export')
-	" Automatically generate HTML on page write.
-	augroup vimwiki
-		au BufWritePost <buffer> Vimwiki2HTML
-	augroup END
+  " Automatically generate HTML on page write.
+  augroup vimwiki
+    au BufWritePost <buffer> Vimwiki2HTML
+  augroup END
 endif
 
 " AUTOCOMMANDS }}}
