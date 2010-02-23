@@ -1,7 +1,7 @@
+" vim:tabstop=2:shiftwidth=2:expandtab:foldmethod=marker:textwidth=79
 " Vimwiki syntax file
 " Author: Maxim Kim <habamax@gmail.com>
 " Home: http://code.google.com/p/vimwiki/
-" vim:tw=79:
 
 " Quit if syntax file is already loaded
 if version < 600
