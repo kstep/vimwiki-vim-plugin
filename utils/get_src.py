@@ -5,8 +5,7 @@ import re
 
 
 # Settings
-# TODO: make it linux friendly too.
-VIMF_DIR = os.path.expanduser("~/vimfiles/")
+VIMF_DIR = os.path.expanduser("~/.vim/")
 SRC_DIR = os.path.expanduser("../src/")
 
 
