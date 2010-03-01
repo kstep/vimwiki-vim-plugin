@@ -8,7 +8,7 @@
        \ `\___/ /\_____\\ \_\\ \_\ `\___x___/ /\_____\\ \_\ \_\ /\_____\~
         `\/__/  \/_____/ \/_/ \/_/'\/__//__/  \/_____/ \/_/\/_/ \/_____/~
 
-                               Version: 0.9.9
+                               Version: 1.0 beta
 
 ==============================================================================
 CONTENTS                                                    *vimwiki-contents*
@@ -40,7 +40,7 @@ CONTENTS                                                    *vimwiki-contents*
     10. Diary                        |vimwiki-diary|
     11. Options                      |vimwiki-options|
     12. Help                         |vimwiki-help|
-    13. Author                       |vimwiki-author|
+    13. Developers                   |vimwiki-developers|
     14. Changelog                    |vimwiki-changelog|
     15. License                      |vimwiki-license|
 
@@ -370,13 +370,8 @@ There are a lot of different wikies out there. Most of them have their own
 syntax and vimwiki is not an exception here. Default vimwiki's syntax is a
 subset of google's wiki syntax markup.
 
-As for MediaWiki's syntax -- it is not that convenient for non English
-(Russian in my case :)) keyboard layouts to emphasize text as it uses a lot
-of '''''' to do it. You have to switch layouts every time you want some bold
-non English text. This is the answer to "Why not MediaWiki?"
-
-Nevertheless, there is MediaWiki syntax file included in the distribution (it
-doesn't have all the fancy stuff original MediaWiki syntax has though).
+There is MediaWiki syntax file included in the distribution (it doesn't have
+all the fancy stuff original MediaWiki syntax has though).
 See |vimwiki-option-syntax|.
 
 
@@ -1413,30 +1408,33 @@ Default value: ''
 ==============================================================================
 12. Help                                                        *vimwiki-help*
 
-As you could see I am not native English speaker (not a writer as well).
-Please send me correct phrases instead of that incorrect stuff I have used
-here.
+Your help in making vimwiki better is really appreciated!
+Any help. Would it be spell correction or code snippet to patch -- everything
+is welcomed.
 
-Any help is really appreciated!
+Issues could be filled in at http://code.google.com/p/vimwiki/issues .
+
 
 ==============================================================================
-13. Author                                                    *vimwiki-author*
+13. Developers                                            *vimwiki-developers*
 
-I live in Moscow and you may believe me -- there are no polar bears (no brown
-too) here in the streets.
+    - Maxim Kim <habamax@gmail.com>
+      Original author.
+    - Mikhail Trishchenkov <kriomant(at)gmail.com>
+      Joined in at Dec 2009.
 
-I do not do programming for a living. So don't blame me for an ugly
-ineffective code. Improvements are welcome.
+Vimwiki's website: http://code.google.com/p/vimwiki/
+Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
+
+... afterword
 
 Many thanks to all of you for voting vimwiki up on www.vim.org. I do vimwiki
 in my spare time I could use to dance argentine tango with beautiful women.
 Your votes are kind of a good replacement. ;)
 
 Sincerely yours,
-Maxim Kim <habamax@gmail.com>.
+Maxim Kim.
 
-Vimwiki's website: http://code.google.com/p/vimwiki/
-Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 
 ==============================================================================
 14. Changelog                                              *vimwiki-changelog*
@@ -1819,7 +1817,7 @@ Vim plugins website: http://www.vim.org/scripts/script.php?script_id=2226
 The MIT Licence
 http://www.opensource.org/licenses/mit-license.php
 
-Copyright (c) 2010 Maxim Kim
+Copyright (c) 2008-2010 Maxim Kim
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
