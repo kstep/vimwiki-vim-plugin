@@ -1439,6 +1439,9 @@ Maxim Kim.
 ==============================================================================
 14. Changelog                                              *vimwiki-changelog*
 
+1.0 beta~
+    * FIX: Issue 47: Lists aren't HTMLized properly.
+
 0.9.9~
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can
       really easy add information into vimwiki that should be sorted out

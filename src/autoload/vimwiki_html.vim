@@ -529,7 +529,7 @@ endfunction "}}}
 function! s:close_tag_list(lists, ldest) "{{{
   while len(a:lists)
     let item = remove(a:lists, -1)
-    call insert(a:ldest, item[0])
+    call add(a:ldest, item[0])
   endwhile
 endfunction! "}}}
 
@@ -675,10 +675,7 @@ function! s:process_tag_list(line, lists) "{{{
     endif
     let processed = 1
   else
-    while len(a:lists)
-      let item = remove(a:lists, -1)
-      call add(lines, item[0])
-    endwhile
+    call s:close_tag_list(a:lists, lines)
   endif
   return [processed, lines]
 endfunction "}}}
