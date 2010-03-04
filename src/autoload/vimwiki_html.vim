@@ -29,7 +29,7 @@ function! s:syntax_supported() " {{{
 endfunction " }}}
 
 function! s:remove_blank_lines(lines) " {{{
-  while a:lines[-1] =~ '^\s*$'
+  while !empty(a:lines) && a:lines[-1] =~ '^\s*$'
     call remove(a:lines, -1)
   endwhile
 endfunction "}}}
@@ -1054,7 +1054,7 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
     " Hack: There could be a lot of empty strings before s:process_tag_quote
     " find out `quote` is over. So we should delete them all. Think of the way
     " to refactor it out.
-    if (oldquote != state.quote) && ldest[-1] =~ '^\s*$'
+    if oldquote != state.quote
       call s:remove_blank_lines(ldest)
     endif
 
