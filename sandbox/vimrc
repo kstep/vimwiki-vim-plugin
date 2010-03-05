@@ -12,6 +12,6 @@ helptags src/doc
 
 " Use directories within 'test' for storing wiki and html.
 let g:vimwiki_list = [
-\	{'path': getcwd().'/test/wiki', 'path_html': getcwd().'/test/html'}
+\	{'path': getcwd().'/sandbox/wiki', 'path_html': getcwd().'/sandbox/html'}
 \]
 

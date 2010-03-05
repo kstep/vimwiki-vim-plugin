@@ -1,3 +1,0 @@
-#!/bin/sh
-
-gvim -n -u test/vimrc -c 'normal \ww'

@@ -21,6 +21,6 @@ Additionally, test configuration file may contain tools helping to debug vimwiki
 
 Current directory must be set to the root of working copy.
 
-Unix: `test/run` to run vim, `test/grun` to run gvim
-Windows: `test\run` or `test\grun` respectively
+Unix: `sandbox/run` to run vim, `sandbox/grun` to run gvim
+Windows: `sandbox\run` or `sandbox\grun` respectively
 

@@ -2,6 +2,9 @@
 \.gz$
 \.zip$
 \.vba$
-^test/wiki$
-^test/html$
+^sandbox/wiki$
+^sandbox/html$
 ^src/doc/tags$
+^tests/wiki$
+^tests/expected$
+^tests/actual$

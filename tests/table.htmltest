@@ -1,0 +1,19 @@
+| Year | Temp. |
+|------+-------|
+| 1900 | -10   |
+| 1930 | _N/A_ |
+@@@@
+<table>
+<tr>
+<th>Year</th>
+<th>Temp.</th>
+</tr>
+<tr>
+<td>1900</td>
+<td>-10</td>
+</tr>
+<tr>
+<td>1930</td>
+<td><em>N/A</em></td>
+</tr>
+</table>
