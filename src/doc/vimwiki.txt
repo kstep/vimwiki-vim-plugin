@@ -1442,6 +1442,7 @@ Maxim Kim.
 1.0 beta~
     * FIX: Issue 47: Lists aren't HTMLized properly.
     * FIX: Issue 49: Table is not HTMLized properly at the end of wiki page.
+    * FIX: Issue 50: Inline formatting is not performed in table cells.
 
 0.9.9~
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can

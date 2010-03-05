@@ -534,18 +534,18 @@ function! s:close_tag_table(table, ldest) "{{{
     if head > 0
       for row in table[: head-1]
         call add(ldest, '<tr>')
-        call extend(ldest, map(row, '"<th>".v:val."</th>"'))
+        call extend(ldest, map(row, '"<th>".s:process_inline_tags(v:val)."</th>"'))
         call add(ldest, '</tr>')
       endfor
       for row in table[head+1 :]
         call add(ldest, '<tr>')
-        call extend(ldest, map(row, '"<td>".v:val."</td>"'))
+        call extend(ldest, map(row, '"<td>".s:process_inline_tags(v:val)."</td>"'))
         call add(ldest, '</tr>')
       endfor
     else
       for row in table
         call add(ldest, '<tr>')
-        call extend(ldest, map(row, '"<td>".v:val."</td>"'))
+        call extend(ldest, map(row, '"<td>".s:process_inline_tags(v:val)."</td>"'))
         call add(ldest, '</tr>')
       endfor
     endif
@@ -953,8 +953,6 @@ function! s:parse_line(line, state) " {{{
   " tables "{{{
   if !processed
     let [processed, lines, state.table] = s:process_tag_table(line, state.table)
-
-    call map(lines, 's:process_inline_tags(v:val)')
 
     call extend(res_lines, lines)
   endif
