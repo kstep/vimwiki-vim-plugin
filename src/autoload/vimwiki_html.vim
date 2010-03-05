@@ -519,11 +519,40 @@ function! s:close_tag_para(para, ldest) "{{{
 endfunction "}}}
 
 function! s:close_tag_table(table, ldest) "{{{
-  if len(a:table)
-    call insert(a:ldest, "</table>")
-    return []
+  let table = a:table
+  let ldest = a:ldest
+  if len(table)
+    call add(ldest, "<table>")
+
+    let head = 0
+    for idx in range(len(table))
+      if empty(table[idx])
+        let head = idx
+        break
+      endif
+    endfor
+    if head > 0
+      for row in table[: head-1]
+        call add(ldest, '<tr>')
+        call extend(ldest, map(row, '"<th>".v:val."</th>"'))
+        call add(ldest, '</tr>')
+      endfor
+      for row in table[head+1 :]
+        call add(ldest, '<tr>')
+        call extend(ldest, map(row, '"<td>".v:val."</td>"'))
+        call add(ldest, '</tr>')
+      endfor
+    else
+      for row in table
+        call add(ldest, '<tr>')
+        call extend(ldest, map(row, '"<td>".v:val."</td>"'))
+        call add(ldest, '</tr>')
+      endfor
+    endif
+    call add(ldest, "</table>")
+    let table = []
   endif
-  return a:table
+  return table
 endfunction "}}}
 
 function! s:close_tag_list(lists, ldest) "{{{
@@ -792,37 +821,8 @@ function! s:process_tag_table(line, table) "{{{
     let processed = 1
 
     call extend(table[-1], split(a:line, '\s*|\s*'))
-
-  elseif len(table)
-    call add(lines, "<table>")
-
-    let head = 0
-    for idx in range(len(table))
-      if empty(table[idx])
-        let head = idx
-        break
-      endif
-    endfor
-    if head > 0
-      for row in table[: head-1]
-        call add(lines, '<tr>')
-        call extend(lines, map(row, '"<th>".v:val."</th>"'))
-        call add(lines, '</tr>')
-      endfor
-      for row in table[head+1 :]
-        call add(lines, '<tr>')
-        call extend(lines, map(row, '"<td>".v:val."</td>"'))
-        call add(lines, '</tr>')
-      endfor
-    else
-      for row in table
-        call add(lines, '<tr>')
-        call extend(lines, map(row, '"<td>".v:val."</td>"'))
-        call add(lines, '</tr>')
-      endfor
-    endif
-    call add(lines, "</table>")
-    let table = []
+  else
+    let table = s:close_tag_table(table, lines)
   endif
   return [processed, lines, table]
 endfunction "}}}
