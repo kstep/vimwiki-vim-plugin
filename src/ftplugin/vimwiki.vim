@@ -292,6 +292,7 @@ noremap <silent><script><buffer>
 if g:vimwiki_table_auto_fmt
   inoremap <expr> <buffer> <CR> vimwiki_tbl#kbd_cr()
   inoremap <expr> <buffer> <Tab> vimwiki_tbl#kbd_tab()
+  inoremap <expr> <buffer> <S-Tab> vimwiki_tbl#kbd_shift_tab()
 endif
 
 nnoremap <buffer> gqq :VimwikiTableAlignQ<CR>

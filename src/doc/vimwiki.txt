@@ -1441,6 +1441,7 @@ Maxim Kim.
 
 1.0 beta~
     * FIX: Issue 47: Lists aren't HTMLized properly.
+    * NEW: Issue 44: <S-Tab> should move cursor to the previous table cell.
 
 0.9.9~
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can
