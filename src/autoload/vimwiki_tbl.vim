@@ -34,7 +34,23 @@ function! s:is_last_column(lnum, cnum) "{{{
   return strpart(getline(a:lnum), a:cnum - 1) =~ '^[^|]*|\s*$'
 endfunction "}}}
 
-function! s:count_separators(lnum) "{{{
+function! s:is_first_column(lnum, cnum) "{{{
+  return strpart(getline(a:lnum), 0, a:cnum - 1) =~ '^\s*|[^|]*$'
+endfunction "}}}
+
+function! s:count_separators_up(lnum) "{{{
+  let lnum = a:lnum - 1
+  while lnum > 1
+    if !s:is_separator(getline(lnum))
+      break
+    endif
+    let lnum -= 1
+  endwhile
+
+  return (a:lnum-lnum)
+endfunction "}}}
+
+function! s:count_separators_down(lnum) "{{{
   let lnum = a:lnum + 1
   while lnum < line('$')
     if !s:is_separator(getline(lnum))
@@ -220,15 +236,34 @@ function! s:kbd_goto_next_row() "{{{
   return cmd
 endfunction "}}}
 
+function! s:kbd_goto_prev_row() "{{{
+  let cmd = "\<ESC>jt|T|a"
+  return cmd
+endfunction "}}}
+
 function! s:kbd_goto_next_col(last) "{{{
   if col('.') == 1
     let cmd = "\<ESC>la"
   else
     if a:last
-      let seps = s:count_separators(line('.'))
+      let seps = s:count_separators_down(line('.'))
       let cmd = "\<ESC>".seps."j0f|F|la"
     else
       let cmd = "\<ESC>f|la"
+    endif
+  endif
+  return cmd
+endfunction "}}}
+
+function! s:kbd_goto_prev_col(first) "{{{
+  if col('.') == col('$')
+    let cmd = "\<ESC>F|la"
+  else
+    if a:first
+      let seps = s:count_separators_up(line('.'))
+      let cmd = "\<ESC>".seps."k$F|la"
+    else
+      let cmd = "\<ESC>2F|la"
     endif
   endif
   return cmd
@@ -263,6 +298,19 @@ function! vimwiki_tbl#kbd_tab() "{{{
     return s:kbd_create_new_row(cols, 1)
   endif
   return s:kbd_goto_next_col(last)
+endfunction "}}}
+
+function! vimwiki_tbl#kbd_shift_tab() "{{{
+  let lnum = line('.')
+  if !s:is_table(getline(lnum))
+    return "\<S-Tab>"
+  endif
+
+  let first = s:is_first_column(lnum, col('.'))
+  if first && !s:is_table(getline(lnum-1))
+    return ""
+  endif
+  return s:kbd_goto_prev_col(first)
 endfunction "}}}
 
 function! vimwiki_tbl#format(lnum) "{{{
