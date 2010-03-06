@@ -1,8 +1,10 @@
 = Purpose =
 
-Scripts in this directory are intended for testing vimwiki working copy in a clean vim - without loading user's configuration files.
+Scripts in this directory are intended for testing vimwiki working copy in a
+clean vim - without loading user's configuration files.
 
-This is usefull during development because it isn't needed to install vimwiki to test it. User configuration is bypassed to avoid influence of other plugins.
+This is usefull during development because it isn't needed to install vimwiki
+to test it. User configuration is bypassed to avoid influence of other plugins.
 
 Additionally, test configuration file may contain tools helping to debug vimwiki.
 
