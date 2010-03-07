@@ -1405,6 +1405,20 @@ would convert utf-8 'привет' to cp1251 and create directory with that name
 Default value: ''
 
 
+------------------------------------------------------------------------------
+*g:vimwiki_CJK_length*
+
+Use special length function to get the correct length of the strings with
+double wide characters.
+
+Value           Description~
+0               Do not use it.
+1               Use it.
+
+Default: 0
+
+
+
 ==============================================================================
 12. Help                                                        *vimwiki-help*
 
@@ -1446,6 +1460,8 @@ Maxim Kim.
     * FIX: Issue 50: Inline formatting is not performed in table cells.
     * FIX: Issue 51: Cannot insert '-' (minus) into table cells of the first
       column.
+    * FIX: Issue 52: Table cell width is incorrect when double wide characters
+      are used (ie. Chinese). Check |g:vimwiki_CJK_length|.
 
 0.9.9~
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can

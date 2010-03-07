@@ -263,6 +263,7 @@ endif
 call s:default('use_calendar', 1)
 call s:default('table_auto_fmt', 1)
 call s:default('w32_dir_enc', '')
+call s:default('CJK_length', 0)
 
 call s:default('current_idx', 0)
 

@@ -19,7 +19,19 @@ let s:textwidth = &tw
 
 " Misc functions {{{
 function! s:wide_len(str) "{{{
-  return strlen(substitute(a:str, '.', 'x', 'g'))
+  if !g:vimwiki_CJK_length
+    let ret = strlen(substitute(a:str, '.', 'x', 'g'))
+  else
+    let savemodified = &modified
+    let save_cursor = getpos('.')
+    exe "norm! o\<esc>"
+    call setline(line("."), a:str)
+    let ret = virtcol("$") - 1
+    d
+    call setpos('.', save_cursor)
+    let &modified = savemodified
+  endif
+  return ret
 endfunction "}}}
 
 function! s:is_table(line) "{{{
@@ -143,6 +155,23 @@ function! s:get_rows(lnum) "{{{
 endfunction "}}}
 
 function! s:get_cell_max_lens(lnum) "{{{
+  let max_lens = {}
+  for [lnum, row] in s:get_rows(a:lnum)
+    if s:is_separator(row)
+      continue
+    endif
+    for [idx, cell] in s:get_values(row)
+      if has_key(max_lens, idx)
+        let max_lens[idx] = max([s:wide_len(cell), max_lens[idx]])
+      else
+        let max_lens[idx] = s:wide_len(cell)
+      endif
+    endfor
+  endfor
+  return max_lens
+endfunction "}}}
+
+function! Get_cell_max_lens(lnum) "{{{
   let max_lens = {}
   for [lnum, row] in s:get_rows(a:lnum)
     if s:is_separator(row)
