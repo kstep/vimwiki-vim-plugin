@@ -1444,6 +1444,8 @@ Maxim Kim.
     * NEW: Issue 44: <S-Tab> should move cursor to the previous table cell.
     * FIX: Issue 49: Table is not HTMLized properly at the end of wiki page.
     * FIX: Issue 50: Inline formatting is not performed in table cells.
+    * FIX: Issue 51: Cannot insert '-' (minus) into table cells of the first
+      column.
 
 0.9.9~
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can

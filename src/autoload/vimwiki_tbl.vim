@@ -27,7 +27,7 @@ function! s:is_table(line) "{{{
 endfunction "}}}
 
 function! s:is_separator(line) "{{{
-  return a:line =~ '^\s*|\s*-\+'
+  return a:line =~ '^\s*|\s*--[-|+]\+'
 endfunction "}}}
 
 function! s:is_last_column(lnum, cnum) "{{{
