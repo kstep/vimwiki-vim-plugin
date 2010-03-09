@@ -34,7 +34,6 @@ CONTENTS                                                    *vimwiki-contents*
         5.9. Comments                |vimwiki-syntax-comments|
     6. Folding/Outline               |vimwiki-folding|
     7. Placeholders                  |vimwiki-placeholders|
-        7.1 Table of Contents        |vimwiki-table-of-contents|
     8. Todo lists                    |vimwiki-todo-lists|
     9. Tables                        |vimwiki-tables|
     10. Diary                        |vimwiki-diary|
@@ -718,7 +717,7 @@ To turn folding on/off check |g:vimwiki_folding|.
 7. Placeholders                                         *vimwiki-placeholders*
 
 ------------------------------------------------------------------------------
-7.1. Table of Contents               *vimwiki-toc* *vimwiki-table-of-contents*
+%toc Table of Contents               *vimwiki-toc* *vimwiki-table-of-contents*
 
 You can add 'table of contents' to your html page generated from wiki one.
 Just place >
@@ -733,6 +732,15 @@ You can also add caption to your 'toc': >
 or >
 
 %toc Whatever
+
+------------------------------------------------------------------------------
+%nohtml                                                       *vimwiki-nohtml*
+
+If you do not want a wiki page to be converted to html, place:
+
+%nohtml
+
+into it.
 
 
 ==============================================================================
@@ -1408,8 +1416,8 @@ Default value: ''
 ------------------------------------------------------------------------------
 *g:vimwiki_CJK_length*
 
-Use special length function to get the correct length of the strings with
-double wide characters.
+Use special method to calculate correct length of the strings with double wide
+characters. (To align table cells properly)
 
 Value           Description~
 0               Do not use it.
@@ -1454,14 +1462,17 @@ Maxim Kim.
 14. Changelog                                              *vimwiki-changelog*
 
 1.0 beta~
-    * FIX: Issue 47: Lists aren't HTMLized properly.
     * NEW: Issue 44: <S-Tab> should move cursor to the previous table cell.
+    * NEW: Issue 46: Do not htmlize some wiki pages (blacklist). New
+      placeholder is added: %nohtml. See |vimwiki-nohtml|.
+    * FIX: Issue 47: Lists aren't HTMLized properly.
     * FIX: Issue 49: Table is not HTMLized properly at the end of wiki page.
     * FIX: Issue 50: Inline formatting is not performed in table cells.
     * FIX: Issue 51: Cannot insert '-' (minus) into table cells of the first
       column.
     * FIX: Issue 52: Table cell width is incorrect when double wide characters
       are used (ie. Chinese). Check |g:vimwiki_CJK_length|.
+    * NEW: Issue 54: Highlight for placeholders.
 
 0.9.9~
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can

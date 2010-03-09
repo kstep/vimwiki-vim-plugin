@@ -84,6 +84,10 @@ if g:vimwiki_hl_cb_checked
         \ g:vimwiki_rxListNumber.'\s*\['.g:vimwiki_listsyms[4].'\].*$/'
 endif
 
+" placeholders
+syntax match VimwikiPlaceholder /^\s*%toc\s.*$/
+syntax match VimwikiPlaceholder /^\s*%nohtml\s*$/
+
 syntax region VimwikiComment start='<!--' end='-->'
 
 if !vimwiki#hl_exists("VimwikiHeader1")
@@ -132,6 +136,7 @@ hi def link VimwikiTodo Todo
 hi def link VimwikiComment Comment
 
 hi def link VimwikiCellSeparator SpecialKey
+hi def link VimwikiPlaceholder SpecialKey
 "}}}
 
 let b:current_syntax="vimwiki"
