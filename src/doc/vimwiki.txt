@@ -613,6 +613,7 @@ In html the following part >
 >
 is higlighted as a table header.
 
+If you indent table then it would be centered in html.
 
 See |vimwiki-tables| for more details on how to manage tables.
 
@@ -827,6 +828,8 @@ values: >
  | Vladislav  | Pokrishkin | 31  | Moscow   | vlad_pok@smail.com   |
  | James      | Esfandiary | 27  | Istanbul | esfandiary@tmail.com |
 <
+
+To indent table indent the first row. Then format it with 'gqq'.
 
 
 
@@ -1463,6 +1466,8 @@ Maxim Kim.
 
 1.0 beta~
     * NEW: Issue 44: <S-Tab> should move cursor to the previous table cell.
+    * NEW: Issue 45: It should be possible to indent tables. Indented tables
+      are centered in html.
     * NEW: Issue 46: Do not htmlize some wiki pages (blacklist). New
       placeholder is added: %nohtml. See |vimwiki-nohtml|.
     * FIX: Issue 47: Lists aren't HTMLized properly.

@@ -47,7 +47,8 @@ function! s:is_last_column(lnum, cnum) "{{{
 endfunction "}}}
 
 function! s:is_first_column(lnum, cnum) "{{{
-  return strpart(getline(a:lnum), 0, a:cnum - 1) =~ '^\s*|[^|]*$'
+  let line = strpart(getline(a:lnum), 0, a:cnum - 1)
+  return line =~ '^\s*|[^|]*$' || line =~ '^\s*$'
 endfunction "}}}
 
 function! s:count_separators_up(lnum) "{{{
@@ -119,6 +120,26 @@ function! s:get_values(line) "{{{
   endwhile
   return cells
 endfunction "}}}
+
+function! s:get_indent(lnum) "{{{
+  if !s:is_table(getline(a:lnum))
+    return
+  endif
+
+  let indent = 0
+
+  let lnum = a:lnum - 1
+  while lnum > 1
+    let line = getline(lnum)
+    if !s:is_table(line)
+      let indent = indent(lnum+1)
+      break
+    endif
+    let lnum -= 1
+  endwhile
+
+  return indent
+endfunction " }}}
 
 function! s:get_rows(lnum) "{{{
   if !s:is_table(getline(a:lnum))
@@ -253,7 +274,7 @@ function! s:kbd_create_new_row(cols, goto_first) "{{{
   let cmd = "\<ESC>o".s:create_empty_row(a:cols)
   let cmd .= "\<ESC>:call vimwiki_tbl#format(line('.'))\<CR>"
   if a:goto_first
-    let cmd .= "0f|T|a"
+    let cmd .= "\<ESC>0:call search('|', 'c', line('.'))\<CR>la"
   else
     let cmd .= "0".(col('.')-1)."lT|a"
   endif
@@ -271,29 +292,21 @@ function! s:kbd_goto_prev_row() "{{{
 endfunction "}}}
 
 function! s:kbd_goto_next_col(last) "{{{
-  if col('.') == 1
-    let cmd = "\<ESC>la"
+  if a:last
+    let seps = s:count_separators_down(line('.'))
+    let cmd = "\<ESC>".seps."j0:call search('|', 'c', line('.'))\<CR>la"
   else
-    if a:last
-      let seps = s:count_separators_down(line('.'))
-      let cmd = "\<ESC>".seps."j0f|F|la"
-    else
-      let cmd = "\<ESC>f|la"
-    endif
+    let cmd = "\<ESC>:call search('|', 'c', line('.'))\<CR>la"
   endif
   return cmd
 endfunction "}}}
 
 function! s:kbd_goto_prev_col(first) "{{{
-  if col('.') == col('$')
-    let cmd = "\<ESC>F|la"
+  if a:first
+    let seps = s:count_separators_up(line('.'))
+    let cmd = "\<ESC>".seps."k$:call search('|', 'b', line('.'))\<CR>la"
   else
-    if a:first
-      let seps = s:count_separators_up(line('.'))
-      let cmd = "\<ESC>".seps."k$F|la"
-    else
-      let cmd = "\<ESC>2F|la"
-    endif
+    let cmd = "\<ESC>2F|la"
   endif
   return cmd
 endfunction "}}}
@@ -349,8 +362,10 @@ function! vimwiki_tbl#format(lnum) "{{{
   endif
 
   let max_lens = s:get_cell_max_lens(a:lnum)
+  let indent = s:get_indent(a:lnum)
 
   for [lnum, row] in s:get_aligned_rows(a:lnum, max_lens)
+    let row = repeat(' ', indent).row
     call setline(lnum, row)
   endfor
   

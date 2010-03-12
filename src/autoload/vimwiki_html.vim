@@ -95,6 +95,7 @@ function! s:create_default_CSS(path) " {{{
     call add(lines, '.justleft {text-align: left;}')
     call add(lines, '.justright {text-align: right;}')
     call add(lines, '.justcenter {text-align: center;}')
+    call add(lines, '.center {margin-left: auto; margin-right: auto;}')
 
     call writefile(lines, css_full_name)
     echomsg "Default style.css is created."
@@ -519,20 +520,31 @@ function! s:close_tag_para(para, ldest) "{{{
 endfunction "}}}
 
 function! s:close_tag_table(table, ldest) "{{{
+  " The first element of table list is a string which tells us if table should be centered.
+  " The rest elements are rows which are lists of columns:
+  " ['center', 
+  "   ['col1', 'col2', 'col3'],
+  "   ['col1', 'col2', 'col3'],
+  "   ['col1', 'col2', 'col3']
+  " ]
   let table = a:table
   let ldest = a:ldest
   if len(table)
-    call add(ldest, "<table>")
+    if table[0] == 'center'
+      call add(ldest, "<table class='center'>")
+    else
+      call add(ldest, "<table>")
+    endif
 
     let head = 0
-    for idx in range(len(table))
+    for idx in range(1, len(table)-1)
       if empty(table[idx])
         let head = idx
         break
       endif
     endfor
     if head > 0
-      for row in table[: head-1]
+      for row in table[1 : head-1]
         call add(ldest, '<tr>')
         call extend(ldest, map(row, '"<th>".s:process_inline_tags(v:val)."</th>"'))
         call add(ldest, '</tr>')
@@ -543,7 +555,7 @@ function! s:close_tag_table(table, ldest) "{{{
         call add(ldest, '</tr>')
       endfor
     else
-      for row in table
+      for row in table[1 :]
         call add(ldest, '<tr>')
         call extend(ldest, map(row, '"<td>".s:process_inline_tags(v:val)."</td>"'))
         call add(ldest, '</tr>')
@@ -814,7 +826,11 @@ function! s:process_tag_table(line, table) "{{{
     let processed = 1
   elseif a:line =~ '^\s*|.\+|\s*$'
     if empty(table)
-      let table = [[]]
+      if a:line =~ '^\s\+'
+        let table = ['center', []]
+      else
+        let table = ['normal', []]
+      endif
     else
       call add(table, [])
     endif
@@ -933,6 +949,13 @@ function! s:parse_line(line, state) " {{{
   endif
   "}}}
 
+  " tables "{{{
+  if !processed
+    let [processed, lines, state.table] = s:process_tag_table(line, state.table)
+    call extend(res_lines, lines)
+  endif
+  "}}}
+
   " quotes "{{{
   if !processed
     let [processed, lines, state.quote] = s:process_tag_quote(line, state.quote)
@@ -953,14 +976,6 @@ function! s:parse_line(line, state) " {{{
     endif
 
     call map(lines, 's:process_inline_tags(v:val)')
-
-    call extend(res_lines, lines)
-  endif
-  "}}}
-
-  " tables "{{{
-  if !processed
-    let [processed, lines, state.table] = s:process_tag_table(line, state.table)
 
     call extend(res_lines, lines)
   endif
