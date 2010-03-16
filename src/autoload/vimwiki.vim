@@ -600,7 +600,7 @@ endfunction
 " TEXT OBJECTS functions {{{
 
 function! vimwiki#TO_header(inner, visual) "{{{
-  if !search('^\(=\+\)[^=]\+\1\s*$', 'bcW')
+  if !search('^\(=\+\).\+\1\s*$', 'bcW')
     return
   endif
   
@@ -617,7 +617,7 @@ function! vimwiki#TO_header(inner, visual) "{{{
   if a:visual && is_header_selected
     if level > 1
       let level -= 1
-      call search('^\(=\{'.level.'\}\)[^=]\+\1\s*$', 'bcW')
+      call search('^\(=\{'.level.'\}\).\+\1\s*$', 'bcW')
     else
       let advance = 1
     endif
@@ -629,7 +629,7 @@ function! vimwiki#TO_header(inner, visual) "{{{
     call cursor(sel_end + advance, 0)
   endif
 
-  if search('^\(=\{1,'.level.'}\)[^=]\+\1\s*$', 'W')
+  if search('^\(=\{1,'.level.'}\).\+\1\s*$', 'W')
     call cursor(line('.') - 1, 0)
   else
     call cursor(line('$'), 0)

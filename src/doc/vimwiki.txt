@@ -1477,6 +1477,8 @@ Maxim Kim.
       column.
     * FIX: Issue 52: Table cell width is incorrect when double wide characters
       are used (ie. Chinese). Check |g:vimwiki_CJK_length|.
+    * NEW: Issue 53: Wiki markup can not nested. (Use links and inline markup
+      in Headers).
     * NEW: Issue 54: Highlight for placeholders.
 
 0.9.9~

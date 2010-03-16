@@ -938,7 +938,7 @@ function! s:parse_line(line, state) " {{{
       let state.pre = s:close_tag_pre(state.pre, res_lines)
       let state.quote = s:close_tag_quote(state.quote, res_lines)
 
-      let line = s:make_tag(line, g:vimwiki_rxTodo, 's:tag_todo')
+      let line = s:process_inline_tags(line)
 
       call add(res_lines, line)
 
