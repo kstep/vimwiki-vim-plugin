@@ -140,17 +140,17 @@ def main(args):
             expected = open(os.path.join('tests', 'expected', test+'.html')).read()
             actual   = open(os.path.join('tests', 'actual',   test+'.html')).read()
             if expected == actual:
-                print "+ %s" % test
+                print("+ %s" % test)
             else:
                 failed_count += 1
                 if options.side_by_side:
                     diff = side_by_side("expected:\n"+expected, "actual:\n"+actual)
                 else:
                     diff = "expected:\n%s\nactual:\n%s" % (expected, actual)
-                print "! %s:\n%s" % (test, diff)
+                print("! %s:\n%s" % (test, diff))
         else:
             # Test is unknown.
-            print "? %s" % test
+            print("? %s" % test)
     # }}}
 
     return failed_count == 0
@@ -160,6 +160,6 @@ if __name__ == '__main__':
         success = main(sys.argv[1:])
         sys.exit(0 if success else 1)
     except Exception as err:
-        print "Error: %s" % err
+        print("Error: %s" % err)
         sys.exit(2)
 
