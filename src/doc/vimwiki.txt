@@ -1480,6 +1480,7 @@ Maxim Kim.
     * NEW: Issue 53: Wiki markup can not nested. (Use links and inline markup
       in Headers).
     * NEW: Issue 54: Highlight for placeholders.
+    * NEW: Issue 60: Links inside completed gtd-items.
 
 0.9.9~
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can

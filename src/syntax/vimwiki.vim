@@ -79,9 +79,11 @@ execute 'syntax region VimwikiPre start=/'.g:vimwiki_rxPreStart.
 syntax match VimwikiCheckBox /\[.\?\]/
 if g:vimwiki_hl_cb_checked
   execute 'syntax match VimwikiCheckBoxDone /'.
-        \ g:vimwiki_rxListBullet.'\s*\['.g:vimwiki_listsyms[4].'\].*$/'
+        \ g:vimwiki_rxListBullet.'\s*\['.g:vimwiki_listsyms[4].'\].*$/'.
+        \ ' contains=VimwikiNoExistsWord,VimwikiWord,VimwikiLink'
   execute 'syntax match VimwikiCheckBoxDone /'.
-        \ g:vimwiki_rxListNumber.'\s*\['.g:vimwiki_listsyms[4].'\].*$/'
+        \ g:vimwiki_rxListNumber.'\s*\['.g:vimwiki_listsyms[4].'\].*$/'.
+        \ ' contains=VimwikiNoExistsWord,VimwikiWord,VimwikiLink'
 endif
 
 " placeholders
@@ -123,7 +125,7 @@ hi def link VimwikiCode PreProc
 hi def link VimwikiWord Underlined
 hi def link VimwikiNoExistsWord Error
 
-hi def link VimwikiPre SpecialComment
+hi def link VimwikiPre PreProc
 hi def link VimwikiLink Underlined
 hi def link VimwikiList Function
 hi def link VimwikiCheckBox VimwikiList
