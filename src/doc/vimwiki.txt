@@ -1480,6 +1480,7 @@ Maxim Kim.
     * NEW: Issue 53: Wiki markup can not nested. (Use links and inline markup
       in Headers).
     * NEW: Issue 54: Highlight for placeholders.
+    * FIX: Issue 59: List item's text can't be started from *.
     * NEW: Issue 60: Links inside completed gtd-items.
 
 0.9.9~

@@ -647,7 +647,7 @@ function! s:process_tag_list(line, lists) "{{{
     return [st_tag, en_tag]
   endfunction "}}}
 
-  " Do not process line that starts from *bold* text as list item.
+  " Do not process line that starts from *bold* text.
   let pos = match(a:line, g:vimwiki_rxBold)
   if pos != -1 && strpart(a:line, 0, pos) =~ '^\s*$'
     return [0, []]
