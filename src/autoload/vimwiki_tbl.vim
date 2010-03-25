@@ -108,17 +108,16 @@ function! s:create_row_sep(cols) "{{{
 endfunction "}}}
 
 function! s:get_values(line) "{{{
-  let cells = []
-  let cnt = 0
-  let idx = 0
-  while idx != -1 && idx < strlen(a:line) - 1
-    let cell = matchstr(a:line, '|\zs[^|]\+\ze|', idx)
-    let cell = substitute(cell, '^\s*\(.\{-}\)\s*$', '\1', 'g')
-    call add(cells, [cnt, cell])
-    let cnt += 1
-    let idx = matchend(a:line, '|\zs[^|]\+\ze|', idx)
-  endwhile
-  return cells
+  return split(a:line, '\s*|\s*', 1)[1:-2]
+endfunction "}}}
+
+function! s:col_count(lnum) "{{{
+  let line = getline(a:lnum)
+  if !s:is_separator(line)
+    return len(split(line, '\s*|\s*', 1)[1:-2])
+  else
+    return len(split(line, '-+-', 1))
+  endif
 endfunction "}}}
 
 function! s:get_indent(lnum) "{{{
@@ -181,46 +180,57 @@ function! s:get_cell_max_lens(lnum) "{{{
     if s:is_separator(row)
       continue
     endif
-    for [idx, cell] in s:get_values(row)
+    let cells = s:get_values(row)
+    for idx in range(len(cells))
+      let value = cells[idx]
       if has_key(max_lens, idx)
-        let max_lens[idx] = max([s:wide_len(cell), max_lens[idx]])
+        let max_lens[idx] = max([s:wide_len(value), max_lens[idx]])
       else
-        let max_lens[idx] = s:wide_len(cell)
+        let max_lens[idx] = s:wide_len(value)
       endif
     endfor
   endfor
   return max_lens
 endfunction "}}}
 
-function! Get_cell_max_lens(lnum) "{{{
-  let max_lens = {}
-  for [lnum, row] in s:get_rows(a:lnum)
-    if s:is_separator(row)
-      continue
-    endif
-    for [idx, cell] in s:get_values(row)
-      if has_key(max_lens, idx)
-        let max_lens[idx] = max([s:wide_len(cell), max_lens[idx]])
-      else
-        let max_lens[idx] = s:wide_len(cell)
-      endif
-    endfor
-  endfor
-  return max_lens
-endfunction "}}}
-
-function! s:get_aligned_rows(lnum, max_lens) "{{{
+function! s:get_aligned_rows(lnum, col1, col2) "{{{
+  let max_lens = s:get_cell_max_lens(a:lnum)
   let rows = []
   for [lnum, row] in s:get_rows(a:lnum)
     if s:is_separator(row)
-      let new_row = s:fmt_sep(a:max_lens)
+      let new_row = s:fmt_sep(max_lens, a:col1, a:col2)
     else
-      let new_row = s:fmt_row(row, a:max_lens)
+      let new_row = s:fmt_row(row, max_lens, a:col1, a:col2)
     endif
     call add(rows, [lnum, new_row])
   endfor
   return rows
 endfunction "}}}
+
+" Number of the current column. Starts from 0.
+function! s:cur_column() "{{{
+  let line = getline('.')
+  if !s:is_table(line)
+    return -1
+  endif
+  if s:is_separator(line)
+    let sep = '[+|]'
+  else
+    let sep = '|'
+  endif
+
+  let curs_pos = col('.')
+  let mpos = match(line, '|', 0)
+  let col = -1
+  while mpos < curs_pos && mpos != -1
+    let mpos = match(line, sep, mpos+1)
+    if mpos != -1
+      let col += 1
+    endif
+  endwhile
+  return col
+endfunction "}}}
+
 " }}}
 
 " Format functions {{{
@@ -236,14 +246,20 @@ function! s:fmt_cell(cell, max_len) "{{{
   return cell
 endfunction "}}}
 
-function! s:fmt_row(line, max_lens) "{{{
+function! s:fmt_row(line, max_lens, col1, col2) "{{{
   let new_line = '|'
-  let values = s:get_values(a:line)
-  for [idx, cell] in values
-    let new_line .= s:fmt_cell(cell, a:max_lens[idx]).'|'
+  let cells = s:get_values(a:line)
+  for idx in range(len(cells))
+    if idx == a:col1
+      let idx = a:col2
+    elseif idx == a:col2
+      let idx = a:col1
+    endif
+    let value = cells[idx]
+    let new_line .= s:fmt_cell(value, a:max_lens[idx]).'|'
   endfor
 
-  let idx = len(values)
+  let idx = len(cells)
   while idx < len(a:max_lens)
     let new_line .= s:fmt_cell('', a:max_lens[idx]).'|'
     let idx += 1
@@ -259,9 +275,14 @@ function! s:fmt_cell_sep(max_len) "{{{
   endif
 endfunction "}}}
 
-function! s:fmt_sep(max_lens) "{{{
+function! s:fmt_sep(max_lens, col1, col2) "{{{
   let sep = '|'
   for idx in range(len(a:max_lens))
+    if idx == a:col1
+      let idx = a:col2
+    elseif idx == a:col2
+      let idx = a:col1
+    endif
     let sep .= s:fmt_cell_sep(a:max_lens[idx]).'+'
   endfor
   let sep = substitute(sep, '+$', '|', '')
@@ -355,16 +376,23 @@ function! vimwiki_tbl#kbd_shift_tab() "{{{
   return s:kbd_goto_prev_col(first)
 endfunction "}}}
 
-function! vimwiki_tbl#format(lnum) "{{{
+function! vimwiki_tbl#format(lnum, ...) "{{{
   let line = getline(a:lnum)
   if !s:is_table(line)
     return
   endif
 
-  let max_lens = s:get_cell_max_lens(a:lnum)
+  if a:0 == 2
+    let col1 = a:1
+    let col2 = a:2
+  else
+    let col1 = 0
+    let col2 = 0
+  endif
+
   let indent = s:get_indent(a:lnum)
 
-  for [lnum, row] in s:get_aligned_rows(a:lnum, max_lens)
+  for [lnum, row] in s:get_aligned_rows(a:lnum, col1, col2)
     let row = repeat(' ', indent).row
     call setline(lnum, row)
   endfor
@@ -423,6 +451,50 @@ function! vimwiki_tbl#reset_tw(lnum) "{{{
   
   let s:textwidth = &tw
   let &tw = 0
+endfunction "}}}
+
+" TODO: move_column_left and move_column_right are good candidates to be
+" refactored.
+function! vimwiki_tbl#move_column_left() "{{{
+  if !s:is_table(getline('.'))
+    return
+  endif
+
+  let cur_col = s:cur_column()
+  if cur_col == -1
+    return
+  endif
+
+  if cur_col > 0
+    call vimwiki_tbl#format(line('.'), cur_col-1, cur_col) 
+    call cursor(line('.'), 1)
+    if !s:is_separator(getline('.'))
+      call search('\%(|[^|]\+\)\{'.(cur_col-1).'}| .', 'eW')
+    else
+      call search('|\%([^+]\++\)\{'.(cur_col-1).'}--', 'eW')
+    endif
+  endif
+endfunction "}}}
+
+function! vimwiki_tbl#move_column_right() "{{{
+  if !s:is_table(getline('.'))
+    return
+  endif
+
+  let cur_col = s:cur_column()
+  if cur_col == -1
+    return
+  endif
+
+  if cur_col < s:col_count(line('.'))-1
+    call vimwiki_tbl#format(line('.'), cur_col, cur_col+1) 
+    call cursor(line('.'), 1)
+    if !s:is_separator(getline('.'))
+      call search('\%(|[^|]\+\)\{'.(cur_col+1).'}| .', 'eW')
+    else
+      call search('|\%([^+]\++\)\{'.(cur_col+1).'}--', 'eW')
+    endif
+  endif
 endfunction "}}}
 
 "}}}

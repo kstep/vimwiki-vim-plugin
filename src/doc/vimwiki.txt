@@ -241,6 +241,13 @@ gqq                     Format table. If you did some changes to a table
  or                     without swapping insert/normal modes this command
 gww                     reformat it.
 
+                        *vimwiki_<A-Left>*
+<A-Left>                Move current table column to the left.
+                        See |:VimwikiTableMoveColumnLeft|
+
+                        *vimwiki_<A-Right>*
+<A-Right>               Move current table column to the right.
+                        See |:VimwikiTableMoveColumnRight|
 
 
 
@@ -360,7 +367,34 @@ You can 'vah' to select a header with its contents or 'dah' to delete it or
     
     :VimwikiTable cols
     Create a table with a given cols and 2 rows
+
+*:VimwikiTableMoveColumnLeft* , *:VimwikiTableMoveColumnRight*
+    Move current column to the left or to the right:
+    Example: >
+
+    | head1  | head2  | head3  | head4  | head5  |
+    |--------+--------+--------+--------+--------|
+    | value1 | value2 | value3 | value4 | value5 |
+
+
+    Cursor is on 'head1'.
+    :VimwikiTableMoveColumnRight
+
+    | head2  | head1  | head3  | head4  | head5  |
+    |--------+--------+--------+--------+--------|
+    | value2 | value1 | value3 | value4 | value5 |
+
+    Cursor is on 'head3'.
+    :VimwikiTableMoveColumnLeft
+
+    | head2  | head3  | head1  | head4  | head5  |
+    |--------+--------+--------+--------+--------|
+    | value2 | value3 | value1 | value4 | value5 |
+<
     
+    Commands are mapped to <A-Left> and <A-Right> respectively.
+
+
 
 ==============================================================================
 5. Wiki syntax                                                *vimwiki-syntax*
@@ -1465,6 +1499,8 @@ Maxim Kim.
 14. Changelog                                              *vimwiki-changelog*
 
 1.0 beta~
+    * NEW: Issue 42: Commands to move table columns left and right. See
+      |:VimwikiTableMoveColumnLeft| and |:VimwikiTableMoveColumnRight|.
     * NEW: Issue 44: <S-Tab> should move cursor to the previous table cell.
     * NEW: Issue 45: It should be possible to indent tables. Indented tables
       are centered in html.

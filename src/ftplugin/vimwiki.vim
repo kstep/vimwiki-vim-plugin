@@ -216,6 +216,8 @@ exe 'command! -buffer -nargs=* VWS vimgrep <args> '.
 command! -buffer -nargs=* VimwikiTable call vimwiki_tbl#create(<f-args>)
 command! -buffer VimwikiTableAlignQ call vimwiki_tbl#align_or_cmd('gqq')
 command! -buffer VimwikiTableAlignW call vimwiki_tbl#align_or_cmd('gww')
+command! -buffer VimwikiTableMoveColumnLeft call vimwiki_tbl#move_column_left()
+command! -buffer VimwikiTableMoveColumnRight call vimwiki_tbl#move_column_right()
 
 " COMMANDS }}}
 
@@ -297,6 +299,8 @@ endif
 
 nnoremap <buffer> gqq :VimwikiTableAlignQ<CR>
 nnoremap <buffer> gww :VimwikiTableAlignW<CR>
+nnoremap <buffer> <A-Left> :VimwikiTableMoveColumnLeft<CR>
+nnoremap <buffer> <A-Right> :VimwikiTableMoveColumnRight<CR>
 
 
 " Text objects {{{
