@@ -284,6 +284,10 @@ ih                      Inner Header without leading empty lines.
 You can 'vah' to select a header with its contents or 'dah' to delete it or
 'yah' to yank it or 'cah' to change it.
 
+a\                      A cell in a table.
+i\                      Inner cell in a table.
+ac                      A column in a table.
+ic                      Inner column in a table.
 
 ==============================================================================
 4. Commands                                                 *vimwiki-commands*
@@ -1439,7 +1443,7 @@ Default: 1
 Convert directory name from current |encoding| into 'g:vimwiki_w32_dir_enc'
 before it is created.
 
-If have 'enc=utf-8' and you set up >
+If you have 'enc=utf-8' and set up >
     let g:vimwiki_w32_dir_enc = 'cp1251'
 <
 then following the next link with <CR>: >
@@ -1447,7 +1451,7 @@ then following the next link with <CR>: >
 >
 would convert utf-8 'привет' to cp1251 and create directory with that name.
 
-Default value: ''
+Default: ''
 
 
 ------------------------------------------------------------------------------
@@ -1499,6 +1503,8 @@ Maxim Kim.
 14. Changelog                                              *vimwiki-changelog*
 
 1.0 beta~
+    * NEW: Issue 41: Table cell and column text objects. See
+      |vimwiki-text-objects|.
     * NEW: Issue 42: Commands to move table columns left and right. See
       |:VimwikiTableMoveColumnLeft| and |:VimwikiTableMoveColumnRight|.
     * NEW: Issue 44: <S-Tab> should move cursor to the previous table cell.

@@ -26,6 +26,12 @@ function! s:is_windows()
   return has("win32") || has("win64") || has("win95") || has("win16")
 endfunction
 
+" Builtin cursor doesn't work right with unicode characters.
+function! s:cursor(lnum, cnum) "{{{
+    exe a:lnum
+    exe 'normal! 0'.a:cnum.'|'
+endfunction "}}}
+
 function! vimwiki#mkdir(path) "{{{
   let path = expand(a:path)
   if !isdirectory(path) && exists("*mkdir")
@@ -641,6 +647,184 @@ function! vimwiki#TO_header(inner, visual) "{{{
   endif
 endfunction
 "}}}
+
+function! vimwiki#TO_table_cell(inner, visual) "{{{
+  if col('.') == col('$')-1
+    return
+  endif
+
+  if a:visual
+    normal! `>
+    let sel_end = getpos('.')
+    normal! `<
+    let sel_start = getpos('.')
+
+    let firsttime = sel_start == sel_end
+
+    if firsttime
+      if !search('|\|\(-+-\)', 'cb', line('.'))
+        return
+      endif
+      if getline('.')[virtcol('.')] == '+'
+        normal! l
+      endif
+      if a:inner
+        normal! 2l
+      endif
+      let sel_start = getpos('.')
+    endif
+
+    normal! `>
+    call search('|\|\(-+-\)', '', line('.'))
+    if getline('.')[virtcol('.')] == '+'
+      normal! l
+    endif
+    if a:inner
+      if firsttime || abs(sel_end[2] - getpos('.')[2]) != 2
+        normal! 2h
+      endif
+    endif
+    let sel_end = getpos('.')
+
+    call setpos('.', sel_start)
+    exe "normal! \<C-v>"
+    call setpos('.', sel_end)
+
+    " XXX: WORKAROUND.
+    " if blockwise selection is ended at | character then pressing j to extend
+    " selection furhter fails. But if we shake the cursor left and right then
+    " it works.
+    normal! hl
+  else
+    if !search('|\|\(-+-\)', 'cb', line('.'))
+      return
+    endif
+    if a:inner
+      normal! 2l
+    endif
+    normal! v
+    call search('|\|\(-+-\)', '', line('.'))
+    if !a:inner && getline('.')[virtcol('.')-1] == '|'
+      normal! h
+    elseif a:inner
+      normal! 2h
+    endif
+  endif
+endfunction "}}}
+
+function! vimwiki#TO_table_col(inner, visual) "{{{
+  let t_rows = vimwiki_tbl#get_rows(line('.'))
+  if empty(t_rows)
+    return
+  endif
+
+  " TODO: refactor it!
+  if a:visual
+    normal! `>
+    let sel_end = getpos('.')
+    normal! `<
+    let sel_start = getpos('.')
+
+    let firsttime = sel_start == sel_end
+
+    if firsttime
+      " place cursor to the top row of the table
+      call s:cursor(t_rows[0][0], virtcol('.'))
+      " do not accept the match at cursor position if cursor is next to column
+      " separator of the table separator (^ is a cursor):
+      " |-----^-+-------|
+      " | bla   | bla   |
+      " |-------+-------|
+      " or it will select wrong column.
+      if strpart(getline('.'), virtcol('.')-1) =~ '^-+'
+        let s_flag = 'b'
+      else
+        let s_flag = 'cb'
+      endif
+      " search the column separator backwards
+      if !search('|\|\(-+-\)', s_flag, line('.'))
+        return
+      endif
+      " -+- column separator is matched --> move cursor to the + sign
+      if getline('.')[virtcol('.')] == '+'
+        normal! l
+      endif
+      " inner selection --> reduce selection
+      if a:inner
+        normal! 2l
+      endif
+      let sel_start = getpos('.')
+    endif
+
+    normal! `>
+    if !firsttime && getline('.')[virtcol('.')] == '|'
+      normal! l
+    elseif a:inner && getline('.')[virtcol('.')+1] =~ '[|+]'
+      normal! 2l
+    endif
+    " search for the next column separator
+    call search('|\|\(-+-\)', '', line('.'))
+    " Outer selection selects a column without border on the right. So we move
+    " our cursor left if the previous search finds | border, not -+-.
+    if getline('.')[virtcol('.')] != '+'
+      normal! h
+    endif
+    if a:inner
+      " reduce selection a bit more if inner.
+      normal! h
+    endif
+    " expand selection to the bottom line of the table
+    call s:cursor(t_rows[-1][0], virtcol('.'))
+    let sel_end = getpos('.')
+
+    call setpos('.', sel_start)
+    exe "normal! \<C-v>"
+    call setpos('.', sel_end)
+
+  else
+    " place cursor to the top row of the table
+    call s:cursor(t_rows[0][0], virtcol('.'))
+    " do not accept the match at cursor position if cursor is next to column
+    " separator of the table separator (^ is a cursor):
+    " |-----^-+-------|
+    " | bla   | bla   |
+    " |-------+-------|
+    " or it will select wrong column.
+    if strpart(getline('.'), virtcol('.')-1) =~ '^-+'
+      let s_flag = 'b'
+    else
+      let s_flag = 'cb'
+    endif
+    " search the column separator backwards
+    if !search('|\|\(-+-\)', s_flag, line('.'))
+      return
+    endif
+    " -+- column separator is matched --> move cursor to the + sign
+    if getline('.')[virtcol('.')] == '+'
+      normal! l
+    endif
+    " inner selection --> reduce selection
+    if a:inner
+      normal! 2l
+    endif
+
+    exe "normal! \<C-V>"
+
+    " search for the next column separator
+    call search('|\|\(-+-\)', '', line('.'))
+    " Outer selection selects a column without border on the right. So we move
+    " our cursor left if the previous search finds | border, not -+-.
+    if getline('.')[virtcol('.')] != '+'
+      normal! h
+    endif
+    " reduce selection a bit more if inner.
+    if a:inner
+      normal! h
+    endif
+    " expand selection to the bottom line of the table
+    call s:cursor(t_rows[-1][0], virtcol('.'))
+  endif
+endfunction "}}}
 
 function! vimwiki#count_first_sym(line) "{{{
   let first_sym = matchstr(a:line, '\S')

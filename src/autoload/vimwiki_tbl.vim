@@ -39,7 +39,7 @@ function! s:is_table(line) "{{{
 endfunction "}}}
 
 function! s:is_separator(line) "{{{
-  return a:line =~ '^\s*|\s*--[-|+]\+'
+  return a:line =~ '^\s*[|+]\s*--[-|+]\+'
 endfunction "}}}
 
 function! s:is_last_column(lnum, cnum) "{{{
@@ -495,6 +495,10 @@ function! vimwiki_tbl#move_column_right() "{{{
       call search('|\%([^+]\++\)\{'.(cur_col+1).'}--', 'eW')
     endif
   endif
+endfunction "}}}
+
+function! vimwiki_tbl#get_rows(lnum) "{{{
+  return s:get_rows(a:lnum)
 endfunction "}}}
 
 "}}}
