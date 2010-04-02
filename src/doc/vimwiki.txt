@@ -1524,6 +1524,8 @@ Maxim Kim.
     * NEW: Issue 54: Highlight for placeholders.
     * FIX: Issue 59: List item's text can't be started from *.
     * NEW: Issue 60: Links inside completed gtd-items.
+    * FIX: Issue 63: Table cannot have leading empty cells in html.
+    * FIX: Issue 66: Table empty cells are very small in html.
 
 0.9.9~
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can

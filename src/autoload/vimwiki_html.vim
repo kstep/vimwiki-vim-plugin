@@ -816,7 +816,13 @@ function! s:process_tag_hr(line) "{{{
 endfunction "}}}
 
 function! s:process_tag_table(line, table) "{{{
-  " XXX: This should be refactored!!!
+  function! s:table_empty_cell(value) "{{{
+    if a:value =~ '^\s*$'
+      return '&nbsp;'
+    endif
+    return a:value
+  endfunction "}}}
+
   let table = a:table
   let lines = []
   let processed = 0
@@ -836,7 +842,9 @@ function! s:process_tag_table(line, table) "{{{
     endif
     let processed = 1
 
-    call extend(table[-1], split(a:line, '\s*|\s*'))
+    let cells = split(a:line, '\s*|\s*', 1)[1: -2]
+    call map(cells, 's:table_empty_cell(v:val)')
+    call extend(table[-1], cells)
   else
     let table = s:close_tag_table(table, lines)
   endif
