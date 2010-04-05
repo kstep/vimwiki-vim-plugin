@@ -399,6 +399,10 @@ ic                      Inner column in a table.
     Commands are mapped to <A-Left> and <A-Right> respectively.
 
 
+*:VimwikiGenerateLinks*
+    Insert all available links into current buffer.
+
+
 
 ==============================================================================
 5. Wiki syntax                                                *vimwiki-syntax*
@@ -1467,6 +1471,20 @@ Value           Description~
 Default: 0
 
 
+------------------------------------------------------------------------------
+*g:vimwiki_dir_link*
+
+This option is about what to do with links to directories -- [[directory/]],
+[[papers/]], etc.
+
+Value           Description~
+''              Open 'directory/' using standard netrw plugin.
+'index'         Open 'directory/index.wiki', create if needed.
+'main'          Open 'directory/main.wiki', create if needed.
+etc.
+
+Default: '' (empty string)
+
 
 ==============================================================================
 12. Help                                                        *vimwiki-help*
@@ -1522,6 +1540,8 @@ Maxim Kim.
     * NEW: Issue 53: Wiki markup can not nested. (Use links and inline markup
       in Headers).
     * NEW: Issue 54: Highlight for placeholders.
+    * NEW: Issue 56: Directory indexes. See |g:vimwiki_dir_link| option and
+      |:VimwikiGenerateLinks| command.
     * FIX: Issue 59: List item's text can't be started from *.
     * NEW: Issue 60: Links inside completed gtd-items.
     * FIX: Issue 63: Table cannot have leading empty cells in html.

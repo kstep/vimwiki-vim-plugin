@@ -381,6 +381,35 @@ function! s:tag_internal_link(value) "{{{
   " TODO: rename function -- it makes not only internal links.
   " TODO: refactor it.
 
+  function! s:linkify(src, caption, style) "{{{
+    if a:style == ''
+      let style_str = ''
+    else
+      let style_str = ' style="'.a:style.'"'
+    endif
+
+    if s:is_img_link(a:caption)
+      let link = '<a href="'.a:src.'"><img src="'.a:caption.'"'.style_str.' />'.
+            \ '</a>'
+    elseif s:is_non_wiki_link(a:src)
+      let link = '<a href="'.a:src.'">'.a:caption.'</a>'
+    elseif s:is_img_link(a:src)
+      let link = '<img src="'.a:src.'" alt="'.a:caption.'"'. style_str.' />'
+    elseif vimwiki#is_link_to_dir(a:src)
+      if g:vimwiki_dir_link == ''
+        let link = '<a href="'.vimwiki#safe_link(a:src).'">'.a:caption.'</a>'
+      else
+        let link = '<a href="'.vimwiki#safe_link(a:src).
+              \ g:vimwiki_dir_link.'.html">'.a:caption.'</a>'
+      endif
+    else
+      let link = '<a href="'.vimwiki#safe_link(a:src).
+            \ '.html">'.a:caption.'</a>'
+    endif
+
+    return link
+  endfunction "}}}
+
   let value = s:mid(a:value, 2)
 
   let line = ''
@@ -390,6 +419,7 @@ function! s:tag_internal_link(value) "{{{
     let link_parts = split(value, "][", 1)
   endif
 
+
   if len(link_parts) > 1
     if len(link_parts) < 3
       let style = ""
@@ -397,29 +427,10 @@ function! s:tag_internal_link(value) "{{{
       let style = link_parts[2]
     endif
 
-    if s:is_img_link(link_parts[1])
-      let line = '<a href="'.link_parts[0].'"><img src="'.link_parts[1].
-            \ '" style="'.style.'" /></a>'
-    elseif len(link_parts) < 3
-      if s:is_non_wiki_link(link_parts[0])
-        let line = '<a href="'.link_parts[0].'">'.link_parts[1].'</a>'
-      else
-        let line = '<a href="'.vimwiki#safe_link(link_parts[0]).
-              \ '.html">'.link_parts[1].'</a>'
-      endif
-    elseif s:is_img_link(link_parts[0])
-      let line = '<img src="'.link_parts[0].'" alt="'.
-            \ link_parts[1].'" style="'.style.'" />'
-    endif
+    let line = s:linkify(link_parts[0], link_parts[1], style)
+
   else
-    if s:is_img_link(value)
-      let line = '<img src="'.value.'" />'
-    elseif s:is_non_wiki_link(link_parts[0])
-      let line = '<a href="'.value.'">'.value.'</a>'
-    else
-      let line = '<a href="'.vimwiki#safe_link(value).
-            \ '.html">'.value.'</a>'
-    endif
+    let line = s:linkify(value, value, '')
   endif
   return line
 endfunction "}}}

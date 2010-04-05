@@ -14,17 +14,17 @@ endif
 if VimwikiGet('maxhi')
   " Every WikiWord is nonexistent
   if g:vimwiki_camel_case
-    execute 'syntax match VimwikiNoExistsWord /\%(^\|[^!]\)\@<='.g:vimwiki_word1.'/'
+    execute 'syntax match VimwikiNoExistsLink /\%(^\|[^!]\)\@<='.g:vimwiki_word1.'/'
   endif
-  execute 'syntax match VimwikiNoExistsWord /'.g:vimwiki_word2.'/'
-  execute 'syntax match VimwikiNoExistsWord /'.g:vimwiki_word3.'/'
+  execute 'syntax match VimwikiNoExistsLink /'.g:vimwiki_word2.'/'
+  execute 'syntax match VimwikiNoExistsLink /'.g:vimwiki_word3.'/'
   " till we find them in vimwiki's path
-  call vimwiki#WikiHighlightWords()
+  call vimwiki#WikiHighlightLinks()
 else
   " A WikiWord (unqualifiedWikiName)
-  execute 'syntax match VimwikiWord /\%(^\|[^!]\)\@<=\<'.g:vimwiki_word1.'\>/'
+  execute 'syntax match VimwikiLink /\%(^\|[^!]\)\@<=\<'.g:vimwiki_word1.'\>/'
   " A [[bracketed wiki word]]
-  execute 'syntax match VimwikiWord /'.g:vimwiki_word2.'/'
+  execute 'syntax match VimwikiLink /'.g:vimwiki_word2.'/'
 endif
 
 execute 'syntax match VimwikiLink `'.g:vimwiki_rxWeblink.'`'
@@ -41,8 +41,8 @@ execute 'runtime! syntax/vimwiki_'.VimwikiGet('syntax').'.vim'
 " Tables
 " execute 'syntax match VimwikiTable /'.g:vimwiki_rxTable.'/'
 syntax match VimwikiTableRow /\s*|.\+|\s*/ 
-      \ transparent contains=VimwikiCellSeparator,VimwikiWord,
-      \ VimwikiNoExistsWord,VimwikiEmoticons,VimwikiTodo,
+      \ transparent contains=VimwikiCellSeparator,VimwikiLink,
+      \ VimwikiNoExistsLink,VimwikiEmoticons,VimwikiTodo,
       \ VimwikiBold,VimwikiItalic,VimwikiBoldItalic,VimwikiItalicBold,
       \ VimwikiDelText,VimwikiSuperScript,VimwikiSubScript,VimwikiCode
 syntax match VimwikiCellSeparator 
@@ -80,10 +80,10 @@ syntax match VimwikiCheckBox /\[.\?\]/
 if g:vimwiki_hl_cb_checked
   execute 'syntax match VimwikiCheckBoxDone /'.
         \ g:vimwiki_rxListBullet.'\s*\['.g:vimwiki_listsyms[4].'\].*$/'.
-        \ ' contains=VimwikiNoExistsWord,VimwikiWord,VimwikiLink'
+        \ ' contains=VimwikiNoExistsLink,VimwikiLink'
   execute 'syntax match VimwikiCheckBoxDone /'.
         \ g:vimwiki_rxListNumber.'\s*\['.g:vimwiki_listsyms[4].'\].*$/'.
-        \ ' contains=VimwikiNoExistsWord,VimwikiWord,VimwikiLink'
+        \ ' contains=VimwikiNoExistsLink,VimwikiLink'
 endif
 
 " placeholders
@@ -122,8 +122,7 @@ hi def VimwikiBoldItalic term=bold cterm=bold gui=bold,italic
 hi def link VimwikiItalicBold VimwikiBoldItalic
 
 hi def link VimwikiCode PreProc
-hi def link VimwikiWord Underlined
-hi def link VimwikiNoExistsWord Error
+hi def link VimwikiNoExistsLink Error
 
 hi def link VimwikiPre PreProc
 hi def link VimwikiLink Underlined
