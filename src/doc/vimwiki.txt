@@ -1545,6 +1545,8 @@ Maxim Kim.
     * FIX: Issue 59: List item's text can't be started from *.
     * NEW: Issue 60: Links inside completed gtd-items.
     * FIX: Issue 63: Table cannot have leading empty cells in html.
+    * FIX: Issue 65: Table separator is not htmlized right if on top of the
+      table.
     * FIX: Issue 66: Table empty cells are very small in html.
 
 0.9.9~

@@ -259,9 +259,9 @@ function! s:trim(string) "{{{
   return res
 endfunction "}}}
 
+function! s:get_html_toc(toc_list) "{{{
 " toc_list is list of [level, header_text, header_id]
 " ex: [[1, "Header", "toc1"], [2, "Header2", "toc2"], ...]
-function! s:get_html_toc(toc_list) "{{{
   if empty(a:toc_list)
     return []
   endif
@@ -547,8 +547,12 @@ function! s:close_tag_table(table, ldest) "{{{
       call add(ldest, "<table>")
     endif
 
+    " Empty lists are table separators.
+    " Search for the last empty list. All the above rows would be a table header.
+    " We should exclude the first element of the table list as it is a text tag
+    " that shows if table should be centered or not.
     let head = 0
-    for idx in range(1, len(table)-1)
+    for idx in range(len(table)-1, 1, -1)
       if empty(table[idx])
         let head = idx
         break
@@ -556,9 +560,11 @@ function! s:close_tag_table(table, ldest) "{{{
     endfor
     if head > 0
       for row in table[1 : head-1]
-        call add(ldest, '<tr>')
-        call extend(ldest, map(row, '"<th>".s:process_inline_tags(v:val)."</th>"'))
-        call add(ldest, '</tr>')
+        if !empty(filter(row, '!empty(v:val)'))
+          call add(ldest, '<tr>')
+          call extend(ldest, map(row, '"<th>".s:process_inline_tags(v:val)."</th>"'))
+          call add(ldest, '</tr>')
+        endif
       endfor
       for row in table[head+1 :]
         call add(ldest, '<tr>')
@@ -834,25 +840,30 @@ function! s:process_tag_table(line, table) "{{{
     return a:value
   endfunction "}}}
 
+  function! s:table_add_row(table, line) "{{{
+    if empty(a:table)
+      if a:line =~ '^\s\+'
+        let row = ['center', []]
+      else
+        let row = ['normal', []]
+      endif
+    else
+      let row = [[]]
+    endif
+    return row
+  endfunction "}}}
+
   let table = a:table
   let lines = []
   let processed = 0
 
-  if a:line =~ '^\s*|[-+]\+|\s*$' && len(table)
-    call add(table, [])
+  if a:line =~ '^\s*|[-+]\+|\s*$'
+    call extend(table, s:table_add_row(a:table, a:line))
     let processed = 1
   elseif a:line =~ '^\s*|.\+|\s*$'
-    if empty(table)
-      if a:line =~ '^\s\+'
-        let table = ['center', []]
-      else
-        let table = ['normal', []]
-      endif
-    else
-      call add(table, [])
-    endif
-    let processed = 1
+    call extend(table, s:table_add_row(a:table, a:line))
 
+    let processed = 1
     let cells = split(a:line, '\s*|\s*', 1)[1: -2]
     call map(cells, 's:table_empty_cell(v:val)')
     call extend(table[-1], cells)
