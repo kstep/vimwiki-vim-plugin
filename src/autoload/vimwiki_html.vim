@@ -664,10 +664,15 @@ function! s:process_tag_list(line, lists) "{{{
     return [st_tag, en_tag]
   endfunction "}}}
 
-  " Do not process line that starts from *bold* text.
-  let pos = match(a:line, g:vimwiki_rxBold)
-  if pos != -1 && strpart(a:line, 0, pos) =~ '^\s*$'
-    return [0, []]
+  let in_list = (len(a:lists) > 0)
+
+  " If it is not list yet then do not process line that starts from *bold*
+  " text.
+  if !in_list
+    let pos = match(a:line, g:vimwiki_rxBold)
+    if pos != -1 && strpart(a:line, 0, pos) =~ '^\s*$'
+      return [0, []]
+    endif
   endif
 
   let lines = []
@@ -690,7 +695,6 @@ function! s:process_tag_list(line, lists) "{{{
     let lstRegExp = ''
   endif
 
-  let in_list = (len(a:lists) > 0)
   if lstSym != ''
     " To get proper indent level 'retab' the line -- change all tabs
     " to spaces*tabstop
