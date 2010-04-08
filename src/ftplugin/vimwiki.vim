@@ -304,6 +304,9 @@ nnoremap <buffer> gww :VimwikiTableAlignW<CR>
 nnoremap <buffer> <A-Left> :VimwikiTableMoveColumnLeft<CR>
 nnoremap <buffer> <A-Right> :VimwikiTableMoveColumnRight<CR>
 
+" Misc mappings
+inoremap <buffer> <S-CR> <br /><CR>
+
 
 " Text objects {{{
 onoremap <silent><buffer> ah :<C-U>call vimwiki#TO_header(0, 0)<CR>

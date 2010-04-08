@@ -273,6 +273,8 @@ INSERT MODE                                           *vimwiki-table-mappings*
 <Tab>                   Goto next table cell, create new row if on the last
                         cell.
 
+                        *vimwiki_i_<S-CR>*
+<S-CR>                  Insert <br /> and a newline.
 
 
 ------------------------------------------------------------------------------
@@ -1542,6 +1544,8 @@ Maxim Kim.
     * NEW: Issue 54: Highlight for placeholders.
     * NEW: Issue 56: Directory indexes. See |g:vimwiki_dir_link| option and
       |:VimwikiGenerateLinks| command.
+    * NEW: Issue 58: Html new lines with <br />. Could be inserted with <S-CR>
+      in insert mode.
     * FIX: Issue 59: List item's text can't be started from *.
     * NEW: Issue 60: Links inside completed gtd-items.
     * FIX: Issue 63: Table cannot have leading empty cells in html.

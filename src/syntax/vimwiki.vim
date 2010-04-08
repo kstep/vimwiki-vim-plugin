@@ -90,6 +90,10 @@ endif
 syntax match VimwikiPlaceholder /^\s*%toc\s.*$/
 syntax match VimwikiPlaceholder /^\s*%nohtml\s*$/
 
+" html tags
+syntax match VimwikiHTMLtag '<br\s*/\?>'
+syntax match VimwikiHTMLtag '<hr\s*/\?>'
+
 syntax region VimwikiComment start='<!--' end='-->'
 
 if !vimwiki#hl_exists("VimwikiHeader1")
@@ -138,6 +142,7 @@ hi def link VimwikiComment Comment
 
 hi def link VimwikiCellSeparator SpecialKey
 hi def link VimwikiPlaceholder SpecialKey
+hi def link VimwikiHTMLtag SpecialKey
 "}}}
 
 let b:current_syntax="vimwiki"

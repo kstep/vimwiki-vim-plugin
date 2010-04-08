@@ -167,11 +167,15 @@ function! s:get_html_footer() "{{{
 endfunction "}}}
 
 function! s:safe_html(line) "{{{
-  "" change dangerous html symbols: < > &
+  "" htmlize symbols: < > &
 
   let line = substitute(a:line, '&', '\&amp;', 'g')
-  let line = substitute(line, '<', '\&lt;', 'g')
-  let line = substitute(line, '>', '\&gt;', 'g')
+
+  " let line = substitute(line, '<', '\&lt;', 'g')
+  " let line = substitute(line, '>', '\&gt;', 'g')
+  " XXX: I believe there should be a much nicer way to do it.
+  let line = substitute(line, '<\(br\|hr\)\@!', '\&lt;', 'g')
+  let line = substitute(line, '\(\(br\|hr\)\s*/\?\)\@<!>', '\&gt;', 'g')
   return line
 endfunction "}}}
 
