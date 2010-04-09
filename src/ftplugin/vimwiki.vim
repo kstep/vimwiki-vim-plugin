@@ -42,6 +42,19 @@ inoremap <buffer> <expr> <CR> vimwiki_lst#insertCR()
 nnoremap <buffer> o :call vimwiki_lst#insertOo('o')<CR>a
 nnoremap <buffer> O :call vimwiki_lst#insertOo('O')<CR>a
 
+if !empty(&langmap)
+  " Valid only if langmap is a comma separated pairs of chars
+  let l_o = matchstr(&langmap, '\C,\zs.\zeo,')
+  if l_o
+    exe 'nnoremap <buffer> '.l_o.' :call vimwiki_lst#insertOo("o")<CR>a'
+  endif
+
+  let l_O = matchstr(&langmap, '\C,\zs.\zeO,')
+  if l_O
+    exe 'nnoremap <buffer> '.l_O.' :call vimwiki_lst#insertOo("O")<CR>a'
+  endif
+endif
+
 " COMMENTS }}}
 
 " FOLDING for headers and list items using expr fold method. {{{

@@ -1554,6 +1554,7 @@ Maxim Kim.
     * FIX: Issue 66: Table empty cells are very small in html.
     * FIX: Issue 67: Wrong html conversion of multilined list item with bold
       text on the start of next line.
+    * FIX: Issue 68: auto-indent problem with langmap.
 
 0.9.9~
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can
