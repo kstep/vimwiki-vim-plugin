@@ -1488,6 +1488,61 @@ etc.
 Default: '' (empty string)
 
 
+------------------------------------------------------------------------------
+*g:vimwiki_html_header_numbering*
+
+Set this option if you want headers to be auto numbered in html.
+
+ex: >
+    1 Header1
+    1.1 Header2
+    1.2 Header2
+    1.2.1 Header2
+    1.2.2 Header2
+    1.3 Header2
+    2 Header1
+    3 Header1
+etc.
+
+Value           Description~
+0               Header numbering is off.
+1               Header numbering is on. Headers are numbered starting from
+                header level 1.
+2               Header numbering is on. Headers are numbered starting from
+                header level 2.
+etc.
+Example when g:vimwiki_html_header_numbering = 2: >
+    Header1
+    1 Header2
+    2 Header2
+    2.1 Header3
+    2.1.1 Header4
+    2.1.2 Header4
+    2.2 Header3
+    3 Header2
+    4 Header2
+etc.
+
+Default: 0
+
+
+------------------------------------------------------------------------------
+*g:vimwiki_html_header_numbering_sym*
+
+Ending symbol for |g:vimwiki_html_header_numbering|. 
+With '.' (dot) headers would look like: >
+    1. Header1
+    1.1. Header2
+    1.2. Header2
+    1.2.1. Header2
+    1.2.2. Header2
+    1.3. Header2
+    2. Header1
+    3. Header1
+
+Default: '' (empty)
+
+
 ==============================================================================
 12. Help                                                        *vimwiki-help*
 
@@ -1548,6 +1603,8 @@ Maxim Kim.
       in insert mode.
     * FIX: Issue 59: List item's text can't be started from *.
     * NEW: Issue 60: Links inside completed gtd-items.
+    * NEW: Issue 61: Headers numbering. See |g:vimwiki_html_header_numbering|
+      and |g:vimwiki_html_header_numbering_sym| options.
     * FIX: Issue 63: Table cannot have leading empty cells in html.
     * FIX: Issue 65: Table separator is not htmlized right if on top of the
       table.

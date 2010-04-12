@@ -264,8 +264,17 @@ function! s:trim(string) "{{{
 endfunction "}}}
 
 function! s:get_html_toc(toc_list) "{{{
-" toc_list is list of [level, header_text, header_id]
-" ex: [[1, "Header", "toc1"], [2, "Header2", "toc2"], ...]
+  " toc_list is list of [level, header_text, header_id]
+  " ex: [[1, "Header", "toc1"], [2, "Header2", "toc2"], ...]
+  function! s:close_list(toc, plevel, level) "{{{
+    let plevel = a:plevel
+    while plevel > a:level
+      call add(a:toc, '</ul>')
+      let plevel -= 1
+    endwhile
+    return plevel
+  endfunction "}}}
+
   if empty(a:toc_list)
     return []
   endif
@@ -277,15 +286,12 @@ function! s:get_html_toc(toc_list) "{{{
     if level > plevel
       call add(toc, '<ul>')
     elseif level < plevel
-      call add(toc, '</ul>')
+      let plevel = s:close_list(toc, plevel, level)
     endif
     call add(toc, '<li><a href="#'.id.'">'.text.'</a></li>')
     let plevel = level
   endfor
-  while level > 0
-    call add(toc, '</ul>')
-    let level -= 1
-  endwhile
+  call s:close_list(toc, level, 0)
   call add(toc, '</div>')
   return toc
 endfunction "}}}
@@ -808,6 +814,12 @@ function! s:process_tag_h(line, id) "{{{
     let h_level = 1
   endif
   if h_level > 0
+    let a:id[h_level] += 1
+    " reset higher level ids
+    for level in range(h_level+1, 6)
+      let a:id[level] = 0
+    endfor
+
     let centered = 0
     if a:line =~ '^\s\+'
       let centered = 1
@@ -815,8 +827,14 @@ function! s:process_tag_h(line, id) "{{{
 
     let line = s:trim(line)
 
-    let h_text = s:trim(strpart(line, h_level, len(line) - h_level * 2))
-    let h_id = 'toc'.a:id
+    let h_number = ''
+    for l in range(1, h_level-1)
+      let h_number .= a:id[l].'.'
+    endfor
+    let h_number .= a:id[h_level]
+
+    let h_id = 'toc_'.h_number
+
     let h_part = '<h'.h_level.' id="'.h_id.'"'
 
     if centered
@@ -824,6 +842,17 @@ function! s:process_tag_h(line, id) "{{{
     else
       let h_part .= '>'
     endif
+
+    let h_text = s:trim(strpart(line, h_level, len(line) - h_level * 2))
+    if g:vimwiki_html_header_numbering
+      let num = matchstr(h_number, 
+            \ '^\(\d.\)\{'.(g:vimwiki_html_header_numbering-1).'}\zs.*')
+      if !empty(num)
+        let num .= g:vimwiki_html_header_numbering_sym
+      endif
+      let h_text = num.' '.h_text
+    endif
+
     let line = h_part.h_text.'</h'.h_level.'>'
     let processed = 1
   endif
@@ -982,7 +1011,6 @@ function! s:parse_line(line, state) " {{{
 
       " gather information for table of contents
       call add(state.toc, [h_level, h_text, h_id])
-      let state.toc_id += 1
     endif
   endif
   "}}}
@@ -1104,7 +1132,7 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
   let state.lists = []
   let state.placeholder = []
   let state.toc = []
-  let state.toc_id = 1
+  let state.toc_id = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 }
 
   for line in lsource
     let oldquote = state.quote

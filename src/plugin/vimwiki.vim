@@ -266,6 +266,9 @@ call s:default('w32_dir_enc', '')
 call s:default('CJK_length', 0)
 call s:default('dir_link', '')
 
+call s:default('html_header_numbering', 0)
+call s:default('html_header_numbering_sym', '')
+
 call s:default('current_idx', 0)
 
 let upp = g:vimwiki_upper
