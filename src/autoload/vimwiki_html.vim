@@ -447,12 +447,19 @@ endfunction "}}}
 
 function! s:tag_wikiword_link(value) "{{{
   " Make <a href="WikiWord">WikiWord</a> from WikiWord
-  " if first symbol is ! then remove it and make no link.
   if a:value[0] == '!'
     return a:value[1:]
   else
     let line = '<a href="'.a:value.'.html">'.a:value.'</a>'
     return line
+  endif
+endfunction "}}}
+
+function! s:tag_no_wikiword_link(value) "{{{
+  if a:value[0] == '!'
+    return a:value[1:]
+  else
+    return a:value
   endif
 endfunction "}}}
 
@@ -500,8 +507,8 @@ function! s:process_inline_tags(line) "{{{
   let line = s:make_tag(line, '\[\[.\{-}\]\]', 's:tag_internal_link')
   let line = s:make_tag(line, '\[.\{-}\]', 's:tag_external_link')
   let line = s:make_tag(line, g:vimwiki_rxWeblink, 's:tag_barebone_link')
-  let line = s:make_tag(line, '!\?'.g:vimwiki_rxWikiWord,
-        \ 's:tag_wikiword_link')
+  let line = s:make_tag(line, g:vimwiki_rxWikiWord, 's:tag_wikiword_link')
+  let line = s:make_tag(line, g:vimwiki_rxNoWikiWord, 's:tag_no_wikiword_link')
   let line = s:make_tag(line, g:vimwiki_rxItalic, 's:tag_em')
   let line = s:make_tag(line, g:vimwiki_rxBold, 's:tag_strong')
   let line = s:make_tag(line, g:vimwiki_rxTodo, 's:tag_todo')

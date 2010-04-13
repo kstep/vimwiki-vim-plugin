@@ -278,14 +278,17 @@ let nup = low.oth
 let nlo = upp.oth
 let any = upp.nup
 
-let g:vimwiki_word1 = '\C\<['.upp.']['.nlo.']*['.
-      \ low.']['.nup.']*['.upp.']['.any.']*\>'
-let g:vimwiki_word2 = '\[\[[^\]]\+\]\]'
-let g:vimwiki_word3 = '\[\[[^\]]\+\]\[[^\]]\+\]\]'
+let wword = '\C\<['.upp.']['.nlo.']*['.low.']['.nup.']*['.upp.']['.any.']*\>'
+let g:vimwiki_rxWikiWord = '!\@<!'.wword
+let g:vimwiki_rxNoWikiWord = '!'.wword
+
+let g:vimwiki_rxWikiLink1 = '\[\[[^\]]\+\]\]'
+let g:vimwiki_rxWikiLink2 = '\[\[[^\]]\+\]\[[^\]]\+\]\]'
 if g:vimwiki_camel_case
-  let g:vimwiki_rxWikiWord = g:vimwiki_word1.'\|'.g:vimwiki_word2.'\|'.g:vimwiki_word3
+  let g:vimwiki_rxWikiLink = g:vimwiki_rxWikiWord.'\|'.
+        \ g:vimwiki_rxWikiLink1.'\|'.g:vimwiki_rxWikiLink2
 else
-  let g:vimwiki_rxWikiWord = g:vimwiki_word2.'\|'.g:vimwiki_word3
+  let g:vimwiki_rxWikiLink = g:vimwiki_rxWikiLink1.'\|'.g:vimwiki_rxWikiLink2
 endif
 let g:vimwiki_rxWeblink = '\%("[^"(]\+\((\([^)]\+\))\)\?":\)\?'.
       \'\%(https\?\|ftp\|gopher\|telnet\|file\|notes\|ms-help\):'.
