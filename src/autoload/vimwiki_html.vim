@@ -70,7 +70,7 @@ function! s:create_default_CSS(path) " {{{
     call vimwiki#mkdir(fnamemodify(css_full_name, ':p:h'))
     let lines = []
 
-    call add(lines, 'body {font-family: Arial, sans-serif; margin: 1em 2em 1em 2em; font-size: 100%; line-height: 130%;}')
+    call add(lines, 'body {font-family: Tahoma, sans-serif; margin: 1em 2em 1em 2em; font-size: 100%; line-height: 130%;}')
     call add(lines, 'h1, h2, h3, h4, h5, h6 {font-family: Trebuchet MS, serif; margin-top: 1.5em; margin-bottom: 0.5em;}')
     call add(lines, 'h1 {font-size: 2.0em; color: #a77070;}')
     call add(lines, 'h2 {font-size: 1.6em; color: #779977;}')

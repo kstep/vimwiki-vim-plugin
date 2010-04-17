@@ -86,10 +86,10 @@ endfunction "}}}
 
 function! s:get_links() "{{{
   let rx = '\d\{4}-\d\d-\d\d'
-  let s_links = glob(VimwikiGet('path').VimwikiGet('diary_rel_path').'*.wiki')
-    
-  "let s_links = substitute(s_links, '\'.VimwikiGet('ext'), "", "g")
-  let s_links = substitute(s_links, '\.wiki', "", "g")
+  let s_links = glob(VimwikiGet('path').VimwikiGet('diary_rel_path').
+        \ '*'.VimwikiGet('ext'))
+
+  let s_links = substitute(s_links, '\'.VimwikiGet('ext'), "", "g")
   let links = split(s_links, '\n')
 
   " remove backup files (.wiki~)

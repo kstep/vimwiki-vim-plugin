@@ -1614,6 +1614,8 @@ Maxim Kim.
     * FIX: Issue 68: auto-indent problem with langmap.
     * FIX: Issue 73: Link navigation by Tab. "Escaped" wiki-word should be
       skipped for navigation with <tab>.
+    * FIX: Issue 77: Diary index only showing link to today's diary entry
+      file for extensions other than '.wiki'.
 
 0.9.9~
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can

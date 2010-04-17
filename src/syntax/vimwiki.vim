@@ -88,7 +88,7 @@ if g:vimwiki_hl_cb_checked
 endif
 
 " placeholders
-syntax match VimwikiPlaceholder /^\s*%toc\s.*$/
+syntax match VimwikiPlaceholder /^\s*%toc\%(\s.*\)\?$/
 syntax match VimwikiPlaceholder /^\s*%nohtml\s*$/
 
 " html tags
