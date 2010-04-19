@@ -288,7 +288,8 @@ function! s:get_html_toc(toc_list) "{{{
     elseif level < plevel
       let plevel = s:close_list(toc, plevel, level)
     endif
-    call add(toc, '<li><a href="#'.id.'">'.text.'</a></li>')
+    call add(toc, '<li><a href="#'.id.'">'.
+          \ s:process_tags_nolinks(text).'</a></li>')
     let plevel = level
   endfor
   call s:close_list(toc, level, 0)
@@ -502,12 +503,8 @@ function! s:make_tag(line, regexp, func) "{{{
   return res_line
 endfunction "}}}
 
-function! s:process_inline_tags(line) "{{{
+function! s:process_tags_nolinks(line) "{{{
   let line = a:line
-  let line = s:make_tag(line, '\[\[.\{-}\]\]', 's:tag_internal_link')
-  let line = s:make_tag(line, '\[.\{-}\]', 's:tag_external_link')
-  let line = s:make_tag(line, g:vimwiki_rxWeblink, 's:tag_barebone_link')
-  let line = s:make_tag(line, g:vimwiki_rxWikiWord, 's:tag_wikiword_link')
   let line = s:make_tag(line, g:vimwiki_rxNoWikiWord, 's:tag_no_wikiword_link')
   let line = s:make_tag(line, g:vimwiki_rxItalic, 's:tag_em')
   let line = s:make_tag(line, g:vimwiki_rxBold, 's:tag_strong')
@@ -518,6 +515,21 @@ function! s:process_inline_tags(line) "{{{
   let line = s:make_tag(line, g:vimwiki_rxCode, 's:tag_code')
   let line = s:make_tag(line, g:vimwiki_rxPreStart.'.\+'.g:vimwiki_rxPreEnd,
         \ 's:tag_pre')
+  return line
+endfunction " }}}
+
+function! s:process_tags_links(line) "{{{
+  let line = a:line
+  let line = s:make_tag(line, '\[\[.\{-}\]\]', 's:tag_internal_link')
+  let line = s:make_tag(line, '\[.\{-}\]', 's:tag_external_link')
+  let line = s:make_tag(line, g:vimwiki_rxWeblink, 's:tag_barebone_link')
+  let line = s:make_tag(line, g:vimwiki_rxWikiWord, 's:tag_wikiword_link')
+  return line
+endfunction " }}}
+
+function! s:process_inline_tags(line) "{{{
+  let line = s:process_tags_links(a:line)
+  let line = s:process_tags_nolinks(line)
   return line
 endfunction " }}}
 "}}}
