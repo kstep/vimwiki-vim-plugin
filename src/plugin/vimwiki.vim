@@ -407,6 +407,7 @@ endif
 " CALENDAR Hook "{{{
 if g:vimwiki_use_calendar
   let g:calendar_action = 'vimwiki_diary#calendar_action'
+  let g:calendar_sign = 'vimwiki_diary#calendar_sign'
 endif
 "}}}
 

@@ -192,7 +192,7 @@ function! vimwiki_diary#make_note(index, ...) "{{{
   call vimwiki#open_link(':e ', link, s:diary_index())
 endfunction "}}}
 
-" Calendar.vim callback.
+" Calendar.vim callback and sign functions.
 function! vimwiki_diary#calendar_action(day, month, year, week, dir) "{{{
   let day = s:prefix_zero(a:day)
   let month = s:prefix_zero(a:month)
@@ -215,3 +215,10 @@ function! vimwiki_diary#calendar_action(day, month, year, week, dir) "{{{
   call vimwiki_diary#make_note(1, link)
 endfunction
 
+function vimwiki_diary#calendar_sign(day, month, year) "{{{
+  let day = s:prefix_zero(a:day)
+  let month = s:prefix_zero(a:month)
+  let sfile = VimwikiGet('path').VimwikiGet('diary_rel_path').
+        \ a:year.'-'.month.'-'.day.VimwikiGet('ext')
+  return filereadable(expand(sfile))
+endfunction "}}}

@@ -920,6 +920,8 @@ be created in default wiki's diary.
 
 Get it from http://www.vim.org/scripts/script.php?script_id=52
 
+See |g:vimwiki_use_calendar| option to turn it off/on.
+
 
 
 ==============================================================================
@@ -1617,6 +1619,8 @@ Maxim Kim.
     * FIX: Issue 75: `code` syntax doesn't display correctly in toc.
     * FIX: Issue 77: Diary index only showing link to today's diary entry
       file for extensions other than '.wiki'.
+    * FIX: Issue 79: Further calendar.vim integration -- add sign to calendar
+      date if it has corresponding diary page.
 
 0.9.9~
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can
