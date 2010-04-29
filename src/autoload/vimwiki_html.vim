@@ -288,8 +288,10 @@ function! s:get_html_toc(toc_list) "{{{
     elseif level < plevel
       let plevel = s:close_list(toc, plevel, level)
     endif
-    call add(toc, '<li><a href="#'.id.'">'.
-          \ s:process_tags_nolinks(text).'</a></li>')
+
+    let toc_text = s:process_tags_remove_links(text)
+    let toc_text = s:process_tags_typefaces(toc_text)
+    call add(toc, '<li><a href="#'.id.'">'.toc_text.'</a></li>')
     let plevel = level
   endfor
   call s:close_list(toc, level, 0)
@@ -347,39 +349,6 @@ endfunction "}}}
 
 function! s:tag_pre(value) "{{{
   return '<code>'.s:mid(a:value, 3).'</code>'
-endfunction "}}}
-
-function! s:tag_external_link(value) "{{{
-  "" Make <a href="link">link desc</a>
-  "" from [link link desc]
-
-  let value = s:mid(a:value, 1)
-
-  let line = ''
-  if s:is_web_link(value)
-    let lnkElements = split(value)
-    let head = lnkElements[0]
-    let rest = join(lnkElements[1:])
-    if rest==""
-      let rest=head
-    endif
-    if s:is_img_link(rest)
-      if rest!=head
-        let line = '<a href="'.head.'"><img src="'.rest.'" /></a>'
-      else
-        let line = '<img src="'.rest.'" />'
-      endif
-    else
-      let line = '<a href="'.head.'">'.rest.'</a>'
-    endif
-  elseif s:is_img_link(value)
-    let line = '<img src="'.value.'" />'
-  else
-    " [alskfj sfsf] shouldn't be a link. So return it as it was --
-    " enclosed in [...]
-    let line = '['.value.']'
-  endif
-  return line
 endfunction "}}}
 
 function! s:tag_internal_link(value) "{{{
@@ -446,6 +415,39 @@ function! s:tag_internal_link(value) "{{{
   return line
 endfunction "}}}
 
+function! s:tag_external_link(value) "{{{
+  "" Make <a href="link">link desc</a>
+  "" from [link link desc]
+
+  let value = s:mid(a:value, 1)
+
+  let line = ''
+  if s:is_web_link(value)
+    let lnkElements = split(value)
+    let head = lnkElements[0]
+    let rest = join(lnkElements[1:])
+    if rest==""
+      let rest=head
+    endif
+    if s:is_img_link(rest)
+      if rest!=head
+        let line = '<a href="'.head.'"><img src="'.rest.'" /></a>'
+      else
+        let line = '<img src="'.rest.'" />'
+      endif
+    else
+      let line = '<a href="'.head.'">'.rest.'</a>'
+    endif
+  elseif s:is_img_link(value)
+    let line = '<img src="'.value.'" />'
+  else
+    " [alskfj sfsf] shouldn't be a link. So return it as it was --
+    " enclosed in [...]
+    let line = '['.value.']'
+  endif
+  return line
+endfunction "}}}
+
 function! s:tag_wikiword_link(value) "{{{
   " Make <a href="WikiWord">WikiWord</a> from WikiWord
   if a:value[0] == '!'
@@ -453,14 +455,6 @@ function! s:tag_wikiword_link(value) "{{{
   else
     let line = '<a href="'.a:value.'.html">'.a:value.'</a>'
     return line
-  endif
-endfunction "}}}
-
-function! s:tag_no_wikiword_link(value) "{{{
-  if a:value[0] == '!'
-    return a:value[1:]
-  else
-    return a:value
   endif
 endfunction "}}}
 
@@ -472,6 +466,59 @@ function! s:tag_barebone_link(value) "{{{
     let line = '<img src="'.a:value.'" />'
   else
     let line = '<a href="'.a:value.'">'.a:value.'</a>'
+  endif
+  return line
+endfunction "}}}
+
+function! s:tag_no_wikiword_link(value) "{{{
+  if a:value[0] == '!'
+    return a:value[1:]
+  else
+    return a:value
+  endif
+endfunction "}}}
+
+function! s:tag_remove_internal_link(value) "{{{
+  let value = s:mid(a:value, 2)
+
+  let line = ''
+  if value =~ '|'
+    let link_parts = split(value, "|", 1)
+  else
+    let link_parts = split(value, "][", 1)
+  endif
+
+  if len(link_parts) > 1
+    if len(link_parts) < 3
+      let style = ""
+    else
+      let style = link_parts[2]
+    endif
+    let line = link_parts[1]
+  else
+    let line = value
+  endif
+  return line
+endfunction "}}}
+
+function! s:tag_remove_external_link(value) "{{{
+  let value = s:mid(a:value, 1)
+
+  let line = ''
+  if s:is_web_link(value)
+    let lnkElements = split(value)
+    let head = lnkElements[0]
+    let rest = join(lnkElements[1:])
+    if rest==""
+      let rest=head
+    endif
+    let line = rest
+  elseif s:is_img_link(value)
+    let line = '<img src="'.value.'" />'
+  else
+    " [alskfj sfsf] shouldn't be a link. So return it as it was --
+    " enclosed in [...]
+    let line = '['.value.']'
   endif
   return line
 endfunction "}}}
@@ -503,7 +550,14 @@ function! s:make_tag(line, regexp, func) "{{{
   return res_line
 endfunction "}}}
 
-function! s:process_tags_nolinks(line) "{{{
+function! s:process_tags_remove_links(line) " {{{
+  let line = a:line
+  let line = s:make_tag(line, '\[\[.\{-}\]\]', 's:tag_remove_internal_link')
+  let line = s:make_tag(line, '\[.\{-}\]', 's:tag_remove_external_link')
+  return line
+endfunction " }}}
+
+function! s:process_tags_typefaces(line) "{{{
   let line = a:line
   let line = s:make_tag(line, g:vimwiki_rxNoWikiWord, 's:tag_no_wikiword_link')
   let line = s:make_tag(line, g:vimwiki_rxItalic, 's:tag_em')
@@ -518,7 +572,7 @@ function! s:process_tags_nolinks(line) "{{{
   return line
 endfunction " }}}
 
-function! s:process_tags_links(line) "{{{
+function! s:process_tags_links(line) " {{{
   let line = a:line
   let line = s:make_tag(line, '\[\[.\{-}\]\]', 's:tag_internal_link')
   let line = s:make_tag(line, '\[.\{-}\]', 's:tag_external_link')
@@ -529,7 +583,7 @@ endfunction " }}}
 
 function! s:process_inline_tags(line) "{{{
   let line = s:process_tags_links(a:line)
-  let line = s:process_tags_nolinks(line)
+  let line = s:process_tags_typefaces(line)
   return line
 endfunction " }}}
 "}}}
