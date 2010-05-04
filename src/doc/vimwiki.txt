@@ -1603,6 +1603,8 @@ Maxim Kim.
     * NEW: Issue 46: Do not htmlize some wiki pages (blacklist). New
       placeholder is added: %nohtml. See |vimwiki-nohtml|.
     * FIX: Issue 47: Lists aren't HTMLized properly.
+    * FIX: Issue 48: With autochdir it is impossible to have path_html such as
+      'd:\vimwiki\html\'
     * FIX: Issue 49: Table is not HTMLized properly at the end of wiki page.
     * FIX: Issue 50: Inline formatting is not performed in table cells.
     * FIX: Issue 51: Cannot insert '-' (minus) into table cells of the first

@@ -24,7 +24,7 @@ endfunction "}}}
 function! s:str_common_pfx(str1, str2) "{{{
   let idx = 0
   let minlen = min([len(a:str1), len(a:str2)])
-  while (idx < minlen) && (a:str1[idx] == a:str2[idx])
+  while (idx < minlen) && (a:str1[idx] ==? a:str2[idx])
     let idx = idx + 1
   endwhile
   return strpart(a:str1, 0, idx)

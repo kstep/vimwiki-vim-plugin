@@ -48,7 +48,7 @@ function! vimwiki#subdir(path, filename)"{{{
   let path = expand(a:path)
   let filename = expand(a:filename)
   let idx = 0
-  while path[idx] == filename[idx]
+  while path[idx] ==? filename[idx]
     let idx = idx + 1
   endwhile
 
