@@ -452,9 +452,11 @@ function! s:tag_wikiword_link(value) "{{{
   " Make <a href="WikiWord">WikiWord</a> from WikiWord
   if a:value[0] == '!'
     return a:value[1:]
-  else
+  elseif g:vimwiki_camel_case
     let line = '<a href="'.a:value.'.html">'.a:value.'</a>'
     return line
+  else
+    return a:value
   endif
 endfunction "}}}
 
