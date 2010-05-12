@@ -9,7 +9,7 @@
               |___|  |___| |_|   |_||__| |__||___| |___| |_||___|            ~
 
 
-                               Version: 1.0 beta
+                               Version: 1.0
 
 ==============================================================================
 CONTENTS                                                    *vimwiki-contents*
@@ -1592,7 +1592,7 @@ Maxim Kim.
 ==============================================================================
 14. Changelog                                              *vimwiki-changelog*
 
-1.0 beta~
+1.0~
     * NEW: Issue 41: Table cell and column text objects. See
       |vimwiki-text-objects|.
     * NEW: Issue 42: Commands to move table columns left and right. See
@@ -1638,6 +1638,8 @@ Maxim Kim.
       date if it has corresponding diary page.
     * FIX: Issue 80: Debian Lenny GUI Vim 7.2 has problems with toggling inner
       todo list items.
+    * FIX: Issue 81: Don't convert WikiWord as a link in html when 
+      `let g:vimwiki_camel_case = 0`
 
 0.9.9~
     * NEW: Diary. Help in making daily notes. See |vimwiki-diary|. Now you can
