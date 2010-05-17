@@ -132,25 +132,22 @@ function! s:is_windows() "{{{
 endfunction "}}}
 
 function! s:get_links(pat) "{{{
-  " search all wiki files in 'path' and its subdirs.
-  let subdir = vimwiki#current_subdir()
-  let globlinks = glob(VimwikiGet('path').subdir.'**/'.a:pat)
+ " search all wiki files in 'path' and its subdirs.
+ let subdir = vimwiki#current_subdir()
+ let globlinks = glob(VimwikiGet('path').subdir.'**/'.a:pat)
 
-  " remove .wiki extensions
-  let globlinks = substitute(globlinks, '\'.VimwikiGet('ext'), "", "g")
-  let links = split(globlinks, '\n')
+ " remove extensions (and backup extensions too: .wiki~)
+ let globlinks = substitute(globlinks, '\'.VimwikiGet('ext').'\~\?', "", "g")
+ let links = split(globlinks, '\n')
 
-  " remove backup files (.wiki~)
-  call filter(links, 'v:val !~ ''.*\~$''')
+ " remove paths
+ let rem_path = escape(expand(VimwikiGet('path')).subdir, '\')
+ call map(links, 'substitute(v:val, rem_path, "", "g")')
 
-  " remove paths
-  let rem_path = escape(expand(VimwikiGet('path')).subdir, '\')
-  call map(links, 'substitute(v:val, rem_path, "", "g")')
+ " Remove trailing slashes.
+ call map(links, 'substitute(v:val, "[/\\\\]*$", "", "g")')
 
-  " Remove trailing slashes.
-  call map(links, 'substitute(v:val, "[/\\\\]*$", "", "g")')
-
-  return links
+ return links
 endfunction "}}}
 
 " Builtin cursor doesn't work right with unicode characters.
@@ -380,37 +377,40 @@ endfunction
 
 " SYNTAX highlight {{{
 function! vimwiki#WikiHighlightLinks() "{{{
-  let links = s:get_links('*'.VimwikiGet('ext'))
+ let links = s:get_links('*'.VimwikiGet('ext'))
 
-  " Links with subdirs should be highlighted for linux and windows separators
-  " Change \ or / to [/\\]
-  let os_p = '[/\\]'
-  let os_p2 = escape(os_p, '\')
-  call map(links, 'substitute(v:val, os_p, os_p2, "g")')
+ " Links with subdirs should be highlighted for linux and windows separators
+ " Change \ or / to [/\\]
+ let os_p = '[/\\]'
+ let os_p2 = escape(os_p, '\')
+ call map(links, 'substitute(v:val, os_p, os_p2, "g")')
 
-  for link in links
-    if g:vimwiki_camel_case && 
-          \ link =~ g:vimwiki_rxWikiWord && !s:is_link_to_non_wiki_file(link)
-      execute 'syntax match VimwikiLink /!\@<!\<'.link.'\>/'
-    endif
-    execute 'syntax match VimwikiLink /\[\[\<'.
-          \ vimwiki#unsafe_link(link).
-          \ '\>\%(|\+.*\)*\]\]/'
-    execute 'syntax match VimwikiLink /\[\[\<'.
-          \ vimwiki#unsafe_link(link).
-          \ '\>\]\[.\+\]\]/'
-  endfor
-  execute 'syntax match VimwikiLink /\[\[.\+\.\%(jpg\|png\|gif\)\%(|\+.*\)*\]\]/'
-  execute 'syntax match VimwikiLink /\[\[.\+\.\%(jpg\|png\|gif\)\]\[.\+\]\]/'
+ for link in links
+   if g:vimwiki_camel_case &&
+         \ link =~ g:vimwiki_rxWikiWord && !s:is_link_to_non_wiki_file(link)
+     execute 'syntax match VimwikiLink /!\@<!\<'.link.'\>/'
+   endif
+   execute 'syntax match VimwikiLink /\[\['.
+         \ escape(vimwiki#unsafe_link(link), '~&$.*').
+         \ '\%(|\+.\{-}\)\{-}\]\]/'
+   execute 'syntax match VimwikiLink /\[\['.
+         \ escape(vimwiki#unsafe_link(link), '~&$.*').
+         \ '\]\[.\{-1,}\]\]/'
+ endfor
+ execute 'syntax match VimwikiLink /\[\[.\+\.\%(jpg\|png\|gif\)\%(|\+.*\)*\]\]/'
+ execute 'syntax match VimwikiLink /\[\[.\+\.\%(jpg\|png\|gif\)\]\[.\+\]\]/'
 
-  " highlight dirs
-  let dirs = s:get_links('*/')
-  call map(dirs, 'substitute(v:val, os_p, os_p2, "g")')
-  for dir in dirs
-    execute 'syntax match VimwikiLink /\[\[\<'.
-          \ vimwiki#unsafe_link(dir).
-          \ '\>[/\\]*\%(|\+.*\)*\]\]/'
-  endfor
+ " highlight dirs
+ let dirs = s:get_links('*/')
+ call map(dirs, 'substitute(v:val, os_p, os_p2, "g")')
+ for dir in dirs
+   execute 'syntax match VimwikiLink /\[\['.
+         \ escape(vimwiki#unsafe_link(dir), '~&$.*').
+         \ '[/\\]*\%(|\+.*\)*\]\]/'
+   execute 'syntax match VimwikiLink /\[\['.
+         \ escape(vimwiki#unsafe_link(dir), '~&$.*').
+         \ '[/\\]*\%(\]\[\+.*\)*\]\]/'
+ endfor
 endfunction
 " }}}
 

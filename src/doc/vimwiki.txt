@@ -9,7 +9,7 @@
               |___|  |___| |_|   |_||__| |__||___| |___| |_||___|            ~
 
 
-                               Version: 1.0
+                               Version: 1.1
 
 ==============================================================================
 CONTENTS                                                    *vimwiki-contents*
@@ -1591,6 +1591,11 @@ Maxim Kim.
 
 ==============================================================================
 14. Changelog                                              *vimwiki-changelog*
+
+1.1~
+    * FIX: Issue 85: Errors if you have '~' subdirectory in a wiki directory.
+    * FIX: Issue 86: Existed links '[[WikiLink1|Alias1]] | [[WikiLink2]]' are
+      highlighted as a single link.
 
 1.0~
     * NEW: Issue 41: Table cell and column text objects. See
