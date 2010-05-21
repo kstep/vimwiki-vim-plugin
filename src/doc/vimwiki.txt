@@ -1593,9 +1593,11 @@ Maxim Kim.
 14. Changelog                                              *vimwiki-changelog*
 
 1.1~
+    * FIX: Issue 84: Vimwiki rename removed the WikiWord display name.
     * FIX: Issue 85: Errors if you have '~' subdirectory in a wiki directory.
     * FIX: Issue 86: Existed links '[[WikiLink1|Alias1]] | [[WikiLink2]]' are
       highlighted as a single link.
+    * FIX: Issue 92: Wikies in a subdir could be renamed to an empty file.
 
 1.0~
     * NEW: Issue 41: Table cell and column text objects. See

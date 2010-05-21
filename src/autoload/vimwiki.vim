@@ -291,19 +291,23 @@ endfunction
 function! s:update_wiki_links_dir(dir, old_fname, new_fname) " {{{
   let old_fname = substitute(a:old_fname, '[/\\]', '[/\\\\]', 'g')
   let new_fname = a:new_fname
+  let old_fname_r = old_fname
+  let new_fname_r = new_fname
 
-  if !s:is_wiki_word(new_fname)
-    let new_fname = '[['.new_fname.']]'
+  if !s:is_wiki_word(new_fname) && s:is_wiki_word(old_fname)
+    let new_fname_r = '[['.new_fname.']]'
   endif
+
   if !s:is_wiki_word(old_fname)
-    let old_fname = '\[\['.vimwiki#unsafe_link(old_fname).
-          \ '\%(|.*\)\?\%(\]\[.*\)\?\]\]'
+    let old_fname_r = '\[\[\zs'.vimwiki#unsafe_link(old_fname).
+          \ '\ze\%(|.*\)\?\%(\]\[.*\)\?\]\]'
   else
-    let old_fname = '\<'.old_fname.'\>'
+    let old_fname_r = '\<'.old_fname.'\>'
   endif
+
   let files = split(glob(VimwikiGet('path').a:dir.'*'.VimwikiGet('ext')), '\n')
   for fname in files
-    call s:update_wiki_link(fname, old_fname, new_fname)
+    call s:update_wiki_link(fname, old_fname_r, new_fname_r)
   endfor
 endfunction
 " }}}
@@ -575,8 +579,6 @@ function! vimwiki#WikiRenameWord() "{{{
     return
   endif
 
-  let new_link = subdir.new_link
-
   " check new_fname - it should be 'good', not empty
   if substitute(new_link, '\s', '', 'g') == ''
     echomsg 'vimwiki: Cannot rename to an empty filename!'
@@ -587,6 +589,7 @@ function! vimwiki#WikiRenameWord() "{{{
     return
   endif
 
+  let new_link = subdir.new_link
   let new_link = s:strip_word(new_link)
   let new_fname = VimwikiGet('path').s:filename(new_link).VimwikiGet('ext')
 
