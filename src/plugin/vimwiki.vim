@@ -292,7 +292,8 @@ else
 endif
 let g:vimwiki_rxWeblink = '\%("[^"(]\+\((\([^)]\+\))\)\?":\)\?'.
       \'\%(https\?\|ftp\|gopher\|telnet\|file\|notes\|ms-help\):'.
-      \'\%(\%(\%(//\)\|\%(\\\\\)\)\+[A-Za-z0-9:#@%/;,$~()_?+=.&\\\-]*\)'
+      \'\%(\%(\%(//\)\|\%(\\\\\)\)\+[A-Za-z0-9:#@%/;,$~()_?+=.&\\\-]*\)'.
+      \'[().,?]\@<!'
 "}}}
 
 " AUTOCOMMANDS for all known wiki extensions {{{

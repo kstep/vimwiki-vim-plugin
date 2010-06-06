@@ -1598,6 +1598,8 @@ Maxim Kim.
     * FIX: Issue 86: Existed links '[[WikiLink1|Alias1]] | [[WikiLink2]]' are
       highlighted as a single link.
     * FIX: Issue 92: Wikies in a subdir could be renamed to an empty file.
+    * FIX: Issue 96: Closing bracket at the end of weblink shouldn't be a part
+      of that link.
 
 1.0~
     * NEW: Issue 41: Table cell and column text objects. See
