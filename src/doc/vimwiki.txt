@@ -1600,6 +1600,7 @@ Maxim Kim.
     * FIX: Issue 92: Wikies in a subdir could be renamed to an empty file.
     * FIX: Issue 96: Closing bracket at the end of weblink shouldn't be a part
       of that link.
+    * FIX: Issue 97: Error opening weblink in a browser if it has # inside.
 
 1.0~
     * NEW: Issue 41: Table cell and column text objects. See

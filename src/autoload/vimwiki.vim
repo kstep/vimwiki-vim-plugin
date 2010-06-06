@@ -490,7 +490,7 @@ function! vimwiki#WikiFollowWord(split) "{{{
   if link == ""
     let weblink = s:strip_word(s:get_word_at_cursor(g:vimwiki_rxWeblink))
     if weblink != ""
-      call VimwikiWeblinkHandler(weblink)
+      call VimwikiWeblinkHandler(escape(weblink, '#'))
     else
       execute "normal! \n"
     endif
