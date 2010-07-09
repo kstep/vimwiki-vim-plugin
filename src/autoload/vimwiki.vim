@@ -132,22 +132,31 @@ function! s:is_windows() "{{{
 endfunction "}}}
 
 function! s:get_links(pat) "{{{
- " search all wiki files in 'path' and its subdirs.
- let subdir = vimwiki#current_subdir()
- let globlinks = glob(VimwikiGet('path').subdir.'**/'.a:pat)
+  " search all wiki files in 'path' and its subdirs.
+  let subdir = vimwiki#current_subdir()
 
- " remove extensions (and backup extensions too: .wiki~)
- let globlinks = substitute(globlinks, '\'.VimwikiGet('ext').'\~\?', "", "g")
- let links = split(globlinks, '\n')
+  " if current wiki is temporary -- was added by an arbitrary wiki file then do
+  " not search wiki files in subdirectories. Or it would hang the system if
+  " wiki file was created in $HOME or C:/ dirs.
+  if VimwikiGet('temp') 
+    let search_dirs = ''
+  else
+    let search_dirs = '**/'
+  endif
+  let globlinks = glob(VimwikiGet('path').subdir.search_dirs.a:pat)
 
- " remove paths
- let rem_path = escape(expand(VimwikiGet('path')).subdir, '\')
- call map(links, 'substitute(v:val, rem_path, "", "g")')
+  " remove extensions (and backup extensions too: .wiki~)
+  let globlinks = substitute(globlinks, '\'.VimwikiGet('ext').'\~\?', "", "g")
+  let links = split(globlinks, '\n')
 
- " Remove trailing slashes.
- call map(links, 'substitute(v:val, "[/\\\\]*$", "", "g")')
+  " remove paths
+  let rem_path = escape(expand(VimwikiGet('path')).subdir, '\')
+  call map(links, 'substitute(v:val, rem_path, "", "g")')
 
- return links
+  " Remove trailing slashes.
+  call map(links, 'substitute(v:val, "[/\\\\]*$", "", "g")')
+
+  return links
 endfunction "}}}
 
 " Builtin cursor doesn't work right with unicode characters.

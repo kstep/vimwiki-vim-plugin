@@ -9,7 +9,7 @@
               |___|  |___| |_|   |_||__| |__||___| |___| |_||___|            ~
 
 
-                               Version: 1.1
+                               Version: 1.1 dev
 
 ==============================================================================
 CONTENTS                                                    *vimwiki-contents*
@@ -1601,6 +1601,7 @@ Maxim Kim.
     * FIX: Issue 96: Closing bracket at the end of weblink shouldn't be a part
       of that link.
     * FIX: Issue 97: Error opening weblink in a browser if it has # inside.
+    * FIX: Issue 99: Vim is not responing while opening arbitrary wiki file.
 
 1.0~
     * NEW: Issue 41: Table cell and column text objects. See

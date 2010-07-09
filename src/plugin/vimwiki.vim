@@ -72,7 +72,7 @@ function! s:setup_buffer_enter() "{{{
     endif
 
     if idx == -1
-      call add(g:vimwiki_list, {'path': path, 'ext': ext})
+      call add(g:vimwiki_list, {'path': path, 'ext': ext, 'temp': 1})
       let g:vimwiki_current_idx = len(g:vimwiki_list) - 1
     else
       let g:vimwiki_current_idx = idx
@@ -206,6 +206,9 @@ let s:vimwiki_defaults.html_header = ''
 let s:vimwiki_defaults.html_footer = ''
 let s:vimwiki_defaults.nested_syntaxes = {}
 let s:vimwiki_defaults.auto_export = 0
+" is wiki temporary -- was added to g:vimwiki_list by opening arbitrary wiki
+" file.
+let s:vimwiki_defaults.temp = 0
 
 " diary
 let s:vimwiki_defaults.diary_rel_path = 'diary/'
