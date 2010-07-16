@@ -62,7 +62,7 @@ function! s:get_diary_range(lines, header) "{{{
     let idx += 1
   endfor
 
-  let ln_end = idx - 1
+  let ln_end = idx
   return [ln_start, ln_end]
 endfunction "}}}
 
@@ -125,6 +125,7 @@ endfunction "}}}
 
 function! s:add_link(page, header, link) "{{{
   let [lines, bufnr] = s:get_file_contents(a:page)
+  echomsg len(lines)
 
   let [ln_start, ln_end] = s:get_diary_range(lines, a:header)
 
@@ -137,6 +138,7 @@ function! s:add_link(page, header, link) "{{{
     if ln_start == -1
       call insert(lines, '= '.a:header.' =')
       let ln_start = 1
+      let ln_end = 1
     endif
 
     " removing 'old' links
