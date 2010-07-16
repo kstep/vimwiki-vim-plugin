@@ -125,7 +125,6 @@ endfunction "}}}
 
 function! s:add_link(page, header, link) "{{{
   let [lines, bufnr] = s:get_file_contents(a:page)
-  echomsg len(lines)
 
   let [ln_start, ln_end] = s:get_diary_range(lines, a:header)
 
