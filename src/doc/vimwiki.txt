@@ -1558,6 +1558,21 @@ headers would look like: >
 Default: '' (empty)
 
 
+------------------------------------------------------------------------------
+*g:vimwiki_file_exts*
+
+Comma separated list of file extensions.
+
+Consider you have the following link: [[my_script.php][my script]].
+If there is 'php' extension in g:vimwiki_file_exts this link would be htmlized
+to <a href="my_script.php">my script</a>.
+Otherwise it would be <a href="my_script.php.html">my script</a> (note .html)
+
+
+Default: 'pdf,txt,doc,rtf,xls,php,zip,rar,7z,html,gz'
+
+
+
 ==============================================================================
 12. Help                                                        *vimwiki-help*
 
@@ -1598,6 +1613,8 @@ Maxim Kim.
     * FIX: Issue 86: Existed links '[[WikiLink1|Alias1]] | [[WikiLink2]]' are
       highlighted as a single link.
     * FIX: Issue 92: Wikies in a subdir could be renamed to an empty file.
+    * FIX: Issue 94: Relative links to PHP files are broken. See
+      |g:vimwiki_file_exts| for details.
     * FIX: Issue 96: Closing bracket at the end of weblink shouldn't be a part
       of that link.
     * FIX: Issue 97: Error opening weblink in a browser if it has # inside.

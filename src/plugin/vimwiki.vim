@@ -268,6 +268,7 @@ call s:default('table_auto_fmt', 1)
 call s:default('w32_dir_enc', '')
 call s:default('CJK_length', 0)
 call s:default('dir_link', '')
+call s:default('file_exts', 'pdf,txt,doc,rtf,xls,php,zip,rar,7z,html,gz')
 
 call s:default('html_header_numbering', 0)
 call s:default('html_header_numbering_sym', '')

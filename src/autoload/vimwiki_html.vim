@@ -49,8 +49,10 @@ function! s:is_img_link(lnk) "{{{
 endfunction "}}}
 
 function! s:is_non_wiki_link(lnk) "{{{
-  " TODO: Add more file extensions here
-  if a:lnk =~ '.\+\.\%(pdf\|txt\|doc\|rtf\|xls\)$'
+  let exts = '.\+\.\%('.
+          \ join(split(g:vimwiki_file_exts, '\s*,\s*'), '\|').
+          \ '\)$'
+  if a:lnk =~ exts
     return 1
   endif
   return 0
