@@ -40,20 +40,16 @@ else
 endif
 setlocal formatoptions=tnro
 
-inoremap <buffer> <expr> <CR> vimwiki_lst#insertCR()
-nnoremap <buffer> o :call vimwiki_lst#insertOo('o')<CR>a
-nnoremap <buffer> O :call vimwiki_lst#insertOo('O')<CR>a
-
 if !empty(&langmap)
   " Valid only if langmap is a comma separated pairs of chars
   let l_o = matchstr(&langmap, '\C,\zs.\zeo,')
   if l_o
-    exe 'nnoremap <buffer> '.l_o.' :call vimwiki_lst#insertOo("o")<CR>a'
+    exe 'nnoremap <buffer> '.l_o.' :call vimwiki_lst#kbd_oO("o")<CR>a'
   endif
 
   let l_O = matchstr(&langmap, '\C,\zs.\zeO,')
   if l_O
-    exe 'nnoremap <buffer> '.l_O.' :call vimwiki_lst#insertOo("O")<CR>a'
+    exe 'nnoremap <buffer> '.l_O.' :call vimwiki_lst#kbd_oO("O")<CR>a'
   endif
 endif
 
@@ -307,9 +303,23 @@ noremap <silent><script><buffer>
       \ <Plug>VimwikiToggleListItem :VimwikiToggleListItem<CR>
 
 
+function! s:CR()
+  let res = vimwiki_lst#kbd_cr()
+  if res == "\<CR>" && g:vimwiki_table_auto_fmt
+    let res = vimwiki_tbl#kbd_cr()
+  endif
+  return res
+endfunction
+
+" List and Table <CR> mapping
+inoremap <buffer> <expr> <CR> <SID>CR()
+
+" List mappings
+nnoremap <buffer> o :call vimwiki_lst#kbd_oO('o')<CR>a
+nnoremap <buffer> O :call vimwiki_lst#kbd_oO('O')<CR>a
+
 " Table mappings
 if g:vimwiki_table_auto_fmt
-  inoremap <expr> <buffer> <CR> vimwiki_tbl#kbd_cr()
   inoremap <expr> <buffer> <Tab> vimwiki_tbl#kbd_tab()
   inoremap <expr> <buffer> <S-Tab> vimwiki_tbl#kbd_shift_tab()
 endif

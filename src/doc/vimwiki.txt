@@ -1624,6 +1624,8 @@ Maxim Kim.
     * FIX: Issue 103: Always highlight links to non-wiki files as existed.
     * FIX: Issue 104: vimwiki#nested_syntax needs 'keepend' to avoid contained
       language syntax eat needed '}}}'.
+    * FIX: Issue 105: <i_CR> on a todo list item with [ ] doesn't create new
+      todo list item.
     * FIX: Issue 106: With MediaWiki syntax <C-Space> on a child todo list
       item produce errors.
     * FIX: Issue 107: With MediaWiki syntax <C-Space> on a list item creates
