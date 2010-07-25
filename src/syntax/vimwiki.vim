@@ -119,8 +119,10 @@ if g:vimwiki_hl_cb_checked
 endif
 
 " placeholders
-syntax match VimwikiPlaceholder /^\s*%toc\%(\s.*\)\?$/
+syntax match VimwikiPlaceholder /^\s*%toc\%(\s.*\)\?$/ contains=VimwikiPlaceholderParam
 syntax match VimwikiPlaceholder /^\s*%nohtml\s*$/
+syntax match VimwikiPlaceholder /^\s*%title\%(\s.*\)\?$/ contains=VimwikiPlaceholderParam
+syntax match VimwikiPlaceholderParam /\s.*/ contained
 
 " html tags
 syntax match VimwikiHTMLtag '<br\s*/\?>'
@@ -194,6 +196,7 @@ hi def link VimwikiComment Comment
 
 hi def link VimwikiCellSeparator SpecialKey
 hi def link VimwikiPlaceholder SpecialKey
+hi def link VimwikiPlaceholderParam String
 hi def link VimwikiHTMLtag SpecialKey
 
 hi def link VimwikiBoldChar Ignore

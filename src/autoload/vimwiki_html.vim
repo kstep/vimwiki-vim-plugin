@@ -94,15 +94,13 @@ function! s:create_default_CSS(path) " {{{
   endif
 endfunction "}}}
 
-function! s:get_html_header(wikifile, subdir, charset) "{{{
+function! s:get_html_header(title, subdir, charset) "{{{
   let lines=[]
-
-  let title = fnamemodify(a:wikifile, ":t:r")
 
   if VimwikiGet('html_header') != "" && !s:warn_html_header
     try
       let lines = readfile(expand(VimwikiGet('html_header')))
-      call map(lines, 'substitute(v:val, "%title%", "'. title .'", "g")')
+      call map(lines, 'substitute(v:val, "%title%", "'. a:title .'", "g")')
       call map(lines, 'substitute(v:val, "%root_path%", "'.
             \ s:root_path(a:subdir) .'", "g")')
       return lines
@@ -126,7 +124,7 @@ function! s:get_html_header(wikifile, subdir, charset) "{{{
   call add(lines, '<head>')
   call add(lines, '<link rel="Stylesheet" type="text/css" href="'.
         \ css_name.'" />')
-  call add(lines, '<title>'.title.'</title>')
+  call add(lines, '<title>'.a:title.'</title>')
   call add(lines, '<meta http-equiv="Content-Type" content="text/html;'.
         \ ' charset='.a:charset.'" />')
   call add(lines, '</head>')
@@ -291,21 +289,34 @@ function! s:get_html_toc(toc_list) "{{{
   return toc
 endfunction "}}}
 
-" insert placeholder's contents into dest.
-function! s:process_placeholders(dest, placeholders, type, ins_content) "{{{
+" insert toc into dest.
+function! s:process_toc(dest, placeholders, toc) "{{{
   if !empty(a:placeholders)
     for [placeholder, row, idx] in a:placeholders
       let [type, param] = placeholder
-      if type == a:type
-        let ins_content = a:ins_content[:]
+      if type == 'toc'
+        let toc = a:toc[:]
         if !empty(param)
-          call insert(ins_content, '<h1>'.param.'</h1>')
+          call insert(toc, '<h1>'.param.'</h1>')
         endif
-        let shift = idx * len(ins_content)
-        call extend(a:dest, ins_content, row + shift)
+        let shift = idx * len(toc)
+        call extend(a:dest, toc, row + shift)
       endif
     endfor
   endif
+endfunction "}}}
+
+" get title.
+function! s:process_title(placeholders, default_title) "{{{
+  if !empty(a:placeholders)
+    for [placeholder, row, idx] in a:placeholders
+      let [type, param] = placeholder
+      if type == 'title' && !empty(param)
+        return param
+      endif
+    endfor
+  endif
+  return a:default_title
 endfunction "}}}
 
 "}}}
@@ -1006,6 +1017,15 @@ function! s:parse_line(line, state) " {{{
     endif
   endif
 
+  " title -- placeholder
+  if !processed
+    if line =~ '^\s*%title'
+      let processed = 1
+      let param = matchstr(line, '^\s*%title\s\zs.*')
+      let state.placeholder = ['title', param]
+    endif
+  endif
+
   " toc -- placeholder "{{{
   if !processed
     if line =~ '^\s*%toc'
@@ -1178,7 +1198,7 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
   let subdir = vimwiki#subdir(VimwikiGet('path'), wikifile)
 
   let lsource = s:remove_comments(readfile(wikifile))
-  let ldest = s:get_html_header(wikifile, subdir, &fileencoding)
+  let ldest = []
 
   let path = expand(a:path).subdir
   call vimwiki#mkdir(path)
@@ -1228,8 +1248,7 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
 
   if !nohtml
     let toc = s:get_html_toc(state.toc)
-    call s:process_placeholders(ldest, placeholders, 'toc', toc)
-
+    call s:process_toc(ldest, placeholders, toc)
     call s:remove_blank_lines(ldest)
 
     "" process end of file
@@ -1243,6 +1262,8 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
     call s:close_tag_table(state.table, lines)
     call extend(ldest, lines)
 
+    let title = s:process_title(placeholders, fnamemodify(a:wikifile, ":t:r"))
+    call extend(ldest, s:get_html_header(title, subdir, &fileencoding), 0)
     call extend(ldest, s:get_html_footer())
 
     "" make html file.

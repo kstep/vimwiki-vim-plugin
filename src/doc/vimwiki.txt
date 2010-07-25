@@ -769,6 +769,18 @@ or >
 
 
 ------------------------------------------------------------------------------
+%title Title of the page                                       *vimwiki-title*
+
+When you htmlize your wiki page you have default title which is the filename
+of the page. 
+Place >
+
+%title My books
+
+into your wiki page if you want another title.
+
+
+------------------------------------------------------------------------------
 %nohtml                                                       *vimwiki-nohtml*
 
 If you do not want a wiki page to be converted to html, place:
@@ -1063,7 +1075,7 @@ This header.tpl could look like: >
         <div class="contents">
 
 where 
-  %title% is replaced by a wiki page name
+  %title% is replaced by a wiki page name or by a |vimwiki-title|
   %root_path% is replaced by a count of ../ for pages buried in subdirs:
     if you have wikilink [[dir1/dir2/dir3/my page in a subdir]] then
     %root_path% is replaced by '../../../'.
@@ -1613,6 +1625,7 @@ Maxim Kim.
     * FIX: Issue 86: Existed links '[[WikiLink1|Alias1]] | [[WikiLink2]]' are
       highlighted as a single link.
     * FIX: Issue 92: Wikies in a subdir could be renamed to an empty file.
+    * FIX: Issue 93: Use alias name in html title. See |vimwiki-title|.
     * FIX: Issue 94: Relative links to PHP files are broken. See
       |g:vimwiki_file_exts| for details.
     * FIX: Issue 96: Closing bracket at the end of weblink shouldn't be a part
