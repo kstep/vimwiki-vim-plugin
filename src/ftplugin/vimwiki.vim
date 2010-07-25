@@ -14,13 +14,15 @@ let b:undo_ftplugin = "setlocal ".
       \ "suffixesadd< isfname< comments< ".
       \ "autowriteall< ".
       \ "formatoptions< foldtext< ".
-      \ "foldmethod< foldexpr< commentstring< "
+      \ "foldmethod< foldexpr< commentstring< ".
+      \ "conceallevel< "
 " UNDO }}}
 
 " MISC STUFF {{{
 
 setlocal autowriteall
 setlocal commentstring=<!--%s-->
+setlocal conceallevel=3
 " MISC }}}
 
 " GOTO FILE: gf {{{

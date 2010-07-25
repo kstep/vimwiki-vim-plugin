@@ -65,7 +65,7 @@ function! vimwiki#current_subdir()"{{{
 endfunction"}}}
 
 function! vimwiki#open_link(cmd, link, ...) "{{{
-  if s:is_link_to_non_wiki_file(a:link)
+  if vimwiki#is_non_wiki_link(a:link)
     call s:edit_file(a:cmd, a:link)
   else
     if a:0
@@ -241,14 +241,15 @@ function! s:strip_word(word) "{{{
 endfunction
 " }}}
 
-function! s:is_link_to_non_wiki_file(link) "{{{
-  " Check if link is to a non-wiki file.
-  " The easiest way is to check if it has extension like .txt or .html
-  if a:link =~ '\.\w\{1,4}$'
+function! vimwiki#is_non_wiki_link(lnk) "{{{
+  let exts = '.\+\.\%('.
+          \ join(split(g:vimwiki_file_exts, '\s*,\s*'), '\|').
+          \ '\)$'
+  if a:lnk =~ exts
     return 1
   endif
   return 0
-endfunction
+endfunction "}}}
 " }}}
 
 function! vimwiki#is_link_to_dir(link) "{{{
@@ -400,18 +401,43 @@ function! vimwiki#WikiHighlightLinks() "{{{
 
  for link in links
    if g:vimwiki_camel_case &&
-         \ link =~ g:vimwiki_rxWikiWord && !s:is_link_to_non_wiki_file(link)
+         \ link =~ g:vimwiki_rxWikiWord && !vimwiki#is_non_wiki_link(link)
      execute 'syntax match VimwikiLink /!\@<!\<'.link.'\>/'
    endif
    execute 'syntax match VimwikiLink /\[\['.
          \ escape(vimwiki#unsafe_link(link), '~&$.*').
-         \ '\%(|\+.\{-}\)\{-}\]\]/'
+         \ '\%(|\+.\{-}\)\{-}\]\]/ contains=VimwikiLinkChar'
    execute 'syntax match VimwikiLink /\[\['.
          \ escape(vimwiki#unsafe_link(link), '~&$.*').
-         \ '\]\[.\{-1,}\]\]/'
+         \ '\]\[.\{-1,}\]\]/ contains=VimwikiLinkChar'
+
+   execute 'syntax match VimwikiLinkT /\[\['.
+         \ escape(vimwiki#unsafe_link(link), '~&$.*').
+         \ '\%(|\+.\{-}\)\{-}\]\]/ contained'
+   execute 'syntax match VimwikiLinkT /\[\['.
+         \ escape(vimwiki#unsafe_link(link), '~&$.*').
+         \ '\]\[.\{-1,}\]\]/ contained'
  endfor
- execute 'syntax match VimwikiLink /\[\[.\+\.\%(jpg\|png\|gif\)\%(|\+.*\)*\]\]/'
- execute 'syntax match VimwikiLink /\[\[.\+\.\%(jpg\|png\|gif\)\]\[.\+\]\]/'
+ execute 'syntax match VimwikiLink /\[\[.\+\.\%(jpg\|png\|gif\)\%(|\+.*\)*\]\]/ contains=VimwikiLinkChar'
+ execute 'syntax match VimwikiLink /\[\[.\+\.\%(jpg\|png\|gif\)\]\[.\+\]\]/ contains=VimwikiLinkChar'
+
+ execute 'syntax match VimwikiLinkT /\[\[.\+\.\%(jpg\|png\|gif\)\%(|\+.*\)*\]\]/ contained'
+ execute 'syntax match VimwikiLinkT /\[\[.\+\.\%(jpg\|png\|gif\)\]\[.\+\]\]/ contained'
+
+ " Issue 103: Always highlight links to non-wiki files as existed.
+ execute 'syntax match VimwikiLink /\[\[.\+\.\%('.
+       \join(split(g:vimwiki_file_exts, '\s*,\s*'), '\|').
+       \'\)\%(|\+.*\)*\]\]/ contains=VimwikiLinkChar'
+ execute 'syntax match VimwikiLink /\[\[.\+\.\%('.
+       \join(split(g:vimwiki_file_exts, '\s*,\s*'), '\|').
+       \'\)\]\[.\+\]\]/ contains=VimwikiLinkChar'
+
+ execute 'syntax match VimwikiLinkT /\[\[.\+\.\%('.
+       \join(split(g:vimwiki_file_exts, '\s*,\s*'), '\|').
+       \'\)\%(|\+.*\)*\]\]/ contained'
+ execute 'syntax match VimwikiLinkT /\[\[.\+\.\%('.
+       \join(split(g:vimwiki_file_exts, '\s*,\s*'), '\|').
+       \'\)\]\[.\+\]\]/ contained'
 
  " highlight dirs
  let dirs = s:get_links('*/')
@@ -419,10 +445,17 @@ function! vimwiki#WikiHighlightLinks() "{{{
  for dir in dirs
    execute 'syntax match VimwikiLink /\[\['.
          \ escape(vimwiki#unsafe_link(dir), '~&$.*').
-         \ '[/\\]*\%(|\+.*\)*\]\]/'
+         \ '[/\\]*\%(|\+.*\)*\]\]/ contains=VimwikiLinkChar'
    execute 'syntax match VimwikiLink /\[\['.
          \ escape(vimwiki#unsafe_link(dir), '~&$.*').
-         \ '[/\\]*\%(\]\[\+.*\)*\]\]/'
+         \ '[/\\]*\%(\]\[\+.*\)*\]\]/ contains=VimwikiLinkChar'
+
+   execute 'syntax match VimwikiLinkT /\[\['.
+         \ escape(vimwiki#unsafe_link(dir), '~&$.*').
+         \ '[/\\]*\%(|\+.*\)*\]\]/ contained'
+   execute 'syntax match VimwikiLinkT /\[\['.
+         \ escape(vimwiki#unsafe_link(dir), '~&$.*').
+         \ '[/\\]*\%(\]\[\+.*\)*\]\]/ contained'
  endfor
 endfunction
 " }}}
@@ -470,7 +503,7 @@ function! vimwiki#nested_syntax(filetype, start, end, textSnipHl) abort "{{{
   execute 'syntax region textSnip'.ft.'
         \ matchgroup='.a:textSnipHl.'
         \ start="'.a:start.'" end="'.a:end.'"
-        \ contains=@'.group
+        \ contains=@'.group.' keepend'
 endfunction "}}}
 
 "}}}
@@ -593,7 +626,7 @@ function! vimwiki#WikiRenameWord() "{{{
     echomsg 'vimwiki: Cannot rename to an empty filename!'
     return
   endif
-  if s:is_link_to_non_wiki_file(new_link)
+  if vimwiki#is_non_wiki_link(new_link)
     echomsg 'vimwiki: Cannot rename to a filename with extension (ie .txt .html)!'
     return
   endif

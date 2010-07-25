@@ -1621,6 +1621,13 @@ Maxim Kim.
     * FIX: Issue 99: Vim is not responing while opening arbitrary wiki file.
     * FIX: Issue 100: Additional content on diary index page could be
       corrupted.
+    * FIX: Issue 103: Always highlight links to non-wiki files as existed.
+    * FIX: Issue 104: vimwiki#nested_syntax needs 'keepend' to avoid contained
+      language syntax eat needed '}}}'.
+    * FIX: Issue 106: With MediaWiki syntax <C-Space> on a child todo list
+      item produce errors.
+    * FIX: Issue 107: With MediaWiki syntax <C-Space> on a list item creates
+      todo list item without space between * and [ ].
 
 1.0~
     * NEW: Issue 41: Table cell and column text objects. See

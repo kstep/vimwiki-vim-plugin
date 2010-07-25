@@ -48,16 +48,6 @@ function! s:is_img_link(lnk) "{{{
   return 0
 endfunction "}}}
 
-function! s:is_non_wiki_link(lnk) "{{{
-  let exts = '.\+\.\%('.
-          \ join(split(g:vimwiki_file_exts, '\s*,\s*'), '\|').
-          \ '\)$'
-  if a:lnk =~ exts
-    return 1
-  endif
-  return 0
-endfunction "}}}
-
 function! s:has_abs_path(fname) "{{{
   if a:fname =~ '\(^.:\)\|\(^/\)'
     return 1
@@ -373,7 +363,7 @@ function! s:tag_internal_link(value) "{{{
     if s:is_img_link(a:caption)
       let link = '<a href="'.a:src.'"><img src="'.a:caption.'"'.style_str.' />'.
             \ '</a>'
-    elseif s:is_non_wiki_link(a:src)
+    elseif vimwiki#is_non_wiki_link(a:src)
       let link = '<a href="'.a:src.'">'.a:caption.'</a>'
     elseif s:is_img_link(a:src)
       let link = '<img src="'.a:src.'" alt="'.a:caption.'"'. style_str.' />'

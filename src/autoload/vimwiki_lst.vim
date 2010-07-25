@@ -40,7 +40,6 @@ endfunction "}}}
 
 " Get regexp of the list item with checkbox.
 function! s:rx_cb_list_item() "{{{
-  " return s:rx_list_item().'\s*\zs\[.\?\]'
   return s:rx_list_item().'\s*\zs\[.\?\]'
 endfunction "}}}
 
@@ -182,9 +181,7 @@ function! s:get_sibling_items(lnum) "{{{
   let lnum = a:lnum
   let ind = s:get_level(lnum)
 
-  while s:get_level(lnum) >= ind &&
-        \ lnum != 0
-
+  while lnum != 0 && s:get_level(lnum) >= ind
     if s:get_level(lnum) == ind && s:is_cb_list_item(lnum)
       call add(result, lnum)
     endif
@@ -192,9 +189,7 @@ function! s:get_sibling_items(lnum) "{{{
   endwhile
 
   let lnum = s:prev_list_item(a:lnum)
-  while s:get_level(lnum) >= ind &&
-        \ lnum != 0
-
+  while lnum != 0 && s:get_level(lnum) >= ind
     if s:get_level(lnum) == ind && s:is_cb_list_item(lnum)
       call add(result, lnum)
     endif
@@ -226,8 +221,10 @@ function! s:create_cb_list_item(lnum) "{{{
   let line = getline(a:lnum)
   let m = matchstr(line, s:rx_list_item())
   if m != ''
+    echomsg "hello ".m
     let li_content = substitute(strpart(line, len(m)), '^\s*', '', '')
-    let line = m.'[ ] '.li_content
+    let line = substitute(m, '\s*$', ' ', '').'[ ] '.li_content
+    echomsg "world ".line
     call setline(a:lnum, line)
   endif
 endfunction "}}}
