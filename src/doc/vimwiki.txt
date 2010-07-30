@@ -1490,6 +1490,9 @@ Value           Description~
 
 Default: 0
 
+Note: Vim73 has new function |strdisplaywidth|, so for Vim73 users this option
+is obsolete.
+
 
 ------------------------------------------------------------------------------
 *g:vimwiki_dir_link*
@@ -1584,6 +1587,15 @@ Otherwise it would be <a href="my_script.php.html">my script</a> (note .html)
 Default: 'pdf,txt,doc,rtf,xls,php,zip,rar,7z,html,gz'
 
 
+------------------------------------------------------------------------------
+*g:vimwiki_valid_html_tags*
+
+Comma separated list of html tags that can be used in vimwiki.
+
+Default: 'b,i,s,u,sub,sup,kbd,br,hr'
+
+
+
 
 ==============================================================================
 12. Help                                                        *vimwiki-help*
@@ -1624,6 +1636,7 @@ Maxim Kim.
     * FIX: Issue 85: Errors if you have '~' subdirectory in a wiki directory.
     * FIX: Issue 86: Existed links '[[WikiLink1|Alias1]] | [[WikiLink2]]' are
       highlighted as a single link.
+    * FIX: Issue 88: Underline text. See |g:vimwiki_valid_html_tags|.
     * FIX: Issue 92: Wikies in a subdir could be renamed to an empty file.
     * FIX: Issue 93: Use alias name in html title. See |vimwiki-title|.
     * FIX: Issue 94: Relative links to PHP files are broken. See
@@ -1634,6 +1647,8 @@ Maxim Kim.
     * FIX: Issue 99: Vim is not responing while opening arbitrary wiki file.
     * FIX: Issue 100: Additional content on diary index page could be
       corrupted.
+    * NEW: Issue 101: Customized HTML tags. See |g:vimwiki_valid_html_tags|
+    * NEW: Issue 102: Conceal feature usage.
     * FIX: Issue 103: Always highlight links to non-wiki files as existed.
     * FIX: Issue 104: vimwiki#nested_syntax needs 'keepend' to avoid contained
       language syntax eat needed '}}}'.

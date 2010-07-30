@@ -303,13 +303,13 @@ noremap <silent><script><buffer>
       \ <Plug>VimwikiToggleListItem :VimwikiToggleListItem<CR>
 
 
-function! s:CR()
+function! s:CR() "{{{
   let res = vimwiki_lst#kbd_cr()
   if res == "\<CR>" && g:vimwiki_table_auto_fmt
     let res = vimwiki_tbl#kbd_cr()
   endif
   return res
-endfunction
+endfunction "}}}
 
 " List and Table <CR> mapping
 inoremap <buffer> <expr> <CR> <SID>CR()

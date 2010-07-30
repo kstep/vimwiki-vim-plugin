@@ -11,8 +11,7 @@ let g:vimwiki_rxBold = '\%(^\|\s\|[[:punct:]]\)\@<='.
       \'\%([^*`[:space:]][^*`]*[^*`[:space:]]\|[^*`[:space:]]\)'.
       \'\*'.
       \'\%([[:punct:]]\|\s\|$\)\@='
-syn match VimwikiBoldChar contained "*" conceal
-syn match VimwikiBoldCharT contained "*"
+let g:vimwiki_char_bold = '*'
 
 " text: _emphasis_
 " let g:vimwiki_rxItalic = '_[^_]\+_'
@@ -21,8 +20,7 @@ let g:vimwiki_rxItalic = '\%(^\|\s\|[[:punct:]]\)\@<='.
       \'\%([^_`[:space:]][^_`]*[^_`[:space:]]\|[^_`[:space:]]\)'.
       \'_'.
       \'\%([[:punct:]]\|\s\|$\)\@='
-syn match VimwikiItalicChar contained "_" conceal
-syn match VimwikiItalicCharT contained "_"
+let g:vimwiki_char_italic = '_'
 
 " text: *_bold italic_* or _*italic bold*_
 let g:vimwiki_rxBoldItalic = '\%(^\|\s\|[[:punct:]]\)\@<='.
@@ -30,36 +28,30 @@ let g:vimwiki_rxBoldItalic = '\%(^\|\s\|[[:punct:]]\)\@<='.
       \'\%([^*_`[:space:]][^*_`]*[^*_`[:space:]]\|[^*_`[:space:]]\)'.
       \'_\*'.
       \'\%([[:punct:]]\|\s\|$\)\@='
-syn match VimwikiBoldItalicChar contained "\*_" conceal
-syn match VimwikiBoldItalicCharT contained "\*_"
+let g:vimwiki_char_bolditalic = '\*_'
 
 let g:vimwiki_rxItalicBold = '\%(^\|\s\|[[:punct:]]\)\@<='.
       \'_\*'.
       \'\%([^*_`[:space:]][^*_`]*[^*_`[:space:]]\|[^*_`[:space:]]\)'.
       \'\*_'.
       \'\%([[:punct:]]\|\s\|$\)\@='
-syn match VimwikiItalicBoldChar contained "_\*" conceal
-syn match VimwikiItalicBoldCharT contained "_\*"
+let g:vimwiki_char_italicbold = '_\*'
 
 " text: `code`
 let g:vimwiki_rxCode = '`[^`]\+`'
-syn match VimwikiCodeChar contained "`" conceal
-syn match VimwikiCodeCharT contained "`"
+let g:vimwiki_char_code = '`'
 
 " text: ~~deleted text~~
 let g:vimwiki_rxDelText = '\~\~[^~`]\+\~\~'
-syn match VimwikiDelTextChar contained "\~\~" conceal
-syn match VimwikiDelTextCharT contained "\~\~"
+let g:vimwiki_char_deltext = '\~\~'
 
 " text: ^superscript^
 let g:vimwiki_rxSuperScript = '\^[^^`]\+\^'
-syn match VimwikiSuperScriptChar contained "^" conceal
-syn match VimwikiSuperScriptCharT contained "^"
+let g:vimwiki_char_superscript = '^'
 
 " text: ,,subscript,,
 let g:vimwiki_rxSubScript = ',,[^,`]\+,,'
-syn match VimwikiSubScriptChar contained ",," conceal
-syn match VimwikiSubScriptCharT contained ",,"
+let g:vimwiki_char_subscript = ',,'
 
 " Header levels, 1-6
 let g:vimwiki_rxH1 = '^\s*=\{1}[^=]\+.*[^=]\+=\{1}\s*$'
@@ -75,7 +67,7 @@ let g:vimwiki_rxHeader = '\%('.g:vimwiki_rxH1.'\)\|'.
       \ '\%('.g:vimwiki_rxH5.'\)\|'.
       \ '\%('.g:vimwiki_rxH6.'\)'
 
-syn match VimwikiHeaderChar contained "\%(^\s*=\+\)\|\%(=\+\s*$\)"
+let g:vimwiki_char_header = '\%(^\s*=\+\)\|\%(=\+\s*$\)'
 
 " <hr>, horizontal rule
 let g:vimwiki_rxHR = '^----.*$'

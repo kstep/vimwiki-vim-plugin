@@ -161,11 +161,13 @@ function! s:safe_html(line) "{{{
 
   let line = substitute(a:line, '&', '\&amp;', 'g')
 
-  " let line = substitute(line, '<', '\&lt;', 'g')
-  " let line = substitute(line, '>', '\&gt;', 'g')
-  " XXX: I believe there should be a much nicer way to do it.
-  let line = substitute(line, '<\(br\|hr\)\@!', '\&lt;', 'g')
-  let line = substitute(line, '\(\(br\|hr\)\s*/\?\)\@<!>', '\&gt;', 'g')
+  let tags = join(split(g:vimwiki_valid_html_tags, '\s*,\s*'), '\|')
+  let line = substitute(line,'<\%(/\?\%('
+        \.tags.'\)\%(\s\{-}\S\{-}\)\{-}/\?>\)\@!', 
+        \'\&lt;', 'g')
+  let line = substitute(line,'\%(</\?\%('
+        \.tags.'\)\%(\s\{-}\S\{-}\)\{-}/\?\)\@<!>',
+        \'\&gt;', 'g')
   return line
 endfunction "}}}
 

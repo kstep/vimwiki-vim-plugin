@@ -81,8 +81,6 @@ function! s:setup_buffer_enter() "{{{
     let b:vimwiki_idx = g:vimwiki_current_idx
   endif
 
-  call s:setup_colors()
-
   if &filetype != 'vimwiki'
     setlocal ft=vimwiki
   else
@@ -99,33 +97,14 @@ function! s:setup_buffer_enter() "{{{
     setlocal foldtext=VimwikiFoldText()
   endif
 
+  " And conceal level too.
+  setlocal conceallevel=3
+
   " Set up menu
   if g:vimwiki_menu != ""
     exe 'nmenu enable '.g:vimwiki_menu.'.Table'
   endif
 endfunction "}}}
-
-function! s:setup_colors()"{{{
-  if g:vimwiki_hl_headers == 0
-    return
-  endif
-
-  if &background == 'light'
-    hi def VimwikiHeader1 guibg=bg guifg=#aa5858 gui=bold ctermfg=DarkRed
-    hi def VimwikiHeader2 guibg=bg guifg=#309010 gui=bold ctermfg=DarkGreen
-    hi def VimwikiHeader3 guibg=bg guifg=#1030a0 gui=bold ctermfg=DarkBlue
-    hi def VimwikiHeader4 guibg=bg guifg=#103040 gui=bold ctermfg=Black
-    hi def VimwikiHeader5 guibg=bg guifg=#001020 gui=bold ctermfg=Black
-    hi def VimwikiHeader6 guibg=bg guifg=#000000 gui=bold ctermfg=Black
-  else
-    hi def VimwikiHeader1 guibg=bg guifg=#e08090 gui=bold ctermfg=Red
-    hi def VimwikiHeader2 guibg=bg guifg=#80e090 gui=bold ctermfg=Green
-    hi def VimwikiHeader3 guibg=bg guifg=#6090e0 gui=bold ctermfg=Blue
-    hi def VimwikiHeader4 guibg=bg guifg=#c0c0f0 gui=bold ctermfg=White
-    hi def VimwikiHeader5 guibg=bg guifg=#e0e0f0 gui=bold ctermfg=White
-    hi def VimwikiHeader6 guibg=bg guifg=#f0f0f0 gui=bold ctermfg=White
-  endif
-endfunction"}}}
 
 " OPTION get/set functions {{{
 " return value of option for current wiki or if second parameter exists for
@@ -269,6 +248,7 @@ call s:default('w32_dir_enc', '')
 call s:default('CJK_length', 0)
 call s:default('dir_link', '')
 call s:default('file_exts', 'pdf,txt,doc,rtf,xls,php,zip,rar,7z,html,gz')
+call s:default('valid_html_tags', 'b,i,s,u,sub,sup,kbd,br,hr')
 
 call s:default('html_header_numbering', 0)
 call s:default('html_header_numbering_sym', '')
@@ -325,7 +305,7 @@ augroup vimwiki
     " ColorScheme could have or could have not a
     " VimwikiHeader1..VimwikiHeader6 highlight groups. We need to refresh
     " syntax after colorscheme change.
-    exe 'autocmd ColorScheme *'.ext.' call s:setup_colors()'.
+    exe 'autocmd ColorScheme *'.ext.' call vimwiki#setup_colors()'.
           \ ' | set syntax=vimwiki'
 
     " Format tables when exit from insert mode. Do not use textwidth to

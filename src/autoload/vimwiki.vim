@@ -460,7 +460,48 @@ function! vimwiki#WikiHighlightLinks() "{{{
 endfunction
 " }}}
 
-function! vimwiki#hl_exists(hl)"{{{
+function! vimwiki#setup_colors() "{{{
+
+  let hlfg_ignore = vimwiki#get_hl_param('Ignore', 'guifg')
+  let hlbg_normal = vimwiki#get_hl_param('Normal', 'guibg')
+  if hlfg_ignore == 'bg' || hlfg_ignore == hlbg_normal
+    hi link VimwikiIgnore Normal
+  else
+    hi link VimwikiIgnore Ignore
+  endif
+
+  if g:vimwiki_hl_headers == 0
+    hi def link VimwikiHeader Title
+    return
+  endif
+
+  if &background == 'light'
+    hi def VimwikiHeader1 guibg=bg guifg=#aa5858 gui=bold ctermfg=DarkRed
+    " hi def VimwikiHeader2 guibg=bg guifg=#309010 gui=bold ctermfg=DarkGreen
+    hi def VimwikiHeader2 guibg=bg guifg=#507030 gui=bold ctermfg=DarkGreen
+    " hi def VimwikiHeader3 guibg=bg guifg=#305070 gui=bold ctermfg=Black
+    hi def VimwikiHeader3 guibg=bg guifg=#1030a0 gui=bold ctermfg=DarkBlue
+    hi def VimwikiHeader4 guibg=bg guifg=#103040 gui=bold ctermfg=Black
+    hi def VimwikiHeader5 guibg=bg guifg=#505050 gui=bold ctermfg=Black
+    hi def VimwikiHeader6 guibg=bg guifg=#636363 gui=bold ctermfg=Black
+  else
+    hi def VimwikiHeader1 guibg=bg guifg=#e08090 gui=bold ctermfg=Red
+    hi def VimwikiHeader2 guibg=bg guifg=#80e090 gui=bold ctermfg=Green
+    hi def VimwikiHeader3 guibg=bg guifg=#6090e0 gui=bold ctermfg=Blue
+    hi def VimwikiHeader4 guibg=bg guifg=#c0c0f0 gui=bold ctermfg=White
+    hi def VimwikiHeader5 guibg=bg guifg=#e0e0f0 gui=bold ctermfg=White
+    hi def VimwikiHeader6 guibg=bg guifg=#f0f0f0 gui=bold ctermfg=White
+  endif
+endfunction "}}}
+
+function vimwiki#get_hl_param(hgroup, hparam) "{{{
+  redir => hlstatus
+  exe "silent hi ".a:hgroup
+  redir END
+  return matchstr(hlstatus, a:hparam.'\s*=\s*\zs\S\+')
+endfunction "}}}
+
+function! vimwiki#hl_exists(hl) "{{{
   if !hlexists(a:hl)
     return 0
   endif

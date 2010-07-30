@@ -39,6 +39,10 @@ endif
 
 execute 'syntax match VimwikiLink `'.g:vimwiki_rxWeblink.'`'
 
+" Load concrete Wiki syntax
+execute 'runtime! syntax/vimwiki_'.VimwikiGet('syntax').'.vim'
+
+" Concealed chars
 syn match VimwikiLinkChar contained /\[\[/ conceal
 syn match VimwikiLinkChar contained /\]\]/ conceal
 syn match VimwikiLinkChar contained /\[\[[^\[\]\|]\{-}|\ze.\{-}]]/ conceal
@@ -49,15 +53,32 @@ syn match VimwikiNoLinkChar contained /\]\]/ conceal
 syn match VimwikiNoLinkChar contained /\[\[[^\[\]\|]\{-}|\ze.*]]/ conceal
 syn match VimwikiNoLinkChar contained /\[\[[^\[\]\|]\{-}]\[\ze.*]]/ conceal
 
+execute 'syn match VimwikiBoldChar contained /'.g:vimwiki_char_bold.'/ conceal'
+execute 'syn match VimwikiItalicChar contained /'.g:vimwiki_char_italic.'/ conceal'
+execute 'syn match VimwikiBoldItalicChar contained /'.g:vimwiki_char_bolditalic.'/ conceal'
+execute 'syn match VimwikiItalicBoldChar contained /'.g:vimwiki_char_italicbold.'/ conceal'
+execute 'syn match VimwikiCodeChar contained /'.g:vimwiki_char_code.'/ conceal'
+execute 'syn match VimwikiDelTextChar contained /'.g:vimwiki_char_deltext.'/ conceal'
+execute 'syn match VimwikiSuperScript contained /'.g:vimwiki_char_superscript.'/ conceal'
+execute 'syn match VimwikiSubScript contained /'.g:vimwiki_char_subscript.'/ conceal'
+
+" Non concealed chars
+syn match VimwikiHeaderChar contained /\%(^\s*=\+\)\|\%(=\+\s*$\)/
+execute 'syn match VimwikiBoldCharT contained /'.g:vimwiki_char_bold.'/'
+execute 'syn match VimwikiItalicCharT contained /'.g:vimwiki_char_italic.'/'
+execute 'syn match VimwikiBoldItalicCharT contained /'.g:vimwiki_char_bolditalic.'/'
+execute 'syn match VimwikiItalicBoldCharT contained /'.g:vimwiki_char_italicbold.'/'
+execute 'syn match VimwikiCodeCharT contained /'.g:vimwiki_char_code.'/'
+execute 'syn match VimwikiDelTextCharT contained /'.g:vimwiki_char_deltext.'/'
+execute 'syn match VimwikiSuperScriptT contained /'.g:vimwiki_char_superscript.'/'
+execute 'syn match VimwikiSubScriptT contained /'.g:vimwiki_char_subscript.'/'
+
+
 " Emoticons
 syntax match VimwikiEmoticons /\%((.)\|:[()|$@]\|:-[DOPS()\]|$@]\|;)\|:'(\)/
 
 let g:vimwiki_rxTodo = '\C\%(TODO:\|DONE:\|STARTED:\|FIXME:\|FIXED:\|XXX:\)'
 execute 'syntax match VimwikiTodo /'. g:vimwiki_rxTodo .'/'
-
-" Load concrete Wiki syntax
-execute 'runtime! syntax/vimwiki_'.VimwikiGet('syntax').'.vim'
-
 
 
 " Tables
@@ -125,13 +146,16 @@ syntax match VimwikiPlaceholder /^\s*%title\%(\s.*\)\?$/ contains=VimwikiPlaceho
 syntax match VimwikiPlaceholderParam /\s.*/ contained
 
 " html tags
-syntax match VimwikiHTMLtag '<br\s*/\?>'
-syntax match VimwikiHTMLtag '<hr\s*/\?>'
+let html_tags = join(split(g:vimwiki_valid_html_tags, '\s*,\s*'), '\|')
+exe 'syntax match VimwikiHTMLtag #\c</\?\%('.html_tags.'\)\%(\s\{-}\S\{-}\)\{-}\s*/\?>#'
+execute 'syntax match VimwikiBold #\c<b>.\{-}</b># contains=VimwikiHTMLTag'
+execute 'syntax match VimwikiItalic #\c<i>.\{-}</i># contains=VimwikiHTMLTag'
+execute 'syntax match VimwikiUnderline #\c<u>.\{-}</u># contains=VimwikiHTMLTag'
 
 syntax region VimwikiComment start='<!--' end='-->'
 
-if !vimwiki#hl_exists("VimwikiHeader1")
-  execute 'syntax match VimwikiHeader /'.g:vimwiki_rxHeader.'/ contains=VimwikiTodo'
+if g:vimwiki_hl_headers == 0
+  execute 'syntax match VimwikiHeader /'.g:vimwiki_rxHeader.'/ contains=VimwikiTodo,VimwikiHeaderChar'
 else
   " Header levels, 1-6
   execute 'syntax match VimwikiHeader1 /'.g:vimwiki_rxH1.'/ contains=VimwikiTodo,VimwikiHeaderChar'
@@ -143,16 +167,8 @@ else
 endif
 
 " group names "{{{
-if !vimwiki#hl_exists("VimwikiHeader1")
-  hi def link VimwikiHeader Title
-else
-  hi def link VimwikiHeader1 Title
-  hi def link VimwikiHeader2 Title
-  hi def link VimwikiHeader3 Title
-  hi def link VimwikiHeader4 Title
-  hi def link VimwikiHeader5 Title
-  hi def link VimwikiHeader6 Title
-endif
+
+call vimwiki#setup_colors()
 
 hi def VimwikiBold term=bold cterm=bold gui=bold
 hi def link VimwikiBoldT VimwikiBold
@@ -164,6 +180,8 @@ hi def VimwikiBoldItalic term=bold cterm=bold gui=bold,italic
 hi def link VimwikiItalicBold VimwikiBoldItalic
 hi def link VimwikiBoldItalicT VimwikiBoldItalic
 hi def link VimwikiItalicBoldT VimwikiBoldItalic
+
+hi def VimwikiUnderline gui=underline
 
 hi def link VimwikiCode PreProc
 hi def link VimwikiCodeT VimwikiCode
@@ -194,32 +212,33 @@ hi def link VimwikiSubScriptT VimwikiSubScript
 hi def link VimwikiTodo Todo
 hi def link VimwikiComment Comment
 
-hi def link VimwikiCellSeparator SpecialKey
+hi def link VimwikiCellSeparator PreProc
+
 hi def link VimwikiPlaceholder SpecialKey
 hi def link VimwikiPlaceholderParam String
 hi def link VimwikiHTMLtag SpecialKey
 
-hi def link VimwikiBoldChar Ignore
-hi def link VimwikiItalicChar Ignore
-hi def link VimwikiBoldItalicChar Ignore
-hi def link VimwikiItalicBoldChar Ignore
-hi def link VimwikiDelTextChar Ignore
-hi def link VimwikiSuperScriptChar Ignore
-hi def link VimwikiSubScriptChar Ignore
-hi def link VimwikiCodeChar Ignore
-hi def link VimwikiHeaderChar Ignore
+hi def link VimwikiBoldChar VimwikiIgnore
+hi def link VimwikiItalicChar VimwikiIgnore
+hi def link VimwikiBoldItalicChar VimwikiIgnore
+hi def link VimwikiItalicBoldChar VimwikiIgnore
+hi def link VimwikiDelTextChar VimwikiIgnore
+hi def link VimwikiSuperScriptChar VimwikiIgnore
+hi def link VimwikiSubScriptChar VimwikiIgnore
+hi def link VimwikiCodeChar VimwikiIgnore
+hi def link VimwikiHeaderChar VimwikiIgnore
 hi def link VimwikiLinkChar VimwikiLink
 hi def link VimwikiNoLinkChar VimwikiNoExistsLink
 
-hi def link VimwikiBoldCharT Ignore
-hi def link VimwikiItalicCharT Ignore
-hi def link VimwikiBoldItalicCharT Ignore
-hi def link VimwikiItalicBoldCharT Ignore
-hi def link VimwikiDelTextCharT Ignore
-hi def link VimwikiSuperScriptCharT Ignore
-hi def link VimwikiSubScriptCharT Ignore
-hi def link VimwikiCodeCharT Ignore
-hi def link VimwikiHeaderCharT Ignore
+hi def link VimwikiBoldCharT VimwikiIgnore
+hi def link VimwikiItalicCharT VimwikiIgnore
+hi def link VimwikiBoldItalicCharT VimwikiIgnore
+hi def link VimwikiItalicBoldCharT VimwikiIgnore
+hi def link VimwikiDelTextCharT VimwikiIgnore
+hi def link VimwikiSuperScriptCharT VimwikiIgnore
+hi def link VimwikiSubScriptCharT VimwikiIgnore
+hi def link VimwikiCodeCharT VimwikiIgnore
+hi def link VimwikiHeaderCharT VimwikiIgnore
 hi def link VimwikiLinkCharT VimwikiLinkT
 hi def link VimwikiNoLinkCharT VimwikiNoExistsLinkT
 "}}}
