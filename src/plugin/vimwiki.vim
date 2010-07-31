@@ -98,7 +98,9 @@ function! s:setup_buffer_enter() "{{{
   endif
 
   " And conceal level too.
-  setlocal conceallevel=3
+  if exists("+conceallevel")
+    setlocal conceallevel=3
+  endif
 
   " Set up menu
   if g:vimwiki_menu != ""

@@ -43,24 +43,30 @@ execute 'syntax match VimwikiLink `'.g:vimwiki_rxWeblink.'`'
 execute 'runtime! syntax/vimwiki_'.VimwikiGet('syntax').'.vim'
 
 " Concealed chars
-syn match VimwikiLinkChar contained /\[\[/ conceal
-syn match VimwikiLinkChar contained /\]\]/ conceal
-syn match VimwikiLinkChar contained /\[\[[^\[\]\|]\{-}|\ze.\{-}]]/ conceal
-syn match VimwikiLinkChar contained /\[\[[^\[\]\|]\{-}]\[\ze.\{-}]]/ conceal
+if exists("+conceallevel")
+  syntax conceal on
+endif
+syn match VimwikiLinkChar contained /\[\[/
+syn match VimwikiLinkChar contained /\]\]/
+syn match VimwikiLinkChar contained /\[\[[^\[\]\|]\{-}|\ze.\{-}]]/
+syn match VimwikiLinkChar contained /\[\[[^\[\]\|]\{-}]\[\ze.\{-}]]/
 
-syn match VimwikiNoLinkChar contained /\[\[/ conceal
-syn match VimwikiNoLinkChar contained /\]\]/ conceal
-syn match VimwikiNoLinkChar contained /\[\[[^\[\]\|]\{-}|\ze.*]]/ conceal
-syn match VimwikiNoLinkChar contained /\[\[[^\[\]\|]\{-}]\[\ze.*]]/ conceal
+syn match VimwikiNoLinkChar contained /\[\[/
+syn match VimwikiNoLinkChar contained /\]\]/
+syn match VimwikiNoLinkChar contained /\[\[[^\[\]\|]\{-}|\ze.*]]/
+syn match VimwikiNoLinkChar contained /\[\[[^\[\]\|]\{-}]\[\ze.*]]/
 
-execute 'syn match VimwikiBoldChar contained /'.g:vimwiki_char_bold.'/ conceal'
-execute 'syn match VimwikiItalicChar contained /'.g:vimwiki_char_italic.'/ conceal'
-execute 'syn match VimwikiBoldItalicChar contained /'.g:vimwiki_char_bolditalic.'/ conceal'
-execute 'syn match VimwikiItalicBoldChar contained /'.g:vimwiki_char_italicbold.'/ conceal'
-execute 'syn match VimwikiCodeChar contained /'.g:vimwiki_char_code.'/ conceal'
-execute 'syn match VimwikiDelTextChar contained /'.g:vimwiki_char_deltext.'/ conceal'
-execute 'syn match VimwikiSuperScript contained /'.g:vimwiki_char_superscript.'/ conceal'
-execute 'syn match VimwikiSubScript contained /'.g:vimwiki_char_subscript.'/ conceal'
+execute 'syn match VimwikiBoldChar contained /'.g:vimwiki_char_bold.'/'
+execute 'syn match VimwikiItalicChar contained /'.g:vimwiki_char_italic.'/'
+execute 'syn match VimwikiBoldItalicChar contained /'.g:vimwiki_char_bolditalic.'/'
+execute 'syn match VimwikiItalicBoldChar contained /'.g:vimwiki_char_italicbold.'/'
+execute 'syn match VimwikiCodeChar contained /'.g:vimwiki_char_code.'/'
+execute 'syn match VimwikiDelTextChar contained /'.g:vimwiki_char_deltext.'/'
+execute 'syn match VimwikiSuperScript contained /'.g:vimwiki_char_superscript.'/'
+execute 'syn match VimwikiSubScript contained /'.g:vimwiki_char_subscript.'/'
+if exists("+conceallevel")
+  syntax conceal off
+endif
 
 " Non concealed chars
 syn match VimwikiHeaderChar contained /\%(^\s*=\+\)\|\%(=\+\s*$\)/
@@ -83,7 +89,6 @@ execute 'syntax match VimwikiTodo /'. g:vimwiki_rxTodo .'/'
 
 " Tables
 " execute 'syntax match VimwikiTable /'.g:vimwiki_rxTable.'/'
-" syntax conceal off
 syntax match VimwikiTableRow /^\s*|.\+|\s*$/ 
       \ transparent contains=VimwikiCellSeparator,VimwikiLinkT,
       \ VimwikiNoExistsLinkT,VimwikiEmoticons,VimwikiTodo,
@@ -91,7 +96,6 @@ syntax match VimwikiTableRow /^\s*|.\+|\s*$/
       \ VimwikiDelTextT,VimwikiSuperScriptT,VimwikiSubScriptT,VimwikiCodeT
 syntax match VimwikiCellSeparator 
       \ /\%(|\)\|\%(-\@<=+\-\@=\)\|\%([|+]\@<=-\+\)/ contained
-" syntax conceal on
 
 " List items
 execute 'syntax match VimwikiList /'.g:vimwiki_rxListBullet.'/'

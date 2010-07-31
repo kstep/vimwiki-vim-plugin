@@ -22,7 +22,9 @@ let b:undo_ftplugin = "setlocal ".
 
 setlocal autowriteall
 setlocal commentstring=<!--%s-->
-setlocal conceallevel=3
+if exists("+conceallevel")
+  setlocal conceallevel=3
+endif
 " MISC }}}
 
 " GOTO FILE: gf {{{
