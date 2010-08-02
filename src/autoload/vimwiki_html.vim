@@ -163,10 +163,10 @@ function! s:safe_html(line) "{{{
 
   let tags = join(split(g:vimwiki_valid_html_tags, '\s*,\s*'), '\|')
   let line = substitute(line,'<\%(/\?\%('
-        \.tags.'\)\%(\s\{-}\S\{-}\)\{-}/\?>\)\@!', 
+        \.tags.'\)\%(\s\{-1}\S\{-}\)\{-}/\?>\)\@!', 
         \'\&lt;', 'g')
   let line = substitute(line,'\%(</\?\%('
-        \.tags.'\)\%(\s\{-}\S\{-}\)\{-}/\?\)\@<!>',
+        \.tags.'\)\%(\s\{-1}\S\{-}\)\{-}/\?\)\@<!>',
         \'\&gt;', 'g')
   return line
 endfunction "}}}
@@ -597,8 +597,8 @@ endfunction " }}}
 
 " BLOCK TAGS {{{
 function! s:close_tag_pre(pre, ldest) "{{{
-  if a:pre
-    call insert(a:ldest, "</pre></code>")
+  if a:pre[0]
+    call insert(a:ldest, "</pre>")
     return 0
   endif
   return a:pre
@@ -676,8 +676,8 @@ endfunction "}}}
 
 function! s:close_tag_list(lists, ldest) "{{{
   while len(a:lists)
-    let item = remove(a:lists, -1)
-    call add(a:ldest, item[0])
+    let item = remove(a:lists, 0)
+    call insert(a:ldest, item[0])
   endwhile
 endfunction! "}}}
 
@@ -690,10 +690,11 @@ function! s:close_tag_def_list(deflist, ldest) "{{{
 endfunction! "}}}
 
 function! s:process_tag_pre(line, pre) "{{{
+  " pre is the list of [is_in_pre, indent_of_pre]
   let lines = []
   let pre = a:pre
   let processed = 0
-  if !pre && a:line =~ '{{{[^\(}}}\)]*\s*$'
+  if !pre[0] && a:line =~ '^\s*{{{[^\(}}}\)]*\s*$'
     let class = matchstr(a:line, '{{{\zs.*$')
     let class = substitute(class, '\s\+$', '', 'g')
     if class != ""
@@ -701,15 +702,15 @@ function! s:process_tag_pre(line, pre) "{{{
     else
       call add(lines, "<pre>")
     endif
-    let pre = 1
+    let pre = [1, len(matchstr(a:line, '^\s*\ze{{{'))]
     let processed = 1
-  elseif pre && a:line =~ '^}}}\s*$'
-    let pre = 0
+  elseif pre[0] && a:line =~ '^\s*}}}\s*$'
+    let pre = [0, 0]
     call add(lines, "</pre>")
     let processed = 1
-  elseif pre
+  elseif pre[0]
     let processed = 1
-    call add(lines, a:line)
+    call add(lines, substitute(a:line, '^\s\{'.pre[1].'}', '', ''))
   endif
   return [processed, lines, pre]
 endfunction "}}}
@@ -997,7 +998,7 @@ function! s:parse_line(line, state) " {{{
   let state = {}
   let state.para = a:state.para
   let state.quote = a:state.quote
-  let state.pre = a:state.pre
+  let state.pre = a:state.pre[:]
   let state.table = a:state.table[:]
   let state.lists = a:state.lists[:]
   let state.deflist = a:state.deflist
@@ -1041,9 +1042,10 @@ function! s:parse_line(line, state) " {{{
   " pres "{{{
   if !processed
     let [processed, lines, state.pre] = s:process_tag_pre(line, state.pre)
-    if processed && len(state.lists)
-      call s:close_tag_list(state.lists, lines)
-    endif
+    " pre is just fine to be in the list -- do not close list item here.
+    " if processed && len(state.lists)
+      " call s:close_tag_list(state.lists, lines)
+    " endif
     if processed && len(state.table)
       let state.table = s:close_tag_table(state.table, lines)
     endif
@@ -1066,7 +1068,7 @@ function! s:parse_line(line, state) " {{{
     if processed && state.quote
       let state.quote = s:close_tag_quote(state.quote, lines)
     endif
-    if processed && state.pre
+    if processed && state.pre[0]
       let state.pre = s:close_tag_pre(state.pre, lines)
     endif
     if processed && len(state.table)
@@ -1123,7 +1125,7 @@ function! s:parse_line(line, state) " {{{
     if processed && len(state.table)
       let state.table = s:close_tag_table(state.table, lines)
     endif
-    if processed && state.pre
+    if processed && state.pre[0]
       let state.pre = s:close_tag_pre(state.pre, lines)
     endif
     if processed && state.para
@@ -1167,7 +1169,7 @@ function! s:parse_line(line, state) " {{{
     if processed && state.quote
       let state.quote = s:close_tag_quote(state.quote, res_lines)
     endif
-    if processed && state.pre
+    if processed && state.pre[0]
       let state.pre = s:close_tag_pre(state.pre, res_lines)
     endif
     if processed && len(state.table)
@@ -1215,7 +1217,7 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
   let state = {}
   let state.para = 0
   let state.quote = 0
-  let state.pre = 0
+  let state.pre = [0, 0] " [in_pre, indent_pre]
   let state.table = []
   let state.deflist = 0
   let state.lists = []

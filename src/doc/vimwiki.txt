@@ -1595,6 +1595,18 @@ Comma separated list of html tags that can be used in vimwiki.
 Default: 'b,i,s,u,sub,sup,kbd,br,hr'
 
 
+------------------------------------------------------------------------------
+*g:vimwiki_conceallevel*
+
+In vim73 |conceallevel| is local to window, thus if you open viwmiki buffer in
+a new tab or window, it would be set to default value.
+
+Vimwiki sets |conceallevel| to g:vimwiki_conceallevel everytime vimwiki buffer
+is entered.
+
+Default: 3
+
+
 
 
 ==============================================================================
@@ -1632,6 +1644,7 @@ Maxim Kim.
 14. Changelog                                              *vimwiki-changelog*
 
 1.1~
+    * NEW: Issue 57: Make it possible to have pre block inside list item.
     * FIX: Issue 84: Vimwiki rename removed the WikiWord display name.
     * FIX: Issue 85: Errors if you have '~' subdirectory in a wiki directory.
     * FIX: Issue 86: Existed links '[[WikiLink1|Alias1]] | [[WikiLink2]]' are
@@ -1648,7 +1661,7 @@ Maxim Kim.
     * FIX: Issue 100: Additional content on diary index page could be
       corrupted.
     * NEW: Issue 101: Customized HTML tags. See |g:vimwiki_valid_html_tags|
-    * NEW: Issue 102: Conceal feature usage.
+    * NEW: Issue 102: Conceal feature usage. See |g:vimwiki_conceallevel|.
     * FIX: Issue 103: Always highlight links to non-wiki files as existed.
     * FIX: Issue 104: vimwiki#nested_syntax needs 'keepend' to avoid contained
       language syntax eat needed '}}}'.
@@ -1658,6 +1671,7 @@ Maxim Kim.
       item produce errors.
     * FIX: Issue 107: With MediaWiki syntax <C-Space> on a list item creates
       todo list item without space between * and [ ].
+    * FIX: Issue 110: Syntax highlighting doesn't work for indented codeblock.
 
 1.0~
     * NEW: Issue 41: Table cell and column text objects. See

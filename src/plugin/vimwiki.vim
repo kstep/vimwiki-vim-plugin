@@ -90,7 +90,6 @@ function! s:setup_buffer_enter() "{{{
   " Settings foldmethod, foldexpr and foldtext are local to window. Thus in a
   " new tab with the same buffer folding is reset to vim defaults. So we
   " insist vimwiki folding here.
-  " TODO: remove the same from ftplugin.
   if g:vimwiki_folding == 1 && &fdm != 'expr'
     setlocal fdm=expr
     setlocal foldexpr=VimwikiFoldLevel(v:lnum)
@@ -98,8 +97,8 @@ function! s:setup_buffer_enter() "{{{
   endif
 
   " And conceal level too.
-  if exists("+conceallevel")
-    setlocal conceallevel=3
+  if g:vimwiki_conceallevel && exists("+conceallevel")
+    let &conceallevel = g:vimwiki_conceallevel
   endif
 
   " Set up menu
@@ -254,6 +253,7 @@ call s:default('valid_html_tags', 'b,i,s,u,sub,sup,kbd,br,hr')
 
 call s:default('html_header_numbering', 0)
 call s:default('html_header_numbering_sym', '')
+call s:default('conceallevel', 3)
 
 call s:default('current_idx', 0)
 

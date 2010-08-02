@@ -14,17 +14,18 @@ let b:undo_ftplugin = "setlocal ".
       \ "suffixesadd< isfname< comments< ".
       \ "autowriteall< ".
       \ "formatoptions< foldtext< ".
-      \ "foldmethod< foldexpr< commentstring< ".
-      \ "conceallevel< "
+      \ "foldmethod< foldexpr< commentstring< "
 " UNDO }}}
 
 " MISC STUFF {{{
 
 setlocal autowriteall
 setlocal commentstring=<!--%s-->
-if exists("+conceallevel")
-  setlocal conceallevel=3
+
+if g:vimwiki_conceallevel && exists("+conceallevel")
+  let &conceallevel = g:vimwiki_conceallevel
 endif
+
 " MISC }}}
 
 " GOTO FILE: gf {{{
@@ -58,12 +59,6 @@ endif
 " COMMENTS }}}
 
 " FOLDING for headers and list items using expr fold method. {{{
-if g:vimwiki_folding == 1
-  setlocal fdm=expr
-  setlocal foldexpr=VimwikiFoldLevel(v:lnum)
-  setlocal foldtext=VimwikiFoldText()
-endif
-
 function! VimwikiFoldLevel(lnum) "{{{
   let line = getline(a:lnum)
 

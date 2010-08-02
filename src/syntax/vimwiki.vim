@@ -151,7 +151,7 @@ syntax match VimwikiPlaceholderParam /\s.*/ contained
 
 " html tags
 let html_tags = join(split(g:vimwiki_valid_html_tags, '\s*,\s*'), '\|')
-exe 'syntax match VimwikiHTMLtag #\c</\?\%('.html_tags.'\)\%(\s\{-}\S\{-}\)\{-}\s*/\?>#'
+exe 'syntax match VimwikiHTMLtag #\c</\?\%('.html_tags.'\)\%(\s\{-1}\S\{-}\)\{-}\s*/\?>#'
 execute 'syntax match VimwikiBold #\c<b>.\{-}</b># contains=VimwikiHTMLTag'
 execute 'syntax match VimwikiItalic #\c<i>.\{-}</i># contains=VimwikiHTMLTag'
 execute 'syntax match VimwikiUnderline #\c<u>.\{-}</u># contains=VimwikiHTMLTag'
@@ -254,9 +254,9 @@ let nested = VimwikiGet('nested_syntaxes')
 if !empty(nested)
   for [hl_syntax, vim_syntax] in items(nested)
     call vimwiki#nested_syntax(vim_syntax, 
-          \ '^{{{\%(.*[[:blank:][:punct:]]\)\?'.
+          \ '^\s*{{{\%(.*[[:blank:][:punct:]]\)\?'.
           \ hl_syntax.'\%([[:blank:][:punct:]].*\)\?',
-          \ '^}}}', 'VimwikiPre')
+          \ '^\s*}}}', 'VimwikiPre')
   endfor
 endif
 "}}}
