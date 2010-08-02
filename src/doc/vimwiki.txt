@@ -1643,7 +1643,7 @@ Maxim Kim.
 ==============================================================================
 14. Changelog                                              *vimwiki-changelog*
 
-1.1~
+1.1 dev~
     * NEW: Issue 57: Make it possible to have pre block inside list item.
     * FIX: Issue 84: Vimwiki rename removed the WikiWord display name.
     * FIX: Issue 85: Errors if you have '~' subdirectory in a wiki directory.
