@@ -81,11 +81,8 @@ function! s:setup_buffer_enter() "{{{
     let b:vimwiki_idx = g:vimwiki_current_idx
   endif
 
-  if &filetype != 'vimwiki'
-    setlocal ft=vimwiki
-  else
-    setlocal syntax=vimwiki
-  endif
+  " Update existed/non-existed links highlighting.
+  call vimwiki#highlight_links()
 
   " Settings foldmethod, foldexpr and foldtext are local to window. Thus in a
   " new tab with the same buffer folding is reset to vim defaults. So we
@@ -303,6 +300,7 @@ augroup vimwiki
   for ext in keys(extensions)
     exe 'autocmd BufEnter *'.ext.' call s:setup_buffer_enter()'
     exe 'autocmd BufLeave,BufHidden *'.ext.' call s:setup_buffer_leave()'
+    exe 'autocmd BufNewFile,BufRead, *'.ext.' setf vimwiki'
 
     " ColorScheme could have or could have not a
     " VimwikiHeader1..VimwikiHeader6 highlight groups. We need to refresh

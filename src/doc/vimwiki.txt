@@ -1643,7 +1643,7 @@ Maxim Kim.
 ==============================================================================
 14. Changelog                                              *vimwiki-changelog*
 
-1.1 dev~
+1.1~
     * NEW: Issue 57: Make it possible to have pre block inside list item.
     * FIX: Issue 84: Vimwiki rename removed the WikiWord display name.
     * FIX: Issue 85: Errors if you have '~' subdirectory in a wiki directory.
@@ -1672,6 +1672,9 @@ Maxim Kim.
     * FIX: Issue 107: With MediaWiki syntax <C-Space> on a list item creates
       todo list item without space between * and [ ].
     * FIX: Issue 110: Syntax highlighting doesn't work for indented codeblock.
+    * FIX: Issue 112: Do not spell check some vimwiki elements: weblinks for
+      example.
+    * FIX: Issue 114: Do not reset syntax to vimwiki on BufEnter autocommand. 
 
 1.0~
     * NEW: Issue 41: Table cell and column text objects. See
