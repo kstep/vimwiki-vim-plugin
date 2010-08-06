@@ -498,10 +498,22 @@ endfunction
 
 function! vimwiki#setup_colors() "{{{
 
+  function! s:set_visible_ignore_color() "{{{
+    if !exists("g:colors_name") || g:colors_name == 'default'
+      if &background == 'light'
+        hi VimwikiIgnore guifg=#d0d0d0
+      else
+        hi VimwikiIgnore guifg=#505050
+      endif
+    else
+      hi link VimwikiIgnore Normal
+    endif
+  endfunction "}}}
+
   let hlfg_ignore = vimwiki#get_hl_param('Ignore', 'guifg')
   let hlbg_normal = vimwiki#get_hl_param('Normal', 'guibg')
   if hlfg_ignore == 'bg' || hlfg_ignore == hlbg_normal
-    hi link VimwikiIgnore Normal
+    call s:set_visible_ignore_color()
   else
     hi link VimwikiIgnore Ignore
   endif
@@ -513,9 +525,7 @@ function! vimwiki#setup_colors() "{{{
 
   if &background == 'light'
     hi def VimwikiHeader1 guibg=bg guifg=#aa5858 gui=bold ctermfg=DarkRed
-    " hi def VimwikiHeader2 guibg=bg guifg=#309010 gui=bold ctermfg=DarkGreen
     hi def VimwikiHeader2 guibg=bg guifg=#507030 gui=bold ctermfg=DarkGreen
-    " hi def VimwikiHeader3 guibg=bg guifg=#305070 gui=bold ctermfg=Black
     hi def VimwikiHeader3 guibg=bg guifg=#1030a0 gui=bold ctermfg=DarkBlue
     hi def VimwikiHeader4 guibg=bg guifg=#103040 gui=bold ctermfg=Black
     hi def VimwikiHeader5 guibg=bg guifg=#505050 gui=bold ctermfg=Black
@@ -577,10 +587,22 @@ function! vimwiki#nested_syntax(filetype, start, end, textSnipHl) abort "{{{
   else
     unlet b:current_syntax
   endif
-  execute 'syntax region textSnip'.ft.'
-        \ matchgroup='.a:textSnipHl.'
-        \ start="'.a:start.'" end="'.a:end.'"
-        \ contains=@'.group.' keepend'
+  execute 'syntax region textSnip'.ft.
+        \ ' matchgroup='.a:textSnipHl.
+        \ ' start="'.a:start.'" end="'.a:end.'"'.
+        \ ' contains=@'.group.' keepend'
+
+  " A workaround to Issue 115: Nested Perl syntax highlighting differs from
+  " regular one.
+  " Perl syntax file has perlFunctionName which is usually has no effect due to
+  " 'contained' flag. Now we have 'syntax include' that makes all the groups
+  " included as 'contained' into specific group. 
+  " Here perlFunctionName (with quite an angry regexp "\h\w*[^:]") clashes with
+  " the rest syntax rules as now it has effect being really 'contained'.
+  " Clear it!
+  if ft =~ 'perl'
+    syntax clear perlFunctionName 
+  endif
 endfunction "}}}
 
 "}}}

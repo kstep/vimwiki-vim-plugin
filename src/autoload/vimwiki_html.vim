@@ -993,6 +993,8 @@ endfunction "}}}
 
 "}}}
 
+" }}}
+
 " WIKI2HTML "{{{
 function! s:parse_line(line, state) " {{{
   let state = {}
@@ -1283,9 +1285,12 @@ function! vimwiki_html#WikiAll2HTML(path) "{{{
   endif
 
   echomsg 'Saving vimwiki files...'
+  let save_eventignore = &eventignore
+  let &eventignore = "all"
   let cur_buf = bufname('%')
   bufdo call s:save_vimwiki_buffer()
   exe 'buffer '.cur_buf
+  let &eventignore = save_eventignore
 
   let path = expand(a:path)
   call vimwiki#mkdir(path)
