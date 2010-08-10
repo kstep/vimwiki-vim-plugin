@@ -719,7 +719,6 @@ function! s:process_tag_quote(line, quote) "{{{
   let lines = []
   let quote = a:quote
   let processed = 0
-  " if a:line =~ '^\s\{4,}[^[:blank:]*#]'
   if a:line =~ '^\s\{4,}\S'
     if !quote
       call add(lines, "<blockquote>")
@@ -727,9 +726,6 @@ function! s:process_tag_quote(line, quote) "{{{
     endif
     let processed = 1
     call add(lines, substitute(a:line, '^\s*', '', ''))
-  elseif quote && a:line =~ '^\s*$'
-    let processed = 1
-    call add(lines, a:line)
   elseif quote
     call add(lines, "</blockquote>")
     let quote = 0
