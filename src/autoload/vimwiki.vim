@@ -127,6 +127,13 @@ function! vimwiki#generate_links()"{{{
   endfor
 endfunction " }}}
 
+function! vimwiki#goto(key) "{{{
+    call s:edit_file(':e',
+          \ VimwikiGet('path').
+          \ a:key.
+          \ VimwikiGet('ext'))
+endfunction "}}}
+
 function! s:is_windows() "{{{
   return has("win32") || has("win64") || has("win95") || has("win16")
 endfunction "}}}
@@ -250,7 +257,6 @@ function! vimwiki#is_non_wiki_link(lnk) "{{{
   endif
   return 0
 endfunction "}}}
-" }}}
 
 function! vimwiki#is_link_to_dir(link) "{{{
   " Check if link is to a directory.
@@ -259,8 +265,7 @@ function! vimwiki#is_link_to_dir(link) "{{{
     return 1
   endif
   return 0
-endfunction
-" }}}
+endfunction " }}}
 
 function! s:print_wiki_list() "{{{
   let idx = 0

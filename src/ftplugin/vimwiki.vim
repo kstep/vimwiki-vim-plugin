@@ -222,6 +222,8 @@ exe 'command! -buffer -nargs=* VimwikiSearch vimgrep <args> '.
 exe 'command! -buffer -nargs=* VWS vimgrep <args> '.
       \ escape(VimwikiGet('path').'**/*'.VimwikiGet('ext'), ' ')
 
+command! -buffer -nargs=1 VimwikiGoto call vimwiki#goto("<args>")
+
 " table commands
 command! -buffer -nargs=* VimwikiTable call vimwiki_tbl#create(<f-args>)
 command! -buffer VimwikiTableAlignQ call vimwiki_tbl#align_or_cmd('gqq')

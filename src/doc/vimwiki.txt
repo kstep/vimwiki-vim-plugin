@@ -339,6 +339,10 @@ ic                      Inner column in a table.
 *:VimwikiPrevWord*
     Find previous WikiWord.
 
+*:VimwikiGoto*
+    Goto link provided by an argument. For example: >
+        :VimwikiGoto HelloWorld
+<   opens opens/creates HelloWorld wiki page.
 
 *:VimwikiDeleteWord*
     Delete WikiWord you are in.
@@ -698,9 +702,6 @@ Text started with 4 or more spaces is a blockquote.
     This would be a blockquote in vimwiki. It is not highlighted in vim but
     could be styled by css in html. Blockquotes are usually used to quote a
     long piece of text from another source.
-
-    Another blockquote.<br />
-    Separated with an empty line.
 
 ------------------------------------------------------------------------------
 5.9. Comments                                        *vimwiki-syntax-comments*
@@ -1648,6 +1649,7 @@ Maxim Kim.
 
 1.1 dev~
     * NEW: Issue 57: Make it possible to have pre block inside list item.
+    * NEW: Issue 82: Add quick goto command. See |:VimwikiGoto|.
     * FIX: Issue 84: Vimwiki rename removed the WikiWord display name.
     * FIX: Issue 85: Errors if you have '~' subdirectory in a wiki directory.
     * FIX: Issue 86: Existed links '[[WikiLink1|Alias1]] | [[WikiLink2]]' are
@@ -1675,8 +1677,6 @@ Maxim Kim.
     * FIX: Issue 107: With MediaWiki syntax <C-Space> on a list item creates
       todo list item without space between * and [ ].
     * FIX: Issue 110: Syntax highlighting doesn't work for indented codeblock.
-    * FIX: Issue 111: Blockquote formatting problem with Vimwiki2HTML.
-      Separate blockquotes with empty lines.
     * FIX: Issue 115: Nested Perl syntax highlighting differs from regular
       one.
 
