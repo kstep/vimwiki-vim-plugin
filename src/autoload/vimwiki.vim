@@ -613,17 +613,17 @@ endfunction "}}}
 "}}}
 
 " WIKI functions {{{
-function! vimwiki#WikiNextWord() "{{{
+function! vimwiki#find_next_link() "{{{
   call s:search_word(g:vimwiki_rxWikiLink.'\|'.g:vimwiki_rxWeblink, '')
 endfunction
 " }}}
 
-function! vimwiki#WikiPrevWord() "{{{
+function! vimwiki#find_prev_link() "{{{
   call s:search_word(g:vimwiki_rxWikiLink.'\|'.g:vimwiki_rxWeblink, 'b')
 endfunction
 " }}}
 
-function! vimwiki#WikiFollowWord(split) "{{{
+function! vimwiki#follow_link(split) "{{{
   if a:split == "split"
     let cmd = ":split "
   elseif a:split == "vsplit"
@@ -646,20 +646,18 @@ function! vimwiki#WikiFollowWord(split) "{{{
   let subdir = vimwiki#current_subdir()
   call vimwiki#open_link(cmd, subdir.link)
 
-endfunction
-" }}}
+endfunction " }}}
 
-function! vimwiki#WikiGoBackWord() "{{{
+function! vimwiki#go_back_link() "{{{
   if exists("b:vimwiki_prev_link")
     " go back to saved WikiWord
     let prev_word = b:vimwiki_prev_link
     execute ":e ".substitute(prev_word[0], '\s', '\\\0', 'g')
     call setpos('.', prev_word[1])
   endif
-endfunction
-" }}}
+endfunction " }}}
 
-function! vimwiki#WikiGoHome(index) "{{{
+function! vimwiki#goto_index(index) "{{{
   call vimwiki#select(a:index)
   call vimwiki#mkdir(VimwikiGet('path'))
 
@@ -667,17 +665,15 @@ function! vimwiki#WikiGoHome(index) "{{{
     execute ':e '.fnameescape(
           \ VimwikiGet('path').VimwikiGet('index').VimwikiGet('ext'))
   catch /E37/ " catch 'No write since last change' error
-    " this is really unsecure!!!
-    execute ':'.VimwikiGet('gohome').' '.
+    execute ':split '.
           \ VimwikiGet('path').
           \ VimwikiGet('index').
           \ VimwikiGet('ext')
   catch /E325/ " catch 'ATTENTION' error (:h E325)
   endtry
-endfunction
-"}}}
+endfunction "}}}
 
-function! vimwiki#WikiDeleteWord() "{{{
+function! vimwiki#delete_link() "{{{
   "" file system funcs
   "" Delete WikiWord you are in from filesystem
   let val = input('Delete ['.expand('%').'] (y/n)? ', "")
@@ -697,10 +693,9 @@ function! vimwiki#WikiDeleteWord() "{{{
   if expand('%:p') != ""
     execute "e"
   endif
-endfunction
-"}}}
+endfunction "}}}
 
-function! vimwiki#WikiRenameWord() "{{{
+function! vimwiki#rename_link() "{{{
   "" Rename WikiWord, update all links to renamed WikiWord
   let subdir = vimwiki#current_subdir()
   let old_fname = subdir.expand('%:t')
@@ -798,16 +793,15 @@ function! vimwiki#WikiRenameWord() "{{{
   echomsg old_fname." is renamed to ".new_fname
 
   let &more = setting_more
-endfunction
-" }}}
+endfunction " }}}
 
-function! vimwiki#WikiUISelect()"{{{
+function! vimwiki#ui_select()"{{{
   call s:print_wiki_list()
   let idx = input("Select Wiki (specify number): ")
   if idx == ""
     return
   endif
-  call vimwiki#WikiGoHome(idx)
+  call vimwiki#goto_index(idx)
 endfunction
 "}}}
 
