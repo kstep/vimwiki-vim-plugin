@@ -106,7 +106,12 @@ function! s:get_position_links(link) "{{{
   let idx = -1
   let links = []
   if a:link =~ '\d\{4}-\d\d-\d\d'
-    let links = sort(s:get_links())
+    let links = s:get_links()
+    " include 'today' into links
+    if index(links, s:diary_date_link()) == -1
+      call add(links, s:diary_date_link())
+    endif
+    call sort(links)
     let idx = index(links, a:link)
   endif
   return [idx, links]
@@ -203,7 +208,7 @@ function! vimwiki_diary#make_note(index, ...) "{{{
   call vimwiki#open_link(':e ', link, s:diary_index())
 endfunction "}}}
 
-" Calendar.vim callback and sign functions.
+" Calendar.vim callback function.
 function! vimwiki_diary#calendar_action(day, month, year, week, dir) "{{{
   let day = s:prefix_zero(a:day)
   let month = s:prefix_zero(a:month)
@@ -226,6 +231,7 @@ function! vimwiki_diary#calendar_action(day, month, year, week, dir) "{{{
   call vimwiki_diary#make_note(1, link)
 endfunction "}}}
 
+" Calendar.vim sign function.
 function vimwiki_diary#calendar_sign(day, month, year) "{{{
   let day = s:prefix_zero(a:day)
   let month = s:prefix_zero(a:month)
