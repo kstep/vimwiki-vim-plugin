@@ -306,13 +306,13 @@ noremap <silent><script><buffer>
       \ <Plug>VimwikiToggleListItem :VimwikiToggleListItem<CR>
 
 if !hasmapto('<Plug>VimwikiDiaryNextDay')
-  nmap <silent><buffer> <C-PageDown> <Plug>VimwikiDiaryNextDay
+  nmap <silent><buffer> <C-Down> <Plug>VimwikiDiaryNextDay
 endif
 noremap <silent><script><buffer>
       \ <Plug>VimwikiDiaryNextDay :VimwikiDiaryNextDay<CR>
 
 if !hasmapto('<Plug>VimwikiDiaryPrevDay')
-  nmap <silent><buffer> <C-PageUp> <Plug>VimwikiDiaryPrevDay
+  nmap <silent><buffer> <C-Up> <Plug>VimwikiDiaryPrevDay
 endif
 noremap <silent><script><buffer>
       \ <Plug>VimwikiDiaryPrevDay :VimwikiDiaryPrevDay<CR>

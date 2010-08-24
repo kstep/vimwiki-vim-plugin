@@ -250,12 +250,12 @@ gww                     reformat it.
 <A-Right>               Move current table column to the right.
                         See |:VimwikiTableMoveColumnRight|
 
-                        *vimwiki_<C-PageUp>*
-<C-PageUp>              Open previous day diary link if available.
+                        *vimwiki_<C-Up>*
+<C-Up>                  Open previous day diary link if available.
                         See |:VimwikiDiaryPrevDay|
 
-                        *vimwiki_<C-PageDown>*
-<C-PageDown>            Open next day diary link if available.
+                        *vimwiki_<C-Down>*
+<C-Down>                Open next day diary link if available.
                         See |:VimwikiDiaryNextDay|
 
 
@@ -418,11 +418,11 @@ ic                      Inner column in a table.
 
 *:VimwikiDiaryNextDay*
     Open next day diary link if available.
-    Mapped to <C-PageDown>.
+    Mapped to <C-Down>.
 
 *:VimwikiDiaryPrevDay*
     Open previous day diary link if available.
-    Mapped to <C-PageUp>.
+    Mapped to <C-Up>.
 
 
 ==============================================================================
