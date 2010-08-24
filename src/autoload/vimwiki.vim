@@ -432,74 +432,73 @@ function! vimwiki#highlight_links() "{{{
 endfunction "}}}
 
 function! s:highlight_existed_links() "{{{
- let links = s:get_links('*'.VimwikiGet('ext'))
+  let links = s:get_links('*'.VimwikiGet('ext'))
 
- " Links with subdirs should be highlighted for linux and windows separators
- " Change \ or / to [/\\]
- let os_p = '[/\\]'
- let os_p2 = escape(os_p, '\')
- call map(links, 'substitute(v:val, os_p, os_p2, "g")')
+  " Links with subdirs should be highlighted for linux and windows separators
+  " Change \ or / to [/\\]
+  let os_p = '[/\\]'
+  let os_p2 = escape(os_p, '\')
+  call map(links, 'substitute(v:val, os_p, os_p2, "g")')
 
- for link in links
-   if g:vimwiki_camel_case &&
-         \ link =~ g:vimwiki_rxWikiWord && !vimwiki#is_non_wiki_link(link)
-     execute 'syntax match VimwikiLink /!\@<!\<'.link.'\>/ display'
-   endif
-   execute 'syntax match VimwikiLink /\[\['.
-         \ escape(vimwiki#unsafe_link(link), '~&$.*').
-         \ '\%(|\+.\{-}\)\{-}\]\]/ display contains=VimwikiLinkChar'
-   execute 'syntax match VimwikiLink /\[\['.
-         \ escape(vimwiki#unsafe_link(link), '~&$.*').
-         \ '\]\[.\{-1,}\]\]/ display contains=VimwikiLinkChar'
+  for link in links
+    if g:vimwiki_camel_case &&
+          \ link =~ g:vimwiki_rxWikiWord && !vimwiki#is_non_wiki_link(link)
+      execute 'syntax match VimwikiLink /!\@<!\<'.link.'\>/ display'
+    endif
+    execute 'syntax match VimwikiLink /\[\['.
+          \ escape(vimwiki#unsafe_link(link), '~&$.*').
+          \ '\%(|\+.\{-}\)\{-}\]\]/ display contains=VimwikiLinkChar'
+    execute 'syntax match VimwikiLink /\[\['.
+          \ escape(vimwiki#unsafe_link(link), '~&$.*').
+          \ '\]\[.\{-1,}\]\]/ display contains=VimwikiLinkChar'
 
-   execute 'syntax match VimwikiLinkT /\[\['.
-         \ escape(vimwiki#unsafe_link(link), '~&$.*').
-         \ '\%(|\+.\{-}\)\{-}\]\]/ display contained'
-   execute 'syntax match VimwikiLinkT /\[\['.
-         \ escape(vimwiki#unsafe_link(link), '~&$.*').
-         \ '\]\[.\{-1,}\]\]/ display contained'
- endfor
- execute 'syntax match VimwikiLink /\[\[.\+\.\%(jpg\|png\|gif\)\%(|\+.*\)*\]\]/ display contains=VimwikiLinkChar'
- execute 'syntax match VimwikiLink /\[\[.\+\.\%(jpg\|png\|gif\)\]\[.\+\]\]/ display contains=VimwikiLinkChar'
+    execute 'syntax match VimwikiLinkT /\[\['.
+          \ escape(vimwiki#unsafe_link(link), '~&$.*').
+          \ '\%(|\+.\{-}\)\{-}\]\]/ display contained'
+    execute 'syntax match VimwikiLinkT /\[\['.
+          \ escape(vimwiki#unsafe_link(link), '~&$.*').
+          \ '\]\[.\{-1,}\]\]/ display contained'
+  endfor
+  execute 'syntax match VimwikiLink /\[\[.\+\.\%(jpg\|png\|gif\)\%(|\+.*\)*\]\]/ display contains=VimwikiLinkChar'
+  execute 'syntax match VimwikiLink /\[\[.\+\.\%(jpg\|png\|gif\)\]\[.\+\]\]/ display contains=VimwikiLinkChar'
 
- execute 'syntax match VimwikiLinkT /\[\[.\+\.\%(jpg\|png\|gif\)\%(|\+.*\)*\]\]/ display contained'
- execute 'syntax match VimwikiLinkT /\[\[.\+\.\%(jpg\|png\|gif\)\]\[.\+\]\]/ display contained'
+  execute 'syntax match VimwikiLinkT /\[\[.\+\.\%(jpg\|png\|gif\)\%(|\+.*\)*\]\]/ display contained'
+  execute 'syntax match VimwikiLinkT /\[\[.\+\.\%(jpg\|png\|gif\)\]\[.\+\]\]/ display contained'
 
- " Issue 103: Always highlight links to non-wiki files as existed.
- execute 'syntax match VimwikiLink /\[\[.\+\.\%('.
-       \join(split(g:vimwiki_file_exts, '\s*,\s*'), '\|').
-       \'\)\%(|\+.*\)*\]\]/ display contains=VimwikiLinkChar'
- execute 'syntax match VimwikiLink /\[\[.\+\.\%('.
-       \join(split(g:vimwiki_file_exts, '\s*,\s*'), '\|').
-       \'\)\]\[.\+\]\]/ display contains=VimwikiLinkChar'
+  " Issue 103: Always highlight links to non-wiki files as existed.
+  execute 'syntax match VimwikiLink /\[\[.\+\.\%('.
+        \join(split(g:vimwiki_file_exts, '\s*,\s*'), '\|').
+        \'\)\%(|\+.*\)*\]\]/ display contains=VimwikiLinkChar'
+  execute 'syntax match VimwikiLink /\[\[.\+\.\%('.
+        \join(split(g:vimwiki_file_exts, '\s*,\s*'), '\|').
+        \'\)\]\[.\+\]\]/ display contains=VimwikiLinkChar'
 
- execute 'syntax match VimwikiLinkT /\[\[.\+\.\%('.
-       \join(split(g:vimwiki_file_exts, '\s*,\s*'), '\|').
-       \'\)\%(|\+.*\)*\]\]/ display contained'
- execute 'syntax match VimwikiLinkT /\[\[.\+\.\%('.
-       \join(split(g:vimwiki_file_exts, '\s*,\s*'), '\|').
-       \'\)\]\[.\+\]\]/ display contained'
+  execute 'syntax match VimwikiLinkT /\[\[.\+\.\%('.
+        \join(split(g:vimwiki_file_exts, '\s*,\s*'), '\|').
+        \'\)\%(|\+.*\)*\]\]/ display contained'
+  execute 'syntax match VimwikiLinkT /\[\[.\+\.\%('.
+        \join(split(g:vimwiki_file_exts, '\s*,\s*'), '\|').
+        \'\)\]\[.\+\]\]/ display contained'
 
- " highlight dirs
- let dirs = s:get_links('*/')
- call map(dirs, 'substitute(v:val, os_p, os_p2, "g")')
- for dir in dirs
-   execute 'syntax match VimwikiLink /\[\['.
-         \ escape(vimwiki#unsafe_link(dir), '~&$.*').
-         \ '[/\\]*\%(|\+.*\)*\]\]/ display contains=VimwikiLinkChar'
-   execute 'syntax match VimwikiLink /\[\['.
-         \ escape(vimwiki#unsafe_link(dir), '~&$.*').
-         \ '[/\\]*\%(\]\[\+.*\)*\]\]/ display contains=VimwikiLinkChar'
+  " highlight dirs
+  let dirs = s:get_links('*/')
+  call map(dirs, 'substitute(v:val, os_p, os_p2, "g")')
+  for dir in dirs
+    execute 'syntax match VimwikiLink /\[\['.
+          \ escape(vimwiki#unsafe_link(dir), '~&$.*').
+          \ '[/\\]*\%(|\+.*\)*\]\]/ display contains=VimwikiLinkChar'
+    execute 'syntax match VimwikiLink /\[\['.
+          \ escape(vimwiki#unsafe_link(dir), '~&$.*').
+          \ '[/\\]*\%(\]\[\+.*\)*\]\]/ display contains=VimwikiLinkChar'
 
-   execute 'syntax match VimwikiLinkT /\[\['.
-         \ escape(vimwiki#unsafe_link(dir), '~&$.*').
-         \ '[/\\]*\%(|\+.*\)*\]\]/ display contained'
-   execute 'syntax match VimwikiLinkT /\[\['.
-         \ escape(vimwiki#unsafe_link(dir), '~&$.*').
-         \ '[/\\]*\%(\]\[\+.*\)*\]\]/ display contained'
- endfor
-endfunction
-" }}}
+    execute 'syntax match VimwikiLinkT /\[\['.
+          \ escape(vimwiki#unsafe_link(dir), '~&$.*').
+          \ '[/\\]*\%(|\+.*\)*\]\]/ display contained'
+    execute 'syntax match VimwikiLinkT /\[\['.
+          \ escape(vimwiki#unsafe_link(dir), '~&$.*').
+          \ '[/\\]*\%(\]\[\+.*\)*\]\]/ display contained'
+  endfor
+endfunction "}}}
 
 function! vimwiki#setup_colors() "{{{
 
