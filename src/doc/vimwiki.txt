@@ -9,7 +9,7 @@
               |___|  |___| |_|   |_||__| |__||___| |___| |_||___|            ~
 
 
-                               Version: 1.1
+                               Version: 1.2 dev
 
 ==============================================================================
 CONTENTS                                                    *vimwiki-contents*
@@ -1648,6 +1648,9 @@ Maxim Kim.
 ==============================================================================
 14. Changelog                                              *vimwiki-changelog*
 
+1.2 dev~
+    * FIX: Issue 122: Dot character in vimwiki's directory path isn't escaped.
+
 1.1~
     * NEW: Issue 57: Make it possible to have pre block inside list item.
     * NEW: Issue 82: Add quick goto command. See |:VimwikiGoto|.
@@ -1665,7 +1668,7 @@ Maxim Kim.
     * FIX: Issue 96: Closing bracket at the end of weblink shouldn't be a part
       of that link.
     * FIX: Issue 97: Error opening weblink in a browser if it has # inside.
-    * FIX: Issue 99: Vim is not responing while opening arbitrary wiki file.
+    * FIX: Issue 99: Vim is not responding while opening arbitrary wiki file.
     * FIX: Issue 100: Additional content on diary index page could be
       corrupted.
     * NEW: Issue 101: Customized HTML tags. See |g:vimwiki_valid_html_tags|

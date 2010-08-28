@@ -364,7 +364,7 @@ function! s:build_menu(topmenu)
   let idx = 0
   while idx < len(g:vimwiki_list)
     let norm_path = fnamemodify(VimwikiGet('path', idx), ':h:t')
-    let norm_path = escape(norm_path, '\ ')
+    let norm_path = escape(norm_path, '\ \.')
     execute 'menu '.a:topmenu.'.Open\ index.'.norm_path.
           \ ' :call vimwiki#goto_index('.(idx + 1).')<CR>'
     execute 'menu '.a:topmenu.'.Open/Create\ diary\ note.'.norm_path.
