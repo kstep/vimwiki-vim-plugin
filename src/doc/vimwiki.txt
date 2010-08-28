@@ -374,7 +374,9 @@ ic                      Inner column in a table.
 
 *:VimwikiSearch* /pattern/
 *:VWS* /pattern/
-    Search for /pattern/ in current wiki.
+    Search for /pattern/ in all files of current wiki.
+    To display next match use |:cnext| command.
+    To display previous match use |:cprevious| command.
 
 
 *:VimwikiTable*
