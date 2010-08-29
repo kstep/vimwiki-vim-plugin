@@ -299,7 +299,7 @@ augroup vimwiki
   for ext in keys(extensions)
     exe 'autocmd BufEnter *'.ext.' call s:setup_buffer_enter()'
     exe 'autocmd BufLeave,BufHidden *'.ext.' call s:setup_buffer_leave()'
-    exe 'autocmd BufNewFile,BufRead, *'.ext.' setf vimwiki'
+    exe 'autocmd BufNewFile,BufRead, *'.ext.' setlocal filetype=vimwiki'
 
     " ColorScheme could have or could have not a
     " VimwikiHeader1..VimwikiHeader6 highlight groups. We need to refresh

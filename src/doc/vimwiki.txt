@@ -1652,6 +1652,8 @@ Maxim Kim.
 
 1.2 dev~
     * FIX: Issue 122: Dot character in vimwiki's directory path isn't escaped.
+    * FIX: Issue 123: Where is Vimwiki2HTML and other commands? Sometimes
+      filetype is not set up to vimwiki.
 
 1.1~
     * NEW: Issue 57: Make it possible to have pre block inside list item.
