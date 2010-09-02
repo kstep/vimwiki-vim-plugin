@@ -1654,6 +1654,7 @@ Maxim Kim.
     * FIX: Issue 122: Dot character in vimwiki's directory path isn't escaped.
     * FIX: Issue 123: Where is Vimwiki2HTML and other commands? Sometimes
       filetype is not set up to vimwiki.
+    * FIX: Issue 124: Highlight group not found: Normal
 
 1.1~
     * NEW: Issue 57: Make it possible to have pre block inside list item.
