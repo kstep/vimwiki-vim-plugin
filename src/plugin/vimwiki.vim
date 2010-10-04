@@ -81,6 +81,11 @@ function! s:setup_buffer_enter() "{{{
     let b:vimwiki_idx = g:vimwiki_current_idx
   endif
 
+  " If you have 
+  "     au GUIEnter * VimwikiIndex
+  " in your vimrc the next line is essential.
+  setf vimwiki
+
   " Update existed/non-existed links highlighting.
   call vimwiki#highlight_links()
 

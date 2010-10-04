@@ -1650,6 +1650,10 @@ Maxim Kim.
 ==============================================================================
 14. Changelog                                              *vimwiki-changelog*
 
+dev~
+    * Issue 131: FileType is not set up when GUIEnter autocommand is used in
+      vimrc.
+
 1.1.1~
     * FIX: Issue 122: Dot character in vimwiki's directory path isn't escaped.
     * FIX: Issue 123: Where is Vimwiki2HTML and other commands? Sometimes
