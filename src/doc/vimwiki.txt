@@ -1653,6 +1653,8 @@ Maxim Kim.
 dev~
     * Issue 131: FileType is not set up when GUIEnter autocommand is used in
       vimrc.
+    * Issue 132: Link to perl (or any non-wiki) file in vimwiki subdirectory
+      doesn't work as intended.
 
 1.1.1~
     * FIX: Issue 122: Dot character in vimwiki's directory path isn't escaped.

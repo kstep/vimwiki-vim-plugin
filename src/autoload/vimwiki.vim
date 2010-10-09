@@ -34,8 +34,17 @@ function! vimwiki#mkdir(path) "{{{
 endfunction
 " }}}
 
-function! vimwiki#safe_link(string) "{{{
-  return substitute(a:string, s:badsymbols, g:vimwiki_stripsym, 'g')
+function! vimwiki#safe_link(link) "{{{
+  " handling Windows absolute paths
+  if a:link =~ '^[[:alpha:]]:[/\\].*'
+    let link_start = a:link[0 : 2]
+    let link = a:link[3 : ]
+  else
+    let link_start = ''
+    let link = a:link
+  endif
+  let link = substitute(link, s:badsymbols, g:vimwiki_stripsym, 'g')
+  return link_start.link
 endfunction
 "}}}
 
@@ -65,8 +74,13 @@ function! vimwiki#current_subdir()"{{{
 endfunction"}}}
 
 function! vimwiki#open_link(cmd, link, ...) "{{{
+  echomsg a:link
   if vimwiki#is_non_wiki_link(a:link)
-    call s:edit_file(a:cmd, a:link)
+    if s:is_path_absolute(a:link)
+      call s:edit_file(a:cmd, a:link)
+    else
+      call s:edit_file(a:cmd, VimwikiGet('path').a:link)
+    endif
   else
     if a:0
       let vimwiki_prev_link = [a:1, []]
@@ -136,6 +150,10 @@ endfunction "}}}
 
 function! s:is_windows() "{{{
   return has("win32") || has("win64") || has("win95") || has("win16")
+endfunction "}}}
+
+function! s:is_path_absolute(path) "{{{
+  return a:path =~ '^/.*' || a:path =~ '^[[:alpha:]]:[/\\].*'
 endfunction "}}}
 
 function! s:get_links(pat) "{{{
@@ -544,7 +562,7 @@ function! vimwiki#setup_colors() "{{{
   endif
 endfunction "}}}
 
-function vimwiki#get_hl_param(hgroup, hparam) "{{{
+function! vimwiki#get_hl_param(hgroup, hparam) "{{{
   redir => hlstatus
   try
     exe "silent hi ".a:hgroup
