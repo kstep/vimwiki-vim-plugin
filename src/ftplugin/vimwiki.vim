@@ -329,8 +329,8 @@ endfunction "}}}
 inoremap <buffer> <expr> <CR> <SID>CR()
 
 " List mappings
-nnoremap <buffer> o :call vimwiki_lst#kbd_oO('o')<CR>a
-nnoremap <buffer> O :call vimwiki_lst#kbd_oO('O')<CR>a
+nnoremap <buffer> o :<C-U>call vimwiki_lst#kbd_oO('o')<CR>a
+nnoremap <buffer> O :<C-U>call vimwiki_lst#kbd_oO('O')<CR>a
 
 " Table mappings
 if g:vimwiki_table_auto_fmt

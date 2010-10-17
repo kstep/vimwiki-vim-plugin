@@ -1660,6 +1660,7 @@ Maxim Kim.
 14. Changelog                                              *vimwiki-changelog*
 
 dev~
+    * Issue 125: Problem with 'o' command given while at the of the file.
     * Issue 131: FileType is not set up when GUIEnter autocommand is used in
       vimrc.
     * Issue 132: Link to perl (or any non-wiki) file in vimwiki subdirectory
