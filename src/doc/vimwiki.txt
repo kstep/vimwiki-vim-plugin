@@ -33,6 +33,7 @@ CONTENTS                                                    *vimwiki-contents*
         5.7. Preformatted text       |vimwiki-syntax-preformatted|
         5.8. Blockquotes             |vimwiki-syntax-blockquotes|
         5.9. Comments                |vimwiki-syntax-comments|
+        5.10. Horizontal line        |vimwiki-syntax-hr|
     6. Folding/Outline               |vimwiki-folding|
     7. Placeholders                  |vimwiki-placeholders|
     8. Todo lists                    |vimwiki-todo-lists|
@@ -726,6 +727,14 @@ Text between <!-- and --> is a comment.
 Ex: >
  <!-- this text would not be in HTML -->
 <
+
+------------------------------------------------------------------------------
+5.10. Horizontal line                                      *vimwiki-syntax-hr*
+
+4 or more dashes at the start of the line is a 'horizontal line' (<hr />): >
+ ----
+<
+
 
 ==============================================================================
 6. Folding/Outline                                           *vimwiki-folding*
