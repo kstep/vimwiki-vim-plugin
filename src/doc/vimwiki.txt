@@ -640,8 +640,8 @@ Multiline list items: >
 Definition lists: >
 Term 1:: Definition 1
 Term 2::
-::Definition 2
-::Definition 3
+:: Definition 2
+:: Definition 3
 
 
 ------------------------------------------------------------------------------
