@@ -1666,8 +1666,8 @@ Maxim Kim.
 dev~
     * Issue 138: Added possibility to remap table-column move bindings. See
       |:VimwikiTableMoveColumnLeft| and |:VimwikiTableMoveColumnRight|
-      commands. For remap instructions see *vimwiki_<A-Left>*
-      and *vimwiki_<A-Right>* 
+      commands. For remap instructions see |vimwiki_<A-Left>|
+      and |vimwiki_<A-Right>|.
     * Issue 125: Problem with 'o' command given while at the of the file.
     * Issue 131: FileType is not set up when GUIEnter autocommand is used in
       vimrc.
