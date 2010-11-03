@@ -340,8 +340,16 @@ endif
 
 nnoremap <buffer> gqq :VimwikiTableAlignQ<CR>
 nnoremap <buffer> gww :VimwikiTableAlignW<CR>
-nnoremap <buffer> <A-Left> :VimwikiTableMoveColumnLeft<CR>
-nnoremap <buffer> <A-Right> :VimwikiTableMoveColumnRight<CR>
+if !hasmapto('<Plug>VimwikiTableMoveColumnLeft')
+  nmap <silent><buffer> <A-Left> <Plug>VimwikiTableMoveColumnLeft
+endif
+noremap <silent><script><buffer>
+      \ <Plug>VimwikiTableMoveColumnLeft :VimwikiTableMoveColumnLeft<CR>
+if !hasmapto('<Plug>VimwikiTableMoveColumnRight')
+  nmap <silent><buffer> <A-Right> <Plug>VimwikiTableMoveColumnRight
+endif
+noremap <silent><script><buffer>
+      \ <Plug>VimwikiTableMoveColumnRight :VimwikiTableMoveColumnRight<CR>
 
 " Misc mappings
 inoremap <buffer> <S-CR> <br /><CR>

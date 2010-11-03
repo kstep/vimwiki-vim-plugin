@@ -246,11 +246,15 @@ gww                     reformat it.
                         *vimwiki_<A-Left>*
 <A-Left>                Move current table column to the left.
                         See |:VimwikiTableMoveColumnLeft|
-
+                        To remap: >
+                        :map <Leader>wtl <Plug>VimwikiTableMoveColumnLeft
+<
                         *vimwiki_<A-Right>*
 <A-Right>               Move current table column to the right.
                         See |:VimwikiTableMoveColumnRight|
-
+                        To remap: >
+                        :map <Leader>wtr <Plug>VimwikiTableMoveColumnRight
+<
                         *vimwiki_<C-Up>*
 <C-Up>                  Open previous day diary link if available.
                         See |:VimwikiDiaryPrevDay|
@@ -1660,6 +1664,10 @@ Maxim Kim.
 14. Changelog                                              *vimwiki-changelog*
 
 dev~
+    * Issue 138: Added possibility to remap table-column move bindings. See
+      |:VimwikiTableMoveColumnLeft| and |:VimwikiTableMoveColumnRight|
+      commands. For remap instructions see *vimwiki_<A-Left>*
+      and *vimwiki_<A-Right>* 
     * Issue 125: Problem with 'o' command given while at the of the file.
     * Issue 131: FileType is not set up when GUIEnter autocommand is used in
       vimrc.
