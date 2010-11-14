@@ -248,11 +248,6 @@ if g:vimwiki_use_mouse
   noremap <silent><buffer> <C-2-LeftMouse> <LeftMouse>:VimwikiVSplitLink<CR>
   noremap <silent><buffer> <RightMouse><LeftMouse> :VimwikiGoBackLink<CR>
 endif
-if !hasmapto('<Plug>VimwikiTabnewLink')
-  nmap <silent><buffer> <D-CR> <Plug>VimwikiTabnewLink
-endif
-noremap <silent><script><buffer>
-      \ <Plug>VimwikiTabnewLink :VimwikiTabnewLink<D-CR>
 
 if !hasmapto('<Plug>VimwikiFollowLink')
   nmap <silent><buffer> <CR> <Plug>VimwikiFollowLink
@@ -271,6 +266,13 @@ if !hasmapto('<Plug>VimwikiVSplitLink')
 endif
 noremap <silent><script><buffer>
       \ <Plug>VimwikiVSplitLink :VimwikiVSplitLink<CR>
+
+if !hasmapto('<Plug>VimwikiTabnewLink')
+  nmap <silent><buffer> <D-CR> <Plug>VimwikiTabnewLink
+  nmap <silent><buffer> <C-S-CR> <Plug>VimwikiTabnewLink
+endif
+noremap <silent><script><buffer>
+      \ <Plug>VimwikiTabnewLink :VimwikiTabnewLink<CR>
 
 if !hasmapto('<Plug>VimwikiGoBackLink')
   nmap <silent><buffer> <BS> <Plug>VimwikiGoBackLink

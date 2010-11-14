@@ -192,6 +192,12 @@ NORMAL MODE                                           *vimwiki-local-mappings*
                         To remap: >
                         :map <Leader>wq <Plug>VimwikiVSplitLink
 <
+                        *vimwiki_<C-S-CR>*    *vimwiki_<D-CR>*
+<C-S-CR>, <D-CR>        Follow/create wiki link in a new tab.
+                        Maps to |:VimwikiTabnewLink|.
+                        To remap: >
+                        :map <Leader>wt <Plug>VimwikiTabnewLink
+<
                         *vimwiki_<Backspace>*
 <Backspace>             Go back to previous wiki link
                         Maps to |:VimwikiGoBackLink|.
@@ -329,7 +335,7 @@ ic                      Inner column in a table.
 4.2. Local commands                                   *vimwiki-local-commands*
 
 *:VimwikiFollowLink*
-    Follow/create wiki link..
+    Follow/create wiki link.
 
 
 *:VimwikiGoBackLink*
@@ -337,11 +343,15 @@ ic                      Inner column in a table.
 
 
 *:VimwikiSplitLink*
-    Split and follow/create wiki link..
+    Split and follow/create wiki link.
 
 
 *:VimwikiVSplitLink*
-    Vertical split and follow/create wiki link..
+    Vertical split and follow/create wiki link.
+
+
+*:VimwikiTabnewLink*
+    Follow/create wiki link in a new tab.
 
 
 *:VimwikiNextLink*
@@ -351,10 +361,12 @@ ic                      Inner column in a table.
 *:VimwikiPrevLink*
     Find previous wiki link..
 
+
 *:VimwikiGoto*
     Goto link provided by an argument. For example: >
         :VimwikiGoto HelloWorld
 <   opens opens/creates HelloWorld wiki page.
+
 
 *:VimwikiDeleteLink*
     Delete wiki link. you are in.
@@ -393,6 +405,7 @@ ic                      Inner column in a table.
     :VimwikiTable cols
     Create a table with a given cols and 2 rows
 
+
 *:VimwikiTableMoveColumnLeft* , *:VimwikiTableMoveColumnRight*
     Move current column to the left or to the right:
     Example: >
@@ -423,9 +436,11 @@ ic                      Inner column in a table.
 *:VimwikiGenerateLinks*
     Insert all available links into current buffer.
 
+
 *:VimwikiDiaryNextDay*
     Open next day diary link if available.
     Mapped to <C-Down>.
+
 
 *:VimwikiDiaryPrevDay*
     Open previous day diary link if available.
@@ -1673,6 +1688,9 @@ dev~
       vimrc.
     * Issue 132: Link to perl (or any non-wiki) file in vimwiki subdirectory
       doesn't work as intended.
+    * Issue 139: |:VimwikiTabnewLink| command is added.
+    * Fix of g:vimwiki_stripsym = '' (i.e. an empty string) -- it removes bad
+      symbols from filenames.
 
 1.1.1~
     * FIX: Issue 122: Dot character in vimwiki's directory path isn't escaped.
