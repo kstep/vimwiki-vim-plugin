@@ -49,7 +49,11 @@ endfunction
 "}}}
 
 function! vimwiki#unsafe_link(string) "{{{
-  return substitute(a:string, g:vimwiki_stripsym, s:badsymbols, 'g')
+  if len(g:vimwiki_stripsym) > 0
+    return substitute(a:string, g:vimwiki_stripsym, s:badsymbols, 'g')
+  else
+    return a:string
+  endif
 endfunction
 "}}}
 
@@ -648,6 +652,8 @@ function! vimwiki#follow_link(split) "{{{
     let cmd = ":split "
   elseif a:split == "vsplit"
     let cmd = ":vsplit "
+  elseif a:split == "tabnew"
+    let cmd = ":tabnew "
   else
     let cmd = ":e "
   endif

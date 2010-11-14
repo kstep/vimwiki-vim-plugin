@@ -212,6 +212,8 @@ command! -buffer VimwikiGoBackLink call vimwiki#go_back_link()
 command! -buffer VimwikiSplitLink call vimwiki#follow_link('split')
 command! -buffer VimwikiVSplitLink call vimwiki#follow_link('vsplit')
 
+command! -buffer VimwikiTabnewLink call vimwiki#follow_link('tabnew')
+
 command! -buffer -range VimwikiToggleListItem call vimwiki_lst#ToggleListItem(<line1>, <line2>)
 
 command! -buffer VimwikiGenerateLinks call vimwiki#generate_links()
@@ -246,6 +248,11 @@ if g:vimwiki_use_mouse
   noremap <silent><buffer> <C-2-LeftMouse> <LeftMouse>:VimwikiVSplitLink<CR>
   noremap <silent><buffer> <RightMouse><LeftMouse> :VimwikiGoBackLink<CR>
 endif
+if !hasmapto('<Plug>VimwikiTabnewLink')
+  nmap <silent><buffer> <D-CR> <Plug>VimwikiTabnewLink
+endif
+noremap <silent><script><buffer>
+      \ <Plug>VimwikiTabnewLink :VimwikiTabnewLink<D-CR>
 
 if !hasmapto('<Plug>VimwikiFollowLink')
   nmap <silent><buffer> <CR> <Plug>VimwikiFollowLink
