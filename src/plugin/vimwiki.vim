@@ -54,6 +54,7 @@ function! s:setup_buffer_leave()"{{{
 endfunction"}}}
 
 function! s:setup_buffer_enter() "{{{
+  echomsg 'setup_buffer_enter'
   if exists("b:vimwiki_idx")
     let g:vimwiki_current_idx = b:vimwiki_idx
   else
@@ -302,7 +303,7 @@ augroup end
 augroup vimwiki
   autocmd!
   for ext in keys(extensions)
-    exe 'autocmd BufEnter *'.ext.' call s:setup_buffer_enter()'
+    exe 'autocmd BufWinEnter *'.ext.' call s:setup_buffer_enter()'
     exe 'autocmd BufLeave,BufHidden *'.ext.' call s:setup_buffer_leave()'
     exe 'autocmd BufNewFile,BufRead, *'.ext.' setlocal filetype=vimwiki'
 

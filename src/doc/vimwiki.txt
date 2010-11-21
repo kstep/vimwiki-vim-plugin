@@ -1691,6 +1691,8 @@ dev~
     * Issue 139: |:VimwikiTabnewLink| command is added.
     * Fix of g:vimwiki_stripsym = '' (i.e. an empty string) -- it removes bad
       symbols from filenames.
+    * Issue 145: With modeline 'set ft=vimwiki' links are not correctly
+      highlighted when open wiki files. 
 
 1.1.1~
     * FIX: Issue 122: Dot character in vimwiki's directory path isn't escaped.
