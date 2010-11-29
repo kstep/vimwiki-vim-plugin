@@ -495,9 +495,12 @@ or: >
 External links~
 Plain link: >
  http://code.google.com/p/vimwiki
+ mailto:habamax@gmail.com
+ ftp://vim.org
 
 Link with description: >
  [http://habamax.ru/blog habamax home page]
+ [mailto:habamax@gmail.com Drop a line to Maxim Kim]
 
 
 Images and image links~
@@ -1303,7 +1306,14 @@ listed in |g:vimwiki_list| then:
 
 Value           Description~
 1               make a temporary wiki in that dir.
-0               don't make temporary wiki it that dir.
+0               don't make temporary wiki in that dir.
+
+Temporary wiki is created to scan filesystem for available links to highlight.
+
+Consider your wiki extension is .txt then you can >
+    let g:vimwiki_global_ext = 0
+to make it local to vimwiki paths listed in g:vimwiki_list. So other text
+files wouldn't be treated as wiki ones.
 
 Default: 1
 
@@ -1688,11 +1698,15 @@ dev~
       vimrc.
     * Issue 132: Link to perl (or any non-wiki) file in vimwiki subdirectory
       doesn't work as intended.
+    * Issue 135: %title and %toc used together cause TOC to appear in an
+      unexpected place in HTML.
     * Issue 139: |:VimwikiTabnewLink| command is added.
     * Fix of g:vimwiki_stripsym = '' (i.e. an empty string) -- it removes bad
       symbols from filenames.
     * Issue 145: With modeline 'set ft=vimwiki' links are not correctly
       highlighted when open wiki files. 
+    * Issue 146: Filetype difficulty with ".txt" as a vimwiki extension.
+    * Issue 148: There are no mailto links.
 
 1.1.1~
     * FIX: Issue 122: Dot character in vimwiki's directory path isn't escaped.

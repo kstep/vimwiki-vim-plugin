@@ -53,8 +53,20 @@ function! s:setup_buffer_leave()"{{{
   endif
 endfunction"}}}
 
+function! s:setup_filetype() "{{{
+    " Find what wiki current buffer belongs to.
+    let path = expand('%:p:h')
+    let ext = '.'.expand('%:e')
+    let idx = s:find_wiki(path)
+
+    if idx == -1 && g:vimwiki_global_ext == 0
+      return
+    endif
+
+  set filetype=vimwiki
+endfunction "}}}
+
 function! s:setup_buffer_enter() "{{{
-  echomsg 'setup_buffer_enter'
   if exists("b:vimwiki_idx")
     let g:vimwiki_current_idx = b:vimwiki_idx
   else
@@ -279,8 +291,12 @@ else
   let g:vimwiki_rxWikiLink = g:vimwiki_rxWikiLink1.'\|'.g:vimwiki_rxWikiLink2
 endif
 let g:vimwiki_rxWeblink = '\%("[^"(]\+\((\([^)]\+\))\)\?":\)\?'.
-      \'\%(https\?\|ftp\|gopher\|telnet\|file\|notes\|ms-help\):'.
-      \'\%(\%(\%(//\)\|\%(\\\\\)\)\+[A-Za-z0-9:#@%/;,$~()_?+=.&\\\-]*\)'.
+      \'\%('.
+        \'\%(https\?\|ftp\|gopher\|telnet\|file\|notes\|ms-help\):'.
+        \'\%(\%(//\)\|\%(\\\\\)\)'.
+      \'\)'.
+      \'\|\%(mailto:\)'.
+      \'\+[A-Za-z0-9:#@%/;,$~()_?+=.&\\\-]*'.
       \'[().,?]\@<!'
 "}}}
 
@@ -305,7 +321,7 @@ augroup vimwiki
   for ext in keys(extensions)
     exe 'autocmd BufWinEnter *'.ext.' call s:setup_buffer_enter()'
     exe 'autocmd BufLeave,BufHidden *'.ext.' call s:setup_buffer_leave()'
-    exe 'autocmd BufNewFile,BufRead, *'.ext.' setlocal filetype=vimwiki'
+    exe 'autocmd BufNewFile,BufRead, *'.ext.' call s:setup_filetype()'
 
     " ColorScheme could have or could have not a
     " VimwikiHeader1..VimwikiHeader6 highlight groups. We need to refresh

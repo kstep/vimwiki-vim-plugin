@@ -35,7 +35,7 @@ function! s:remove_blank_lines(lines) " {{{
 endfunction "}}}
 
 function! s:is_web_link(lnk) "{{{
-  if a:lnk =~ '^\%(https://\|http://\|www.\|ftp://\|file://\)'
+  if a:lnk =~ '^\%(https://\|http://\|www.\|ftp://\|file://\|mailto:\)'
     return 1
   endif
   return 0
@@ -293,6 +293,7 @@ endfunction "}}}
 
 " insert toc into dest.
 function! s:process_toc(dest, placeholders, toc) "{{{
+  let toc_idx = 0
   if !empty(a:placeholders)
     for [placeholder, row, idx] in a:placeholders
       let [type, param] = placeholder
@@ -301,8 +302,9 @@ function! s:process_toc(dest, placeholders, toc) "{{{
         if !empty(param)
           call insert(toc, '<h1>'.param.'</h1>')
         endif
-        let shift = idx * len(toc)
+        let shift = toc_idx * len(toc)
         call extend(a:dest, toc, row + shift)
+        let toc_idx += 1
       endif
     endfor
   endif
