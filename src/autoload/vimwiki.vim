@@ -78,12 +78,11 @@ function! vimwiki#current_subdir()"{{{
 endfunction"}}}
 
 function! vimwiki#open_link(cmd, link, ...) "{{{
-  echomsg a:link
   if vimwiki#is_non_wiki_link(a:link)
     if s:is_path_absolute(a:link)
-      call s:edit_file(a:cmd, a:link)
+      call vimwiki#edit_file(a:cmd, a:link)
     else
-      call s:edit_file(a:cmd, VimwikiGet('path').a:link)
+      call vimwiki#edit_file(a:cmd, VimwikiGet('path').a:link)
     endif
   else
     if a:0
@@ -94,15 +93,15 @@ function! vimwiki#open_link(cmd, link, ...) "{{{
 
     if vimwiki#is_link_to_dir(a:link)
       if g:vimwiki_dir_link == ''
-        call s:edit_file(a:cmd, VimwikiGet('path').a:link)
+        call vimwiki#edit_file(a:cmd, VimwikiGet('path').a:link)
       else
-        call s:edit_file(a:cmd, 
+        call vimwiki#edit_file(a:cmd, 
               \ VimwikiGet('path').a:link.
               \ g:vimwiki_dir_link.
               \ VimwikiGet('ext'))
       endif
     else
-      call s:edit_file(a:cmd, VimwikiGet('path').a:link.VimwikiGet('ext'))
+      call vimwiki#edit_file(a:cmd, VimwikiGet('path').a:link.VimwikiGet('ext'))
     endif
     
     if exists('vimwiki_prev_link')
@@ -146,7 +145,7 @@ function! vimwiki#generate_links()"{{{
 endfunction " }}}
 
 function! vimwiki#goto(key) "{{{
-    call s:edit_file(':e',
+    call vimwiki#edit_file(':e',
           \ VimwikiGet('path').
           \ a:key.
           \ VimwikiGet('ext'))
@@ -213,10 +212,15 @@ function! s:is_wiki_word(str) "{{{
 endfunction
 " }}}
 
-function! s:edit_file(command, filename) "{{{
+function! vimwiki#edit_file(command, filename) "{{{
   let fname = escape(a:filename, '% ')
   call vimwiki#mkdir(fnamemodify(a:filename, ":p:h"))
-  execute a:command.' '.fname
+  try
+    execute a:command.' '.fname
+  catch /E37/ " catch 'No write since last change' error
+    execute ':split '.fname
+  catch /E325/ " catch 'ATTENTION' error (:h E325)
+  endtry
 endfunction
 " }}}
 
@@ -405,7 +409,7 @@ function! s:get_wiki_buffers() "{{{
 endfunction " }}}
 
 function! s:open_wiki_buffer(item) "{{{
-  call s:edit_file('e', a:item[0])
+  call vimwiki#edit_file(':e', a:item[0])
   if !empty(a:item[1])
     call setbufvar(a:item[0], "vimwiki_prev_link", a:item[1])
   endif
@@ -685,18 +689,8 @@ endfunction " }}}
 
 function! vimwiki#goto_index(index) "{{{
   call vimwiki#select(a:index)
-  call vimwiki#mkdir(VimwikiGet('path'))
-
-  try
-    execute ':e '.fnameescape(
-          \ VimwikiGet('path').VimwikiGet('index').VimwikiGet('ext'))
-  catch /E37/ " catch 'No write since last change' error
-    execute ':split '.
-          \ VimwikiGet('path').
-          \ VimwikiGet('index').
-          \ VimwikiGet('ext')
-  catch /E325/ " catch 'ATTENTION' error (:h E325)
-  endtry
+  call vimwiki#edit_file('e',
+        \ VimwikiGet('path').VimwikiGet('index').VimwikiGet('ext'))
 endfunction "}}}
 
 function! vimwiki#delete_link() "{{{

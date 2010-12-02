@@ -9,7 +9,7 @@
               |___|  |___| |_|   |_||__| |__||___| |___| |_||___|            ~
 
 
-                               Version: 1.1.1
+                               Version: 1.2dev
 
 ==============================================================================
 CONTENTS                                                    *vimwiki-contents*
@@ -131,7 +131,22 @@ See also |:VimwikiTabIndex|
         To remap: >
         :map <Leader>wq <Plug>VimwikiUISelect
 <
-See also|:VimwikiUISelect|
+See also |:VimwikiUISelect|
+
+
+[count]<Leader>wi or <Plug>VimwikiDiaryIndex
+        Open diary index file of the [count]'s wiki.
+
+        <Leader>wi opens diary index file of the first wiki from
+        |g:vimwiki_list|.
+        1<Leader>wi the same as above.
+        2<Leader>wi opens diary index file of the second wiki from
+        |g:vimwiki_list|.
+        etc.
+        To remap: >
+        :map <Leader>i <Plug>VimwikiDiaryIndex
+
+See also |:VimwikiDiaryIndex|
 
 
 [count]<Leader>w<Leader>w or <Plug>VimwikiMakeDiaryNote
@@ -149,7 +164,7 @@ See also|:VimwikiUISelect|
         To remap: >
         :map <Leader>d <Plug>VimwikiMakeDiaryNote
 <
-See also|:VimwikiMakeDiaryNote|
+See also |:VimwikiMakeDiaryNote|
 
 
 [count]<Leader>w<Leader>t or <Plug>VimwikiTabMakeDiaryNote
@@ -167,7 +182,7 @@ See also|:VimwikiMakeDiaryNote|
         To remap: >
         :map <Leader>dt <Plug>VimwikiTabMakeDiaryNote
 <
-See also|:VimwikiTabMakeDiaryNote|
+See also |:VimwikiTabMakeDiaryNote|
 
 
 ------------------------------------------------------------------------------
@@ -324,6 +339,9 @@ ic                      Inner column in a table.
 
 *:VimwikiUISelect*
     Open index file of the selected wiki.
+
+*:VimwikiDiaryIndex*
+    Open diary index file of the current wiki.
 
 *:VimwikiMakeDiaryNote*
     Open diary wiki-file for today of the current wiki.
@@ -1689,6 +1707,7 @@ Maxim Kim.
 14. Changelog                                              *vimwiki-changelog*
 
 dev~
+    * Issue 117: |VimwikiDiaryIndex| command that opens diary index wiki page.
     * Issue 138: Added possibility to remap table-column move bindings. See
       |:VimwikiTableMoveColumnLeft| and |:VimwikiTableMoveColumnRight|
       commands. For remap instructions see |vimwiki_<A-Left>|

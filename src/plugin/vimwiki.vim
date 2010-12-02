@@ -346,6 +346,8 @@ command! -count VimwikiIndex
 command! -count VimwikiTabIndex tabedit <bar>
       \ call vimwiki#goto_index(v:count1)
 
+command! -count VimwikiDiaryIndex
+      \ call vimwiki_diary#goto_index(v:count1)
 command! -count VimwikiMakeDiaryNote
       \ call vimwiki_diary#make_note(v:count1)
 command! -count VimwikiTabMakeDiaryNote tabedit <bar>
@@ -367,6 +369,11 @@ if !hasmapto('<Plug>VimwikiUISelect')
   map <silent><unique> <Leader>ws <Plug>VimwikiUISelect
 endif
 noremap <unique><script> <Plug>VimwikiUISelect :VimwikiUISelect<CR>
+
+if !hasmapto('<Plug>VimwikiDiaryIndex')
+  map <silent><unique> <Leader>wi <Plug>VimwikiDiaryIndex
+endif
+noremap <unique><script> <Plug>VimwikiDiaryIndex :VimwikiDiaryIndex<CR>
 
 if !hasmapto('<Plug>VimwikiMakeDiaryNote')
   map <silent><unique> <Leader>w<Leader>w <Plug>VimwikiMakeDiaryNote
