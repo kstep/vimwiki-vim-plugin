@@ -174,6 +174,11 @@ endfunction "}}}
 function! s:delete_html_files(path) "{{{
   let htmlfiles = split(glob(a:path.'**/*.html'), '\n')
   for fname in htmlfiles
+    " ignore user html files, e.g. search.html,404.html
+    if stridx(g:vimwiki_user_htmls, fnamemodify(fname, ":t")) >= 0
+      continue
+    endif
+
     try
       call delete(fname)
     catch

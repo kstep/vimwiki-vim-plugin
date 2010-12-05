@@ -1660,6 +1660,21 @@ Default: 'b,i,s,u,sub,sup,kbd,br,hr'
 
 
 ------------------------------------------------------------------------------
+*g:vimwiki_user_htmls*
+
+Comma separated list of html files that have no corresponding wiki files and
+should not be deleted after |:VimwikiAll2HTML|.
+
+Default: ''
+
+Example:
+Consider you have 404.html and search.html in your vimwiki 'path_html'.
+With: >
+    let g:vimwiki_user_htmls = '404.html,search.html'
+they would not be deleted after |:VimwikiAll2HTML|.
+
+
+------------------------------------------------------------------------------
 *g:vimwiki_conceallevel*
 
 In vim73 |conceallevel| is local to window, thus if you open viwmiki buffer in
@@ -1730,6 +1745,8 @@ dev~
     * Issue 151: Use location list instead of quickfix list for :VimwikiSearch
       command result. Use :lopen instead of :copen, :lnext instead of :cnext
       etc.
+    * Issue 152: Add the list of html files that would not be deleted after
+      |:VimwikiAll2HTML|.
 
 
 1.1.1~
