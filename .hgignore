@@ -6,5 +6,6 @@
 ^sandbox/html$
 ^src/doc/tags$
 ^tests/wiki$
+^tests/wiki_html$
 ^tests/expected$
 ^tests/actual$
