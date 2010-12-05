@@ -218,10 +218,10 @@ command! -buffer -range VimwikiToggleListItem call vimwiki_lst#ToggleListItem(<l
 
 command! -buffer VimwikiGenerateLinks call vimwiki#generate_links()
 
-exe 'command! -buffer -nargs=* VimwikiSearch vimgrep <args> '.
+exe 'command! -buffer -nargs=* VimwikiSearch lvimgrep <args> '.
       \ escape(VimwikiGet('path').'**/*'.VimwikiGet('ext'), ' ')
 
-exe 'command! -buffer -nargs=* VWS vimgrep <args> '.
+exe 'command! -buffer -nargs=* VWS lvimgrep <args> '.
       \ escape(VimwikiGet('path').'**/*'.VimwikiGet('ext'), ' ')
 
 command! -buffer -nargs=1 VimwikiGoto call vimwiki#goto("<args>")

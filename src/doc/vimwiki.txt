@@ -410,8 +410,9 @@ ic                      Inner column in a table.
 *:VimwikiSearch* /pattern/
 *:VWS* /pattern/
     Search for /pattern/ in all files of current wiki.
-    To display next match use |:cnext| command.
-    To display previous match use |:cprevious| command.
+    To display all matches use |:lopen| command.
+    To display next match use |:lnext| command.
+    To display previous match use |:lprevious| command.
 
 
 *:VimwikiTable*
@@ -1726,6 +1727,10 @@ dev~
       highlighted when open wiki files. 
     * Issue 146: Filetype difficulty with ".txt" as a vimwiki extension.
     * Issue 148: There are no mailto links.
+    * Issue 151: Use location list instead of quickfix list for :VimwikiSearch
+      command result. Use :lopen instead of :copen, :lnext instead of :cnext
+      etc.
+
 
 1.1.1~
     * FIX: Issue 122: Dot character in vimwiki's directory path isn't escaped.
