@@ -179,6 +179,13 @@ function! s:delete_html_files(path) "{{{
       continue
     endif
 
+    " delete if there is no corresponding wiki file
+    let wikifile = VimwikiGet("path").
+          \fnamemodify(fname, ":t:r").VimwikiGet("ext")
+    if filereadable(wikifile)
+      continue
+    endif
+
     try
       call delete(fname)
     catch
@@ -1298,7 +1305,7 @@ function! vimwiki_html#WikiAll2HTML(path) "{{{
   let path = expand(a:path)
   call vimwiki#mkdir(path)
 
-  echomsg 'Deleting old html files...'
+  echomsg 'Deleting non-wiki html files...'
   call s:delete_html_files(path)
 
   echomsg 'Converting wiki to html files...'

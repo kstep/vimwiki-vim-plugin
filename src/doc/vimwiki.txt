@@ -1747,6 +1747,8 @@ dev~
       etc.
     * Issue 152: Add the list of html files that would not be deleted after
       |:VimwikiAll2HTML|.
+    * Issue 153: Delete html files that has no corresponding wiki ones with
+      |:VimwikiAll2HTML|.
 
 
 1.1.1~
