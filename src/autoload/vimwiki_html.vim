@@ -337,11 +337,24 @@ function! s:process_title(placeholders, default_title) "{{{
 endfunction "}}}
 
 function! s:is_html_uptodate(wikifile) "{{{
+  let tpl_time = -1
+
+  let tpl_file = expand(VimwikiGet('html_header'))
+  if tpl_file != ''
+    let tpl_time = getftime(tpl_file)
+  endif
+
+  let tpl_file = expand(VimwikiGet('html_footer'))
+  if tpl_file != ''
+    let tpl_time = max([getftime(tpl_file), tpl_time])
+  endif
+
   let wikifile = fnamemodify(a:wikifile, ":p")
   let subdir = vimwiki#subdir(VimwikiGet('path'), wikifile)
   let htmlfile = expand(VimwikiGet('path_html').subdir.
         \fnamemodify(wikifile, ":t:r").".html")
-  if getftime(wikifile) <= getftime(htmlfile)
+
+  if getftime(wikifile) <= getftime(htmlfile) && tpl_time <= getftime(htmlfile)
     return 1
   endif
   return 0
