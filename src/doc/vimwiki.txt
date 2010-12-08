@@ -1723,6 +1723,8 @@ Maxim Kim.
 14. Changelog                                              *vimwiki-changelog*
 
 dev~
+    * Issue 72: Do not convent again for unchanged file. |:VimwikiAll2HTML|
+      converts only changed wiki files.
     * Issue 117: |VimwikiDiaryIndex| command that opens diary index wiki page.
     * Issue 138: Added possibility to remap table-column move bindings. See
       |:VimwikiTableMoveColumnLeft| and |:VimwikiTableMoveColumnRight|

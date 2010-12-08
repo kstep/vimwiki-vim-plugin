@@ -180,7 +180,8 @@ function! s:delete_html_files(path) "{{{
     endif
 
     " delete if there is no corresponding wiki file
-    let wikifile = VimwikiGet("path").
+    let subdir = vimwiki#subdir(VimwikiGet('path_html'), fname)
+    let wikifile = VimwikiGet("path").subdir.
           \fnamemodify(fname, ":t:r").VimwikiGet("ext")
     if filereadable(wikifile)
       continue
@@ -333,6 +334,17 @@ function! s:process_title(placeholders, default_title) "{{{
     endfor
   endif
   return a:default_title
+endfunction "}}}
+
+function! s:is_html_uptodate(wikifile) "{{{
+  let wikifile = fnamemodify(a:wikifile, ":p")
+  let subdir = vimwiki#subdir(VimwikiGet('path'), wikifile)
+  let htmlfile = expand(VimwikiGet('path_html').subdir.
+        \fnamemodify(wikifile, ":t:r").".html")
+  if getftime(wikifile) <= getftime(htmlfile)
+    return 1
+  endif
+  return 0
 endfunction "}}}
 
 "}}}
@@ -1262,30 +1274,32 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
   endfor
 
 
-  if !nohtml
-    let toc = s:get_html_toc(state.toc)
-    call s:process_toc(ldest, placeholders, toc)
-    call s:remove_blank_lines(ldest)
-
-    "" process end of file
-    "" close opened tags if any
-    let lines = []
-    call s:close_tag_quote(state.quote, lines)
-    call s:close_tag_para(state.para, lines)
-    call s:close_tag_pre(state.pre, lines)
-    call s:close_tag_list(state.lists, lines)
-    call s:close_tag_def_list(state.deflist, lines)
-    call s:close_tag_table(state.table, lines)
-    call extend(ldest, lines)
-
-    let title = s:process_title(placeholders, fnamemodify(a:wikifile, ":t:r"))
-    call extend(ldest, s:get_html_header(title, subdir, &fileencoding), 0)
-    call extend(ldest, s:get_html_footer())
-
-    "" make html file.
-    let wwFileNameOnly = fnamemodify(wikifile, ":t:r")
-    call writefile(ldest, path.wwFileNameOnly.'.html')
+  if nohtml
+    return
   endif
+
+  let toc = s:get_html_toc(state.toc)
+  call s:process_toc(ldest, placeholders, toc)
+  call s:remove_blank_lines(ldest)
+
+  "" process end of file
+  "" close opened tags if any
+  let lines = []
+  call s:close_tag_quote(state.quote, lines)
+  call s:close_tag_para(state.para, lines)
+  call s:close_tag_pre(state.pre, lines)
+  call s:close_tag_list(state.lists, lines)
+  call s:close_tag_def_list(state.deflist, lines)
+  call s:close_tag_table(state.table, lines)
+  call extend(ldest, lines)
+
+  let title = s:process_title(placeholders, fnamemodify(a:wikifile, ":t:r"))
+  call extend(ldest, s:get_html_header(title, subdir, &fileencoding), 0)
+  call extend(ldest, s:get_html_footer())
+
+  "" make html file.
+  let wwFileNameOnly = fnamemodify(wikifile, ":t:r")
+  call writefile(ldest, path.wwFileNameOnly.'.html')
 endfunction "}}}
 
 function! vimwiki_html#WikiAll2HTML(path) "{{{
@@ -1314,8 +1328,12 @@ function! vimwiki_html#WikiAll2HTML(path) "{{{
 
   let wikifiles = split(glob(VimwikiGet('path').'**/*'.VimwikiGet('ext')), '\n')
   for wikifile in wikifiles
-    echomsg 'Processing '.wikifile
-    call vimwiki_html#Wiki2HTML(path, wikifile)
+    if !s:is_html_uptodate(wikifile)
+      echomsg 'Processing '.wikifile
+      call vimwiki_html#Wiki2HTML(path, wikifile)
+    else
+      echomsg 'Skipping '.wikifile
+    endif
   endfor
   call s:create_default_CSS(path)
   echomsg 'Done!'
