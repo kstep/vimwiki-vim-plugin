@@ -14,9 +14,8 @@ let g:loaded_vimwiki_html_auto = 1
 "}}}
 
 " SCRIPT VARS "{{{
-" Warn if html header or html footer do not exist only once.
-let s:warn_html_header = 0
-let s:warn_html_footer = 0
+" Warn if html template do not exist only once.
+let s:warn_html_template = 0
 "}}}
 
 " UTILITY "{{{
@@ -94,19 +93,16 @@ function! s:create_default_CSS(path) " {{{
   endif
 endfunction "}}}
 
-function! s:get_html_header(title, subdir, charset) "{{{
+function! s:get_html_template(subdir, wikifile) "{{{
   let lines=[]
 
-  if VimwikiGet('html_header') != "" && !s:warn_html_header
+  if VimwikiGet('html_template') != "" && !s:warn_html_template
     try
-      let lines = readfile(expand(VimwikiGet('html_header')))
-      call map(lines, 'substitute(v:val, "%title%", "'. a:title .'", "g")')
-      call map(lines, 'substitute(v:val, "%root_path%", "'.
-            \ s:root_path(a:subdir) .'", "g")')
+      let lines = readfile(expand(VimwikiGet('html_template')))
       return lines
     catch /E484/
-      let s:warn_html_header = 1
-      echomsg 'vimwiki: Header template '.VimwikiGet('html_header').
+      let s:warn_html_template = 1
+      echomsg 'vimwiki: Html template '.VimwikiGet('html_template').
             \ ' does not exist!'
     endtry
   endif
@@ -118,41 +114,20 @@ function! s:get_html_header(title, subdir, charset) "{{{
     let css_name = s:root_path(a:subdir).css_name
   endif
 
-  " if no VimwikiGet('html_header') set up or error while reading template
-  " file -- use default header.
+  " if no VimwikiGet('html_template') set up or error while reading template
+  " file -- use default one.
   call add(lines, '<html>')
   call add(lines, '<head>')
   call add(lines, '<link rel="Stylesheet" type="text/css" href="'.
         \ css_name.'" />')
-  call add(lines, '<title>'.a:title.'</title>')
+  call add(lines, '<title>'.fnamemodify(a:wikifile, ":t:r").'</title>')
   call add(lines, '<meta http-equiv="Content-Type" content="text/html;'.
-        \ ' charset='.a:charset.'" />')
+        \ ' charset='.&fileencoding.'" />')
   call add(lines, '</head>')
   call add(lines, '<body>')
-
-  return lines
-endfunction "}}}
-
-function! s:get_html_footer() "{{{
-  let lines=[]
-
-  if VimwikiGet('html_footer') != "" && !s:warn_html_footer
-    try
-      let lines = readfile(expand(VimwikiGet('html_footer')))
-      return lines
-    catch /E484/
-      let s:warn_html_footer = 1
-      echomsg 'vimwiki: Footer template '.VimwikiGet('html_footer').
-            \ ' does not exist!'
-    endtry
-  endif
-
-  " if no VimwikiGet('html_footer') set up or error while reading template
-  " file -- use default footer.
-  call add(lines, "")
+  call add(lines, '%content%')
   call add(lines, '</body>')
   call add(lines, '</html>')
-
   return lines
 endfunction "}}}
 
@@ -339,14 +314,9 @@ endfunction "}}}
 function! s:is_html_uptodate(wikifile) "{{{
   let tpl_time = -1
 
-  let tpl_file = expand(VimwikiGet('html_header'))
+  let tpl_file = expand(VimwikiGet('html_template'))
   if tpl_file != ''
     let tpl_time = getftime(tpl_file)
-  endif
-
-  let tpl_file = expand(VimwikiGet('html_footer'))
-  if tpl_file != ''
-    let tpl_time = max([getftime(tpl_file), tpl_time])
   endif
 
   let wikifile = fnamemodify(a:wikifile, ":p")
@@ -360,6 +330,27 @@ function! s:is_html_uptodate(wikifile) "{{{
   return 0
 endfunction "}}}
 
+function! s:html_insert_contents(html_lines, content) "{{{
+  let lines = []
+  for line in a:html_lines
+    if line =~ '%content%'
+      let parts = split(line, '%content%', 1)
+      if empty(parts)
+        call extend(lines, a:content)
+      else
+        for idx in range(len(parts))
+          call add(lines, parts[idx])
+          if idx < len(parts) - 1
+            call extend(lines, a:content)
+          endif
+        endfor
+      endif
+    else
+      call add(lines, line)
+    endif
+  endfor
+  return lines
+endfunction "}}}
 "}}}
 
 " INLINE TAGS "{{{
@@ -1307,12 +1298,20 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
   call extend(ldest, lines)
 
   let title = s:process_title(placeholders, fnamemodify(a:wikifile, ":t:r"))
-  call extend(ldest, s:get_html_header(title, subdir, &fileencoding), 0)
-  call extend(ldest, s:get_html_footer())
+
+  let html_lines = s:get_html_template(subdir, a:wikifile)
+
+  " processing template variables (refactor to a function)
+  call map(html_lines, 'substitute(v:val, "%title%", "'. title .'", "g")')
+  call map(html_lines, 'substitute(v:val, "%root_path%", "'.
+        \ s:root_path(subdir) .'", "g")')
+  let html_lines = s:html_insert_contents(html_lines, ldest) " %contents%
+  
+  
 
   "" make html file.
   let wwFileNameOnly = fnamemodify(wikifile, ":t:r")
-  call writefile(ldest, path.wwFileNameOnly.'.html')
+  call writefile(html_lines, path.wwFileNameOnly.'.html')
 endfunction "}}}
 
 function! vimwiki_html#WikiAll2HTML(path) "{{{

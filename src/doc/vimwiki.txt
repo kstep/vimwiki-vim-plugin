@@ -1035,7 +1035,7 @@ You can also create wikis as a separate |Dictionary|s. >
 
     let wiki_1 = {}
     let wiki_1.path = '~/my_docs/'
-    let wiki_1.html_header = '~/public_html/header.tpl'
+    let wiki_1.html_template = '~/public_html/template.tpl'
     let wiki_1.nested_syntaxes = {'python': 'python', 'c++': 'cpp'}
 
     let wiki_2 = {}
@@ -1124,15 +1124,15 @@ To use MediaWiki's wiki markup: >
   let g:vimwiki_list = [{'path': '~/my_site/', 'syntax': 'media'}]
 <
 
-*vimwiki-option-html_header*
+*vimwiki-option-html_template*
 ------------------------------------------------------------------------------
 Key             Default value~
-html_header
+html_template
 
 Description~
 Set up file name for html header template: >
   let g:vimwiki_list = [{'path': '~/my_site/',
-          \ 'html_header': '~/public_html/header.tpl'}]
+          \ 'html_template': '~/public_html/template.tpl'}]
 
 This header.tpl could look like: >
     <html>
@@ -1142,30 +1142,21 @@ This header.tpl could look like: >
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
     <body>
-        <div class="contents">
+        <div class="content">
+        %content%
+        </div>
+    </body>
+    </html>
 
 where 
   %title% is replaced by a wiki page name or by a |vimwiki-title|
   %root_path% is replaced by a count of ../ for pages buried in subdirs:
     if you have wikilink [[dir1/dir2/dir3/my page in a subdir]] then
     %root_path% is replaced by '../../../'.
+  
+  %content% is replaced by a wiki file content.
 
 
-*vimwiki-option-html_footer*
-------------------------------------------------------------------------------
-Key             Default value~
-html_footer
-
-Description~
-Set up file name for html footer template: >
-  let g:vimwiki_list = [{'path': '~/my_site/',
-          \ 'html_footer': '~/public_html/footer.tpl'}]
-
-This footer.tpl could look like: >
-        </div>
-    </body>
-    </html>
-<
 
 *vimwiki-option-css_name*
 ------------------------------------------------------------------------------
@@ -1726,6 +1717,8 @@ dev~
     * Issue 72: Do not convent again for unchanged file. |:VimwikiAll2HTML|
       converts only changed wiki files.
     * Issue 117: |VimwikiDiaryIndex| command that opens diary index wiki page.
+    * Issue 120: Links in headers are not highlighted in vimwiki but are
+      highlighted in html.
     * Issue 138: Added possibility to remap table-column move bindings. See
       |:VimwikiTableMoveColumnLeft| and |:VimwikiTableMoveColumnRight|
       commands. For remap instructions see |vimwiki_<A-Left>|
@@ -1751,6 +1744,9 @@ dev~
       |:VimwikiAll2HTML|.
     * Issue 153: Delete html files that has no corresponding wiki ones with
       |:VimwikiAll2HTML|.
+    * Issue 157: Make one single template instead of header and footer. See
+      |vimwiki-option-html_template| -- html_header and html_footer are no
+      longer exist.
 
 
 1.1.1~
