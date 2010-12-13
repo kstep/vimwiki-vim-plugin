@@ -1717,6 +1717,8 @@ dev~
     * Issue 72: Do not convent again for unchanged file. |:VimwikiAll2HTML|
       converts only changed wiki files.
     * Issue 117: |VimwikiDiaryIndex| command that opens diary index wiki page.
+    * Issue 119: HTML comments are removed from preformatted text blocks but
+      should not.
     * Issue 120: Links in headers are not highlighted in vimwiki but are
       highlighted in html.
     * Issue 138: Added possibility to remap table-column move bindings. See

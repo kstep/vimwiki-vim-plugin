@@ -171,40 +171,148 @@ function! s:delete_html_files(path) "{{{
 endfunction "}}}
 
 function! s:remove_comments(lines) "{{{
+
+  " Kind of a state machine
+  function! s:strip_comment(line, state) "{{{
+    let state = a:state
+    let line = ''
+    let bufline = ''
+    let idx = 0
+    while idx < len(a:line)
+      if state == 'normal'
+        if a:line[idx] == '<'
+          let state = '<'
+        elseif a:line[idx] == '{'
+          let state = '{'
+        elseif a:line[idx] == '`'
+          let state = 'code'
+        endif
+        let bufline = a:line[idx]
+      elseif state == '<'
+        if a:line[idx] == '!'
+          let state = '<!'
+          let bufline = '<!'
+        elseif a:line[idx] == '{'
+          let state = '{'
+          let bufline = '{'
+        elseif a:line[idx] == '`'
+          let state = 'code'
+        else
+          let state = 'normal'
+        endif
+      elseif state == '<!'
+        if a:line[idx] == '-'
+          let state = '<!-'
+          let bufline = '<!-'
+        elseif a:line[idx] == '{'
+          let state = '{'
+          let bufline = '{'
+        elseif a:line[idx] == '`'
+          let state = 'code'
+        else
+          let state = 'normal'
+        endif
+      elseif state == '<!-'
+        if a:line[idx] == '-'
+          let state = 'comment'
+          let bufline = '<!--'
+        elseif a:line[idx] == '{'
+          let state = '{'
+          let bufline = '{'
+        elseif a:line[idx] == '`'
+          let state = 'code'
+        else
+          let state = 'normal'
+        endif
+      elseif state == '{'
+        if a:line[idx] == '{'
+          let state = '{{'
+          let bufline = '{{'
+        elseif a:line[idx] == '<'
+          let state = '<'
+          let bufline = '<'
+        elseif a:line[idx] == '`'
+          let state = 'code'
+        else
+          let state = 'normal'
+        endif
+      elseif state == '{{'
+        if a:line[idx] == '{'
+          let state = 'pre'
+          let bufline = '{{{'
+        elseif a:line[idx] == '<'
+          let state = '<'
+          let bufline = '<'
+        elseif a:line[idx] == '`'
+          let state = 'code'
+        else
+          let state = 'normal'
+        endif
+      elseif state == 'comment'
+        if a:line[idx] == '-'
+          let state = '-'
+          let bufline = '-'
+        endif
+      elseif state == '-'
+        if a:line[idx] == '-'
+          let state = '--'
+          let bufline = '--'
+        else
+          let state = 'comment'
+        endif
+      elseif state == '--'
+        if a:line[idx] == '>'
+          let state = 'normal'
+          let bufline = ''
+        else
+          let state = 'comment'
+        endif
+      elseif state == 'pre'
+        if a:line[idx] == '}'
+          let state = '}'
+        endif
+        let bufline .= a:line[idx]
+      elseif state == '}'
+        if a:line[idx] == '}'
+          let state = '}}'
+        endif
+        let bufline .= a:line[idx]
+      elseif state == '}}'
+        if a:line[idx] == '}'
+          let state = 'normal'
+        endif
+        let bufline .= a:line[idx]
+      elseif state == 'code'
+        if a:line[idx] == '`'
+          let state = 'normal'
+        endif
+        let bufline .= a:line[idx]
+      endif
+
+      if state == 'normal' || state == 'pre' || state == 'code'
+        let line = line . bufline
+        let bufline = ''
+      endif
+
+      let idx += 1
+    endwhile
+    return [line, state]
+  endfunction "}}}
+
   let res = []
-  let multiline_comment = 0
+  let state = 'normal'
 
   let idx = 0
   while idx < len(a:lines)
     let line = a:lines[idx]
     let idx += 1
 
-    if multiline_comment
-      let col = matchend(line, '-->',)
-      if col != -1
-        let multiline_comment = 0
-        let line = strpart(line, col)
-      else
-        continue
-      endif
+    let [strip_line, state] = s:strip_comment(line, state)
+    if !len(strip_line) && len(line)
+      continue
     endif
 
-    if !multiline_comment && line =~ '<!--.*-->'
-      let line = substitute(line, '<!--.*-->', '', 'g')
-      if line =~ '^\s*$'
-        continue
-      endif
-    endif
-
-    if !multiline_comment
-      let col = match(line, '<!--',)
-      if col != -1
-        let multiline_comment = 1
-        let line = strpart(line, 1, col - 1)
-      endif
-    endif
-
-    call add(res, line)
+    call add(res, strip_line)
   endwhile
   return res
 endfunction "}}}
