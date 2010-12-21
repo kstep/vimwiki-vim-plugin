@@ -172,7 +172,7 @@ endfunction "}}}
 
 function! s:remove_comments(lines) "{{{
 
-  " Kind of a state machine
+  " Kind of a Finite State Machine
   function! s:strip_comment(line, state) "{{{
     let state = a:state
     let line = ''
@@ -187,76 +187,72 @@ function! s:remove_comments(lines) "{{{
         elseif a:line[idx] == '`'
           let state = 'code'
         endif
-        let bufline = a:line[idx]
+        let bufline .= a:line[idx]
       elseif state == '<'
         if a:line[idx] == '!'
           let state = '<!'
-          let bufline = '<!'
         elseif a:line[idx] == '{'
           let state = '{'
-          let bufline = '{'
         elseif a:line[idx] == '`'
           let state = 'code'
         else
           let state = 'normal'
         endif
+        let bufline .= a:line[idx]
       elseif state == '<!'
         if a:line[idx] == '-'
           let state = '<!-'
-          let bufline = '<!-'
         elseif a:line[idx] == '{'
           let state = '{'
-          let bufline = '{'
         elseif a:line[idx] == '`'
           let state = 'code'
         else
           let state = 'normal'
         endif
+        let bufline .= a:line[idx]
       elseif state == '<!-'
         if a:line[idx] == '-'
           let state = 'comment'
-          let bufline = '<!--'
+          let bufline = ''
         elseif a:line[idx] == '{'
           let state = '{'
-          let bufline = '{'
+          let bufline .= a:line[idx]
         elseif a:line[idx] == '`'
           let state = 'code'
+          let bufline .= a:line[idx]
         else
           let state = 'normal'
+          let bufline .= a:line[idx]
         endif
       elseif state == '{'
         if a:line[idx] == '{'
           let state = '{{'
-          let bufline = '{{'
         elseif a:line[idx] == '<'
           let state = '<'
-          let bufline = '<'
         elseif a:line[idx] == '`'
           let state = 'code'
         else
           let state = 'normal'
         endif
+        let bufline .= a:line[idx]
       elseif state == '{{'
         if a:line[idx] == '{'
           let state = 'pre'
-          let bufline = '{{{'
         elseif a:line[idx] == '<'
           let state = '<'
-          let bufline = '<'
         elseif a:line[idx] == '`'
           let state = 'code'
         else
           let state = 'normal'
         endif
+        let bufline .= a:line[idx]
       elseif state == 'comment'
         if a:line[idx] == '-'
           let state = '-'
-          let bufline = '-'
         endif
       elseif state == '-'
         if a:line[idx] == '-'
           let state = '--'
-          let bufline = '--'
         else
           let state = 'comment'
         endif
