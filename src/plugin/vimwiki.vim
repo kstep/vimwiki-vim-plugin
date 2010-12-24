@@ -196,7 +196,11 @@ let s:vimwiki_defaults.index = 'index'
 let s:vimwiki_defaults.ext = '.wiki'
 let s:vimwiki_defaults.maxhi = 1
 let s:vimwiki_defaults.syntax = 'default'
-let s:vimwiki_defaults.html_template = ''
+
+let s:vimwiki_defaults.template_path = '~/vimwiki/templates/'
+let s:vimwiki_defaults.template_default = 'default'
+let s:vimwiki_defaults.template_ext = '.html'
+
 let s:vimwiki_defaults.nested_syntaxes = {}
 let s:vimwiki_defaults.auto_export = 0
 " is wiki temporary -- was added to g:vimwiki_list by opening arbitrary wiki

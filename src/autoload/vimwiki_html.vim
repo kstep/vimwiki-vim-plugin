@@ -13,11 +13,6 @@ endif
 let g:loaded_vimwiki_html_auto = 1
 "}}}
 
-" SCRIPT VARS "{{{
-" Warn if html template do not exist only once.
-let s:warn_html_template = 0
-"}}}
-
 " UTILITY "{{{
 function! s:root_path(subdir) "{{{
   return repeat('../', len(split(a:subdir, '[/\\]')))
@@ -93,16 +88,34 @@ function! s:create_default_CSS(path) " {{{
   endif
 endfunction "}}}
 
-function! s:get_html_template(subdir, wikifile) "{{{
+function! s:template_full_name(name) "{{{
+  if a:name == ''
+    let name = VimwikiGet('template_default')
+  else
+    let name = a:name
+  endif
+
+  let fname = expand(VimwikiGet('template_path').
+        \name.
+        \VimwikiGet('template_ext'))
+
+  if filereadable(fname)
+    return fname
+  else
+    return ''
+  endif
+endfunction "}}}
+
+function! s:get_html_template(subdir, wikifile, template) "{{{
   let lines=[]
 
-  if VimwikiGet('html_template') != "" && !s:warn_html_template
+  let template_name = s:template_full_name(a:template)
+  if template_name != ''
     try
-      let lines = readfile(expand(VimwikiGet('html_template')))
+      let lines = readfile(template_name)
       return lines
     catch /E484/
-      let s:warn_html_template = 1
-      echomsg 'vimwiki: Html template '.VimwikiGet('html_template').
+      echomsg 'vimwiki: html template '.template_name.
             \ ' does not exist!'
     endtry
   endif
@@ -418,7 +431,7 @@ endfunction "}}}
 function! s:is_html_uptodate(wikifile) "{{{
   let tpl_time = -1
 
-  let tpl_file = expand(VimwikiGet('html_template'))
+  let tpl_file = s:template_full_name('')
   if tpl_file != ''
     let tpl_time = getftime(tpl_file)
   endif
@@ -1161,6 +1174,16 @@ function! s:parse_line(line, state) " {{{
     endif
   endif
 
+  " html template -- placeholder "{{{
+  if !processed
+    if line =~ '^\s*%template'
+      let processed = 1
+      let param = matchstr(line, '^\s*%template\s\zs.*')
+      let state.placeholder = ['template', param]
+    endif
+  endif
+  "}}}
+
   " toc -- placeholder "{{{
   if !processed
     if line =~ '^\s*%toc'
@@ -1342,6 +1365,9 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
   " nohtml placeholder -- to skip html generation.
   let nohtml = 0
 
+  " template placeholder
+  let template_name = ''
+
   " for table of contents placeholders.
   let placeholders = []
 
@@ -1372,10 +1398,12 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
       if state.placeholder[0] == 'nohtml'
         let nohtml = 1
         break
-      else
+      elseif state.placeholder[0] == 'toc'
         call add(placeholders, [state.placeholder, len(ldest), len(placeholders)])
-        let state.placeholder = []
+      elseif state.placeholder[0] == 'template'
+        let template_name = state.placeholder[1]
       endif
+      let state.placeholder = []
     endif
 
     call extend(ldest, lines)
@@ -1403,7 +1431,7 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
 
   let title = s:process_title(placeholders, fnamemodify(a:wikifile, ":t:r"))
 
-  let html_lines = s:get_html_template(subdir, a:wikifile)
+  let html_lines = s:get_html_template(subdir, a:wikifile, template_name)
 
   " processing template variables (refactor to a function)
   call map(html_lines, 'substitute(v:val, "%title%", "'. title .'", "g")')

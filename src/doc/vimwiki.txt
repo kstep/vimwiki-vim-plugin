@@ -860,6 +860,18 @@ If you do not want a wiki page to be converted to html, place:
 into it.
 
 
+------------------------------------------------------------------------------
+%template                                                   *vimwiki-template*
+
+Apply concrete html template:
+
+%template name
+
+into it.
+
+See |vimwiki-option-template_path| for details.
+
+
 ==============================================================================
 8. Todo lists                                             *vimwiki-todo-lists*
 
@@ -1124,17 +1136,26 @@ To use MediaWiki's wiki markup: >
   let g:vimwiki_list = [{'path': '~/my_site/', 'syntax': 'media'}]
 <
 
-*vimwiki-option-html_template*
+*vimwiki-option-template_path*
 ------------------------------------------------------------------------------
-Key             Default value~
-html_template
+Key                 Default value~
+template_path       ~/vimwiki/templates/
 
 Description~
-Set up file name for html header template: >
+Set up path for html templates: >
   let g:vimwiki_list = [{'path': '~/my_site/',
-          \ 'html_template': '~/public_html/template.tpl'}]
+          \ 'template_path': '~/public_html/templates/',
+          \ 'template_default': 'def_template',
+          \ 'template_ext': '.html'}]
 
-This header.tpl could look like: >
+There could be bunch of templates: >
+    def_template.html
+    index.html
+    bio.html
+    person.html
+etc.
+
+Each template could look like: >
     <html>
     <head>
         <link rel="Stylesheet" type="text/css" href="%root_path%style.css" />
@@ -1156,6 +1177,35 @@ where
   
   %content% is replaced by a wiki file content.
 
+
+Default template would be applied to all of your wiki pages unless you add
+specific one. Consider you have wiki page named 'Maxim.wiki' and you want
+apply 'person.html' template to it. Just add: >
+ %template person
+to that page.
+
+
+*vimwiki-option-template_default*
+------------------------------------------------------------------------------
+Key                 Default value~
+template_default    default
+template_ext        .html
+
+Description~
+Set up default template name (without extension).
+
+See |vimwiki-option-template_path| for details.
+
+
+*vimwiki-option-template_default*
+------------------------------------------------------------------------------
+Key                 Default value~
+template_ext        .html
+
+Description~
+Set up template filename extension.
+
+See |vimwiki-option-template_path| for details.
 
 
 *vimwiki-option-css_name*
@@ -1746,9 +1796,9 @@ dev~
       |:VimwikiAll2HTML|.
     * Issue 153: Delete html files that has no corresponding wiki ones with
       |:VimwikiAll2HTML|.
-    * Issue 157: Make one single template instead of header and footer. See
-      |vimwiki-option-html_template| -- html_header and html_footer are no
-      longer exist.
+    * Issue 156: Add multiple html templates. See
+      |vimwiki-option-template_path|. Options html_header and html_footer are
+      no longer exist.
 
 
 1.1.1~
