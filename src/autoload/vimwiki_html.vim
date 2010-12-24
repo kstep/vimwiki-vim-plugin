@@ -284,11 +284,15 @@ function! s:remove_comments(lines) "{{{
       elseif state == '}'
         if a:line[idx] == '}'
           let state = '}}'
+        else
+          let state = 'pre'
         endif
         let bufline .= a:line[idx]
       elseif state == '}}'
         if a:line[idx] == '}'
           let state = 'normal'
+        else
+          let state = 'pre'
         endif
         let bufline .= a:line[idx]
       elseif state == 'code'
