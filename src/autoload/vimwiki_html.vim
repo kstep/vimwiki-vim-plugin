@@ -133,7 +133,7 @@ function! s:get_html_template(subdir, wikifile, template) "{{{
   call add(lines, '<head>')
   call add(lines, '<link rel="Stylesheet" type="text/css" href="'.
         \ css_name.'" />')
-  call add(lines, '<title>'.fnamemodify(a:wikifile, ":t:r").'</title>')
+  call add(lines, '<title>%title%</title>')
   call add(lines, '<meta http-equiv="Content-Type" content="text/html;'.
         \ ' charset='.&fileencoding.'" />')
   call add(lines, '</head>')
@@ -1402,10 +1402,10 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
       if state.placeholder[0] == 'nohtml'
         let nohtml = 1
         break
-      elseif state.placeholder[0] == 'toc'
-        call add(placeholders, [state.placeholder, len(ldest), len(placeholders)])
       elseif state.placeholder[0] == 'template'
         let template_name = state.placeholder[1]
+      else
+        call add(placeholders, [state.placeholder, len(ldest), len(placeholders)])
       endif
       let state.placeholder = []
     endif
