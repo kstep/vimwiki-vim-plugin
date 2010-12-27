@@ -355,10 +355,9 @@ function! vimwiki_tbl#kbd_cr() "{{{
   endif
 endfunction "}}}
 
-function! vimwiki_tbl#kbd_tab(code) "{{{
+function! vimwiki_tbl#kbd_tab() "{{{
   let lnum = line('.')
   if !s:is_table(getline(lnum))
-    execute code
     return "\<Tab>"
   endif
 
