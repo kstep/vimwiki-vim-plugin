@@ -104,7 +104,7 @@ execute 'syntax match VimwikiCodeT /'.g:vimwiki_rxCode.'/ contained contains=Vim
 execute 'syntax match VimwikiHR /'.g:vimwiki_rxHR.'/'
 
 execute 'syntax region VimwikiPre start=/'.g:vimwiki_rxPreStart.
-      \ '/ end=/'.g:vimwiki_rxPreEnd.'/ contains=VimwikiComment'
+      \ '/ end=/'.g:vimwiki_rxPreEnd.'/'
 
 " List item checkbox
 syntax match VimwikiCheckBox /\[.\?\]/

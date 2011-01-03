@@ -37,8 +37,15 @@ def test_all():
     for test in tests:
         expected_name = os.path.join('expected_html', test+'.html')
         actual_name = os.path.join('html', test+'.html')
-        expected = open(expected_name).read()
-        actual   = open(actual_name).read()
+        if os.path.exists(expected_name):
+            expected = open(expected_name).read()
+        else:
+            expected = ''
+        if os.path.exists(actual_name):
+            actual = open(actual_name).read()
+        else:
+            actual = ''
+
         if expected == actual:
             count += 1
         else:
