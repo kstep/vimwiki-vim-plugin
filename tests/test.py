@@ -2,12 +2,8 @@
 # vim:shiftwidth=4:softtabstop=4:expandtab:foldmethod=marker
 
 """Test vimwiki's HTML generator.
-
-This module contains doctests, you can run them using:
-    python -m doctest test.py
 """
 
-import sys
 import os.path
 from glob import glob
 
