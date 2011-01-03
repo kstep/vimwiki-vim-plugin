@@ -127,6 +127,11 @@ function! s:get_html_template(subdir, wikifile, template) "{{{
     let css_name = s:root_path(a:subdir).css_name
   endif
 
+  let enc = &fileencoding
+  if enc == ''
+    let enc = &encoding
+  endif
+
   " if no VimwikiGet('html_template') set up or error while reading template
   " file -- use default one.
   call add(lines, '<html>')
@@ -135,7 +140,7 @@ function! s:get_html_template(subdir, wikifile, template) "{{{
         \ css_name.'" />')
   call add(lines, '<title>%title%</title>')
   call add(lines, '<meta http-equiv="Content-Type" content="text/html;'.
-        \ ' charset='.&fileencoding.'" />')
+        \ ' charset='.&enc.'" />')
   call add(lines, '</head>')
   call add(lines, '<body>')
   call add(lines, '%content%')

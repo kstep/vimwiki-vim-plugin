@@ -2,10 +2,8 @@
 \.gz$
 \.zip$
 \.vba$
+\.netrw.*
 ^sandbox/wiki$
 ^sandbox/html$
 ^src/doc/tags$
-^tests/wiki$
-^tests/wiki_html$
-^tests/expected$
-^tests/actual$
+^tests/html$

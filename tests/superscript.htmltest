@@ -1,5 +1,0 @@
-before^superscript^after
-@@@@
-<p>
-before<sup><small>superscript</small></sup>after
-</p>
