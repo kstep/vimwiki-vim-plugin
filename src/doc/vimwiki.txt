@@ -329,6 +329,7 @@ i\                      Inner cell in a table.
 ac                      A column in a table.
 ic                      Inner column in a table.
 
+
 ==============================================================================
 4. Commands                                                 *vimwiki-commands*
 
@@ -353,63 +354,51 @@ ic                      Inner column in a table.
 *:VimwikiTabMakeDiaryNote*
     Open diary wiki-file for today of the current wiki in a new tab.
 
+
 ------------------------------------------------------------------------------
 4.2. Local commands                                   *vimwiki-local-commands*
 
 *:VimwikiFollowLink*
     Follow wiki link (create target wiki page if needed).
 
-
 *:VimwikiGoBackLink*
     Go back to the wiki page you came from.
-
 
 *:VimwikiSplitLink*
     Split and follow wiki link (create target wiki page if needed).
 
-
 *:VimwikiVSplitLink*
     Vertical split and follow wiki link (create target wiki page if needed).
-
 
 *:VimwikiTabnewLink*
     Follow wiki link in a new tab (create target wiki page if needed).
 
-
 *:VimwikiNextLink*
     Find next wiki link.
 
-
 *:VimwikiPrevLink*
     Find previous wiki link.
-
 
 *:VimwikiGoto*
     Goto link provided by an argument. For example: >
         :VimwikiGoto HelloWorld
 <   opens opens/creates HelloWorld wiki page.
 
-
 *:VimwikiDeleteLink*
     Delete the wiki page that you are in.
-
 
 *:VimwikiRenameLink*
     Rename the wiki page that you are in.
 
-
 *:Vimwiki2HTML*
     Convert current wiki page to HTML.
-
 
 *:VimwikiAll2HTML*
     Convert all wiki pages to HTML.
 
-
 *:VimwikiToggleListItem*
     Toggle list item on/off (checked/unchecked)
     See |vimwiki-todo-lists|.
-
 
 *:VimwikiSearch* /pattern/
 *:VWS* /pattern/
@@ -459,11 +448,9 @@ ic                      Inner column in a table.
 *:VimwikiGenerateLinks*
     Insert all available links into current buffer.
 
-
 *:VimwikiDiaryNextDay*
     Open next day diary link if available.
     Mapped to <C-Down>.
-
 
 *:VimwikiDiaryPrevDay*
     Open previous day diary link if available.
@@ -494,6 +481,7 @@ text should be decorated: >
   super^script^
   sub,,script,,
 
+
 ------------------------------------------------------------------------------
 5.2. Links                                              *vimwiki-syntax-links*
 
@@ -514,7 +502,6 @@ or: >
 or: >
   [[This is a link source][Description of the link]]
 
-
 External links~
 Plain link: >
  http://code.google.com/p/vimwiki
@@ -524,7 +511,6 @@ Plain link: >
 Link with description: >
  [http://habamax.ru/blog habamax home page]
  [mailto:habamax@gmail.com Drop a line to Maxim Kim]
-
 
 Images and image links~
 An image link is a link to a file with a jpg, png or gif extension.
@@ -604,7 +590,6 @@ You can center your headers in HTML by placing spaces before the first '=':
                      = Centered Header L1 =~
 
 
-
 ------------------------------------------------------------------------------
 5.4. Paragraphs                                    *vimwiki-syntax-paragraphs*
 
@@ -616,6 +601,7 @@ with two lines.
 
 This is a second paragraph with
 two lines.
+
 
 ------------------------------------------------------------------------------
 5.5. Lists                                              *vimwiki-syntax-lists*
@@ -756,6 +742,7 @@ such as google's syntax highlighter.
 You can setup vimwiki to highlight code snippets in preformatted text.
 See |vimwiki-option-nested_syntaxes|
 
+
 ------------------------------------------------------------------------------
 5.8. Blockquotes                                  *vimwiki-syntax-blockquotes*
 
@@ -765,6 +752,7 @@ Text started with 4 or more spaces is a blockquote.
     could be styled by CSS in HTML. Blockquotes are usually used to quote a
     long piece of text from another source.
 
+
 ------------------------------------------------------------------------------
 5.9. Comments                                        *vimwiki-syntax-comments*
 
@@ -772,6 +760,7 @@ Text between <!-- and --> is a comment.
 E.g.: >
  <!-- this text would not be in HTML -->
 <
+
 
 ------------------------------------------------------------------------------
 5.10. Horizontal line                                      *vimwiki-syntax-hr*
@@ -820,6 +809,7 @@ properly only if all of them are indented using current |shiftwidth|.
 For MediaWiki, * or # should be in the first column.
 
 To turn folding on/off check |g:vimwiki_folding|.
+
 
 ==============================================================================
 7. Placeholders                                         *vimwiki-placeholders*
@@ -890,7 +880,6 @@ Consider the following example:
   * [X] Make numbered list items toggleable too
   * [X] Add highlighting to list item boxes
   * [X] Add [ ] to the next created with o, O and <CR> list item.
-
 
 Pressing <C-Space> on the first list item will toggle it and all of its child
 items:
@@ -965,7 +954,6 @@ values: >
 To indent table indent the first row. Then format it with 'gqq'.
 
 
-
 ==============================================================================
 10. Diary                                                      *vimwiki-diary*
 
@@ -1010,7 +998,6 @@ will be created in the default wiki's diary.
 Get it from http://www.vim.org/scripts/script.php?script_id=52
 
 See |g:vimwiki_use_calendar| option to turn it off/on.
-
 
 
 ==============================================================================
@@ -1064,7 +1051,6 @@ You can also create wikis as separate |Dictionary|s. >
 <
 
 PER WIKI OPTIONS                                       *viwmiki-local-options*
-
 
 
 *vimwiki-option-path*
@@ -1286,7 +1272,6 @@ or in: >
  }}}
 
 
-
 *vimwiki-option-diary_rel_path*
 ------------------------------------------------------------------------------
 Key             Default value~
@@ -1427,6 +1412,7 @@ etc.
 
 Default: 'Vimwiki'
 
+
 ------------------------------------------------------------------------------
 *g:vimwiki_stripsym*
 
@@ -1436,6 +1422,7 @@ vimwiki replaces them with a neutral symbol (_ is default): >
 
 You can change it to a <space> for example: >
     let g:vimwiki_stripsym = ' '
+
 
 ------------------------------------------------------------------------------
 *g:vimwiki_badsyms*
@@ -1450,6 +1437,7 @@ Now files for all [[links with spaces]] would be created like
 
 This option is a complement one to |g:vimwiki_stripsym|.
 
+
 ------------------------------------------------------------------------------
 *g:vimwiki_listsyms*
 
@@ -1458,6 +1446,7 @@ Default value is ' .oOX'.
 
 g:vimwiki_listsyms[0] is for 0% done items.
 g:vimwiki_listsyms[4] is for 100% done items.
+
 
 ------------------------------------------------------------------------------
 *g:vimwiki_use_mouse*
@@ -1469,6 +1458,7 @@ Value           Description~
 1               Use mouse mappings.
 
 Default: 0
+
 
 ------------------------------------------------------------------------------
 *g:vimwiki_folding*
@@ -1482,6 +1472,7 @@ Value           Description~
 
 Default: 0
 
+
 ------------------------------------------------------------------------------
 *g:vimwiki_fold_lists*
 
@@ -1492,6 +1483,7 @@ Value           Description~
 1               Enable list subitem's folding.
 
 Default: 0
+
 
 ------------------------------------------------------------------------------
 *g:vimwiki_fold_trailing_empty_lines*
@@ -1504,6 +1496,7 @@ Value           Description~
 
 Default: 0
 
+
 ------------------------------------------------------------------------------
 *g:vimwiki_camel_case*
 
@@ -1514,6 +1507,7 @@ Value           Description~
 1               Make links from CamelCased words.
 
 Default: 1
+
 
 ------------------------------------------------------------------------------
 *g:vimwiki_list_ignore_newline*
@@ -1526,6 +1520,7 @@ Value           Description~
 1               Ignore newlines.
 
 Default: 1
+
 
 ------------------------------------------------------------------------------
 *g:vimwiki_use_calendar*
@@ -1732,8 +1727,6 @@ Vimwiki sets |conceallevel| to g:vimwiki_conceallevel everytime vimwiki buffer
 is entered.
 
 Default: 3
-
-
 
 
 ==============================================================================
