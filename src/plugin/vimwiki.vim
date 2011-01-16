@@ -362,34 +362,34 @@ command! -count VimwikiTabMakeDiaryNote tabedit <bar>
 
 " MAPPINGS {{{
 if !hasmapto('<Plug>VimwikiIndex')
-  map <silent><unique> <Leader>ww <Plug>VimwikiIndex
+  nmap <silent><unique> <Leader>ww <Plug>VimwikiIndex
 endif
-noremap <unique><script> <Plug>VimwikiIndex :VimwikiIndex<CR>
+nnoremap <unique><script> <Plug>VimwikiIndex :VimwikiIndex<CR>
 
 if !hasmapto('<Plug>VimwikiTabIndex')
-  map <silent><unique> <Leader>wt <Plug>VimwikiTabIndex
+  nmap <silent><unique> <Leader>wt <Plug>VimwikiTabIndex
 endif
-noremap <unique><script> <Plug>VimwikiTabIndex :VimwikiTabIndex<CR>
+nnoremap <unique><script> <Plug>VimwikiTabIndex :VimwikiTabIndex<CR>
 
 if !hasmapto('<Plug>VimwikiUISelect')
-  map <silent><unique> <Leader>ws <Plug>VimwikiUISelect
+  nmap <silent><unique> <Leader>ws <Plug>VimwikiUISelect
 endif
-noremap <unique><script> <Plug>VimwikiUISelect :VimwikiUISelect<CR>
+nnoremap <unique><script> <Plug>VimwikiUISelect :VimwikiUISelect<CR>
 
 if !hasmapto('<Plug>VimwikiDiaryIndex')
-  map <silent><unique> <Leader>wi <Plug>VimwikiDiaryIndex
+  nmap <silent><unique> <Leader>wi <Plug>VimwikiDiaryIndex
 endif
-noremap <unique><script> <Plug>VimwikiDiaryIndex :VimwikiDiaryIndex<CR>
+nnoremap <unique><script> <Plug>VimwikiDiaryIndex :VimwikiDiaryIndex<CR>
 
 if !hasmapto('<Plug>VimwikiMakeDiaryNote')
-  map <silent><unique> <Leader>w<Leader>w <Plug>VimwikiMakeDiaryNote
+  nmap <silent><unique> <Leader>w<Leader>w <Plug>VimwikiMakeDiaryNote
 endif
-noremap <unique><script> <Plug>VimwikiMakeDiaryNote :VimwikiMakeDiaryNote<CR>
+nnoremap <unique><script> <Plug>VimwikiMakeDiaryNote :VimwikiMakeDiaryNote<CR>
 
 if !hasmapto('<Plug>VimwikiTabMakeDiaryNote')
-  map <silent><unique> <Leader>w<Leader>t <Plug>VimwikiTabMakeDiaryNote
+  nmap <silent><unique> <Leader>w<Leader>t <Plug>VimwikiTabMakeDiaryNote
 endif
-noremap <unique><script> <Plug>VimwikiTabMakeDiaryNote
+nnoremap <unique><script> <Plug>VimwikiTabMakeDiaryNote
       \ :VimwikiTabMakeDiaryNote<CR>
 
 "}}}

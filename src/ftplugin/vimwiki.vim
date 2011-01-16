@@ -243,65 +243,65 @@ command! -buffer VimwikiDiaryPrevDay call vimwiki_diary#goto_prev_day()
 if g:vimwiki_use_mouse
   nmap <buffer> <S-LeftMouse> <NOP>
   nmap <buffer> <C-LeftMouse> <NOP>
-  noremap <silent><buffer> <2-LeftMouse> :VimwikiFollowLink<CR>
-  noremap <silent><buffer> <S-2-LeftMouse> <LeftMouse>:VimwikiSplitLink<CR>
-  noremap <silent><buffer> <C-2-LeftMouse> <LeftMouse>:VimwikiVSplitLink<CR>
-  noremap <silent><buffer> <RightMouse><LeftMouse> :VimwikiGoBackLink<CR>
+  nnoremap <silent><buffer> <2-LeftMouse> :VimwikiFollowLink<CR>
+  nnoremap <silent><buffer> <S-2-LeftMouse> <LeftMouse>:VimwikiSplitLink<CR>
+  nnoremap <silent><buffer> <C-2-LeftMouse> <LeftMouse>:VimwikiVSplitLink<CR>
+  nnoremap <silent><buffer> <RightMouse><LeftMouse> :VimwikiGoBackLink<CR>
 endif
 
 if !hasmapto('<Plug>VimwikiFollowLink')
   nmap <silent><buffer> <CR> <Plug>VimwikiFollowLink
 endif
-noremap <silent><script><buffer>
+nnoremap <silent><script><buffer>
       \ <Plug>VimwikiFollowLink :VimwikiFollowLink<CR>
 
 if !hasmapto('<Plug>VimwikiSplitLink')
   nmap <silent><buffer> <S-CR> <Plug>VimwikiSplitLink
 endif
-noremap <silent><script><buffer>
+nnoremap <silent><script><buffer>
       \ <Plug>VimwikiSplitLink :VimwikiSplitLink<CR>
 
 if !hasmapto('<Plug>VimwikiVSplitLink')
   nmap <silent><buffer> <C-CR> <Plug>VimwikiVSplitLink
 endif
-noremap <silent><script><buffer>
+nnoremap <silent><script><buffer>
       \ <Plug>VimwikiVSplitLink :VimwikiVSplitLink<CR>
 
 if !hasmapto('<Plug>VimwikiTabnewLink')
   nmap <silent><buffer> <D-CR> <Plug>VimwikiTabnewLink
   nmap <silent><buffer> <C-S-CR> <Plug>VimwikiTabnewLink
 endif
-noremap <silent><script><buffer>
+nnoremap <silent><script><buffer>
       \ <Plug>VimwikiTabnewLink :VimwikiTabnewLink<CR>
 
 if !hasmapto('<Plug>VimwikiGoBackLink')
   nmap <silent><buffer> <BS> <Plug>VimwikiGoBackLink
 endif
-noremap <silent><script><buffer>
+nnoremap <silent><script><buffer>
       \ <Plug>VimwikiGoBackLink :VimwikiGoBackLink<CR>
 
 if !hasmapto('<Plug>VimwikiNextLink')
   nmap <silent><buffer> <TAB> <Plug>VimwikiNextLink
 endif
-noremap <silent><script><buffer>
+nnoremap <silent><script><buffer>
       \ <Plug>VimwikiNextLink :VimwikiNextLink<CR>
 
 if !hasmapto('<Plug>VimwikiPrevLink')
   nmap <silent><buffer> <S-TAB> <Plug>VimwikiPrevLink
 endif
-noremap <silent><script><buffer>
+nnoremap <silent><script><buffer>
       \ <Plug>VimwikiPrevLink :VimwikiPrevLink<CR>
 
 if !hasmapto('<Plug>VimwikiDeleteLink')
   nmap <silent><buffer> <Leader>wd <Plug>VimwikiDeleteLink
 endif
-noremap <silent><script><buffer>
+nnoremap <silent><script><buffer>
       \ <Plug>VimwikiDeleteLink :VimwikiDeleteLink<CR>
 
 if !hasmapto('<Plug>VimwikiRenameLink')
   nmap <silent><buffer> <Leader>wr <Plug>VimwikiRenameLink
 endif
-noremap <silent><script><buffer>
+nnoremap <silent><script><buffer>
       \ <Plug>VimwikiRenameLink :VimwikiRenameLink<CR>
 
 if !hasmapto('<Plug>VimwikiToggleListItem')
@@ -311,19 +311,19 @@ if !hasmapto('<Plug>VimwikiToggleListItem')
     nmap <silent><buffer> <C-@> <Plug>VimwikiToggleListItem
   endif
 endif
-noremap <silent><script><buffer>
+nnoremap <silent><script><buffer>
       \ <Plug>VimwikiToggleListItem :VimwikiToggleListItem<CR>
 
 if !hasmapto('<Plug>VimwikiDiaryNextDay')
   nmap <silent><buffer> <C-Down> <Plug>VimwikiDiaryNextDay
 endif
-noremap <silent><script><buffer>
+nnoremap <silent><script><buffer>
       \ <Plug>VimwikiDiaryNextDay :VimwikiDiaryNextDay<CR>
 
 if !hasmapto('<Plug>VimwikiDiaryPrevDay')
   nmap <silent><buffer> <C-Up> <Plug>VimwikiDiaryPrevDay
 endif
-noremap <silent><script><buffer>
+nnoremap <silent><script><buffer>
       \ <Plug>VimwikiDiaryPrevDay :VimwikiDiaryPrevDay<CR>
 
 function! s:CR() "{{{
@@ -352,12 +352,12 @@ nnoremap <buffer> gww :VimwikiTableAlignW<CR>
 if !hasmapto('<Plug>VimwikiTableMoveColumnLeft')
   nmap <silent><buffer> <A-Left> <Plug>VimwikiTableMoveColumnLeft
 endif
-noremap <silent><script><buffer>
+nnoremap <silent><script><buffer>
       \ <Plug>VimwikiTableMoveColumnLeft :VimwikiTableMoveColumnLeft<CR>
 if !hasmapto('<Plug>VimwikiTableMoveColumnRight')
   nmap <silent><buffer> <A-Right> <Plug>VimwikiTableMoveColumnRight
 endif
-noremap <silent><script><buffer>
+nnoremap <silent><script><buffer>
       \ <Plug>VimwikiTableMoveColumnRight :VimwikiTableMoveColumnRight<CR>
 
 " Misc mappings
@@ -383,8 +383,8 @@ vnoremap <silent><buffer> ac :<C-U>call vimwiki#TO_table_col(0, 1)<CR>
 onoremap <silent><buffer> ic :<C-U>call vimwiki#TO_table_col(1, 0)<CR>
 vnoremap <silent><buffer> ic :<C-U>call vimwiki#TO_table_col(1, 1)<CR>
 
-noremap <silent><buffer> = :call vimwiki#AddHeaderLevel()<CR>
-noremap <silent><buffer> - :call vimwiki#RemoveHeaderLevel()<CR>
+nnoremap <silent><buffer> = :call vimwiki#AddHeaderLevel()<CR>
+nnoremap <silent><buffer> - :call vimwiki#RemoveHeaderLevel()<CR>
 
 " }}}
 
