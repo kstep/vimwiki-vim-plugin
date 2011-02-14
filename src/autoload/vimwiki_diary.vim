@@ -186,14 +186,17 @@ function! s:add_link(page, header, link) "{{{
   endif
 endfunction "}}}
 
-function! s:make_date_link(...) "{{{
+function! vimwiki_diary#make_date_link(...) "{{{
+"  call Dfunc('vimwiki_diary#make_date_link')
   if a:0
     let link = a:1
   else
     let link = s:diary_date_link()
   endif
+"  call Decho('link '.link)
   let header = VimwikiGet('diary_header')
   call s:add_link(s:diary_index(), header, link)
+"  call Dret('vimwiki_diary#make_date_link')
   return VimwikiGet('diary_rel_path').link
 endfunction "}}}
 
@@ -201,9 +204,9 @@ function! vimwiki_diary#make_note(index, ...) "{{{
   call vimwiki#select(a:index)
   call vimwiki#mkdir(VimwikiGet('path').VimwikiGet('diary_rel_path'))
   if a:0
-    let link = s:make_date_link(a:1)
+    let link = vimwiki_diary#make_date_link(a:1)
   else
-    let link = s:make_date_link()
+    let link = vimwiki_diary#make_date_link()
   endif
   call vimwiki#open_link(':e ', link, s:diary_index())
 endfunction "}}}

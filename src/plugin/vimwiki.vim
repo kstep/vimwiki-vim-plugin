@@ -358,6 +358,10 @@ command! -count VimwikiMakeDiaryNote
       \ call vimwiki_diary#make_note(v:count1)
 command! -count VimwikiTabMakeDiaryNote tabedit <bar>
       \ call vimwiki_diary#make_note(v:count1)
+
+" TODO: expand("%:t") works for vimwiki links, but not for files elsewhere.
+command! -count VimwikiMakeTimelogNote
+      \ call vimwiki_gtimelog#log(v:count, expand("%"))
 "}}}
 
 " MAPPINGS {{{
@@ -391,6 +395,12 @@ if !hasmapto('<Plug>VimwikiTabMakeDiaryNote')
 endif
 noremap <unique><script> <Plug>VimwikiTabMakeDiaryNote
       \ :VimwikiTabMakeDiaryNote<CR>
+
+if !hasmapto('<Plug>VimwikiMakeTimelogNote')
+  map <silent><unique> <Leader>ll <Plug>VimwikiMakeTimelogNote
+endif
+noremap <unique><script> <Plug>VimwikiMakeTimelogNote
+      \ :VimwikiMakeTimelogNote<CR>
 
 "}}}
 
