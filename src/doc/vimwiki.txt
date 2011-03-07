@@ -1799,8 +1799,10 @@ dev~
     * Issue 156: Add multiple HTML templates. See
       |vimwiki-option-template_path|. Options html_header and html_footer are
       no longer exist.
-    * Issue 182: Browser command does not quote url
+    * Issue 182: Browser command does not quote url.
     * Issue 184: Wrong foldlevel in some cases.
+    * Issue 173: When virtualedit=all option is enabled the 'o' command behave
+      strange.
 
 
 1.1.1~

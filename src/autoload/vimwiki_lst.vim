@@ -351,6 +351,7 @@ function! vimwiki_lst#kbd_oO(cmd) "{{{
     elseif &autoindent || &smartindent
       let res = matchstr(line, '^\s*')
     endif
+
     if a:cmd ==# 'o'
       call append(lnum, res)
       call cursor(lnum + 1, col('$'))
@@ -361,5 +362,8 @@ function! vimwiki_lst#kbd_oO(cmd) "{{{
 
     let l:count -= 1
   endwhile
+
+  startinsert!
+
 endfunction "}}}
 
