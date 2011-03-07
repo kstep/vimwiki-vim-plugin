@@ -94,7 +94,7 @@ function! s:setup_buffer_enter() "{{{
     let b:vimwiki_idx = g:vimwiki_current_idx
   endif
 
-  " If you have 
+  " If you have
   "     au GUIEnter * VimwikiIndex
   " in your vimrc the next line is essential.
   setf vimwiki
@@ -172,18 +172,18 @@ endfunction "}}}
 " CALLBACK function "{{{
 " User can redefine it.
 if !exists("*VimwikiWeblinkHandler") "{{{
-  function VimwikiWeblinkHandler(weblink) 
+  function VimwikiWeblinkHandler(weblink)
     for browser in g:vimwiki_browsers
       if executable(browser)
         if has("win32")
-          execute '!start "'.browser.'" ' . a:weblink
+          execute '!start "'.browser.'" "' . a:weblink . '"'
         else
-          execute '!'.browser.' ' . a:weblink
+          execute '!'.browser.' "' . a:weblink . '"'
         endif
         return
       endif
     endfor
-  endfunction 
+  endfunction
 endif "}}}
 " CALLBACK }}}
 
@@ -244,7 +244,7 @@ call s:default('camel_case', 1)
 call s:default('list_ignore_newline', 1)
 call s:default('listsyms', ' .oOX')
 if has("win32")
-  call s:default('browsers', 
+  call s:default('browsers',
         \ [
         \  expand('~').'\Local Settings\Application Data\Google\Chrome\Application\chrome.exe',
         \  'C:\Program Files\Opera\opera.exe',
@@ -252,7 +252,7 @@ if has("win32")
         \  'C:\Program Files\Internet Explorer\iexplore.exe',
         \ ])
 else
-  call s:default('browsers', 
+  call s:default('browsers',
         \ [
         \  'opera',
         \  'firefox',
