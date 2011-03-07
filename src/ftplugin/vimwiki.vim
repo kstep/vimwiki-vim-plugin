@@ -68,14 +68,14 @@ function! VimwikiFoldLevel(lnum) "{{{
     return '>'.n
   endif
 
-  if g:vimwiki_fold_trailing_empty_lines == 0
-    if line =~ '^\s*$'
-      let nnline = getline(nextnonblank(a:lnum + 1))
-      if nnline =~ g:vimwiki_rxHeader
-        let n = vimwiki#count_first_sym(nnline)
-        return '<'.n
-      endif
-    endif
+  if g:vimwiki_fold_trailing_empty_lines == 0 && line =~ '^\s*$'
+    let nnline = getline(nextnonblank(a:lnum + 1))
+  else 
+    let nnline = getline(a:lnum + 1)
+  endif
+  if nnline =~ g:vimwiki_rxHeader
+    let n = vimwiki#count_first_sym(nnline)
+    return '<'.n
   endif
 
   " List item folding...

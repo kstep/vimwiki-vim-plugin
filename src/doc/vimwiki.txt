@@ -1799,6 +1799,7 @@ dev~
     * Issue 156: Add multiple HTML templates. See
       |vimwiki-option-template_path|. Options html_header and html_footer are
       no longer exist.
+    * Issue 184: Wrong foldlevel in some cases.
 
 
 1.1.1~
