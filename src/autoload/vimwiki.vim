@@ -78,19 +78,25 @@ function! vimwiki#current_subdir()"{{{
 endfunction"}}}
 
 function! vimwiki#open_link(cmd, link, ...) "{{{
+"  call Dfunc('vimwiki#open_link(cmd="'.a:cmd.'", link="'.a:link.'")')
   if vimwiki#is_non_wiki_link(a:link)
+"    call Decho('Not a wiki link')
     if s:is_path_absolute(a:link)
       call vimwiki#edit_file(a:cmd, a:link)
     else
       call vimwiki#edit_file(a:cmd, VimwikiGet('path').a:link)
     endif
   else
+"    call Decho('Going to a wiki link')
     if a:0
+"      call Decho('1.')
       let vimwiki_prev_link = [a:1, []]
     elseif &ft == 'vimwiki'
+"      call Decho('2.')
       let vimwiki_prev_link = [expand('%:p'), getpos('.')]
     endif
 
+"    call Decho('vimwiki_prev_link="'.join(vimwiki_prev_link, ',').'"')
     if vimwiki#is_link_to_dir(a:link)
       if g:vimwiki_dir_link == ''
         call vimwiki#edit_file(a:cmd, VimwikiGet('path').a:link)
@@ -108,6 +114,7 @@ function! vimwiki#open_link(cmd, link, ...) "{{{
       let b:vimwiki_prev_link = vimwiki_prev_link
     endif
   endif
+"  call Dret('vimwiki#open_link')
 endfunction
 " }}}
 
@@ -213,6 +220,7 @@ endfunction
 " }}}
 
 function! vimwiki#edit_file(command, filename) "{{{
+"  call Dfunc('vimwiki#edit_file(command="'.a:command.'", filename="'.a:filename.'")')
   let fname = escape(a:filename, '% ')
   call vimwiki#mkdir(fnamemodify(a:filename, ":p:h"))
   try
@@ -221,6 +229,7 @@ function! vimwiki#edit_file(command, filename) "{{{
     execute ':split '.fname
   catch /E325/ " catch 'ATTENTION' error (:h E325)
   endtry
+"  call Dret('vimwiki#edit_file')
 endfunction
 " }}}
 
