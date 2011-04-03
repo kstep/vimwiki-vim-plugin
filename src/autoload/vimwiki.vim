@@ -39,15 +39,25 @@ endfunction "}}}
 function! vimwiki#find_wiki(path) "{{{
 "  call Dfunc('vimwiki#find_wiki(path="'.a:path.'"')
   let idx = 0
+  let longest_match = {}
+  let longest_match.length = 0
+  let longest_match.idx = 0
   while idx < len(g:vimwiki_list)
     let path = vimwiki#chomp_slash(expand(VimwikiGet('path', idx)))
-    if s:str_common_pfx(path, a:path) == path
-"      call Decho('path: '.path.' idx: '.idx)
-"      call Dret('vimwiki#find_wiki')
-      return idx
+    let common_pfx = s:str_common_pfx(path, a:path)
+    if common_pfx == path
+      if len(common_pfx) > longest_match.length
+"        call Decho('Best match: '.path.' idx: '.idx)
+        let longest_match.length = len(common_pfx)
+        let longest_match.idx = idx
+      endif
     endif
     let idx += 1
   endwhile
+  if longest_match.length > 0
+"    call Dret('vimwiki#find_wiki')
+    return longest_match.idx
+  endif
 "  call Decho('wiki not found')
 "  call Dret('vimwiki#find_wiki')
   return -1

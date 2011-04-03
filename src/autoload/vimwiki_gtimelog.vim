@@ -30,16 +30,23 @@ function! vimwiki_gtimelog#log(index, from, ...) "{{{
   else
     let from = a:from
   endif
+
+  let index = a:index
+  if a:index == 0
+    " If no count was passed, we want the first wiki
+    let index = 1
+  endif
+
   let saved_X = getpos("'X")
   call setpos("'X", getpos("."))
 "  call Decho('saved_X = '.join(saved_X, ','))
-"  call Decho('Wiki index passed: '.a:index)
   " let start_wiki_idx = b:vimwiki_idx
-  " call vimwiki#select(a:index)
+  call vimwiki#select(index)
 
   " Create or find diary page
   let link = vimwiki_diary#make_date_link()
 "  call Decho('link: '.link)
+"  call Decho('3. g:vimwiki_current_idx: '.g:vimwiki_current_idx)
 
   " optionally set logline and prefix
   let category = ""
@@ -55,6 +62,7 @@ function! vimwiki_gtimelog#log(index, from, ...) "{{{
 "    call Decho("category: ".category)
   endif
 
+"  call Decho('4. g:vimwiki_current_idx: '.g:vimwiki_current_idx)
   call s:add_logline(link, from, logline, category)
 "  call Decho('Returning to saved_X = '.join(saved_X,','))
   normal 'X
@@ -70,15 +78,19 @@ function! s:add_logline(link, from, logline, category) "{{{
   " Add a line like 'TIMESTAMP: category: logline' to today's diary.
   " If '*category: logline*' was the last thing logged, update that line
   " instead of adding. 
+"  call Decho('g:vimwiki_current_idx = "'.g:vimwiki_current_idx.'"')
 
   let [auto_category, from_link] = s:category(a:from)
-"  call Decho('category = "'.auto_category)
+"  call Decho('category = "'.auto_category.'"')
+"  call Decho('VimwikiGet("path") = "'.VimwikiGet("path").'"')
+"  call Decho('g:vimwiki_current_idx = "'.g:vimwiki_current_idx.'"')
+"  call Decho('vimwiki#find_wiki(a:from) = "'.vimwiki#find_wiki(a:from).'"')
 
   if a:category != ''
     " If we were passed a category, override the computed category
     let category = a:category.": ".from_link
 "    call Decho('1. category = "'.category.': "')
-  elseif g:vimwiki_current_idx != vimwiki#find_wiki(from)
+  elseif g:vimwiki_current_idx != vimwiki#find_wiki(a:from)
   "elseif 1 == 1
     " Accept the computed category
     let category = auto_category
@@ -129,7 +141,7 @@ function! s:category(from) "{{{
   " If we don't have a wiki name, return 'parent/link'.
 "  call Dfunc('s:category(from="'.a:from.'")')
 
-  let wiki_name = VimwikiGet('name')
+  let wiki_name = VimwikiGet('name', vimwiki#find_wiki(a:from))
 
   " TODO: platform-independent seperator (look at s:os_sep in
   " autoload/vimwiki.vim)
