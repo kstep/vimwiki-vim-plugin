@@ -19,29 +19,6 @@ function! s:default(varname, value) "{{{
   endif
 endfunction "}}}
 
-" return longest common prefix of 2 given strings.
-" 'Hello world', 'Hello worm' => 'Hello wor'
-function! s:str_common_pfx(str1, str2) "{{{
-  let idx = 0
-  let minlen = min([len(a:str1), len(a:str2)])
-  while (idx < minlen) && (a:str1[idx] ==? a:str2[idx])
-    let idx = idx + 1
-  endwhile
-  return strpart(a:str1, 0, idx)
-endfunction "}}}
-
-function! s:find_wiki(path) "{{{
-  let idx = 0
-  while idx < len(g:vimwiki_list)
-    let path = vimwiki#chomp_slash(expand(VimwikiGet('path', idx)))
-    if s:str_common_pfx(path, a:path) == path
-      return idx
-    endif
-    let idx += 1
-  endwhile
-  return -1
-endfunction "}}}
-
 function! s:setup_buffer_leave()"{{{
   if &filetype == 'vimwiki' && !exists("b:vimwiki_idx")
     let b:vimwiki_idx = g:vimwiki_current_idx
@@ -57,7 +34,8 @@ function! s:setup_filetype() "{{{
     " Find what wiki current buffer belongs to.
     let path = expand('%:p:h')
     let ext = '.'.expand('%:e')
-    let idx = s:find_wiki(path)
+    " let idx = s:find_wiki(path)
+    let idx = vimwiki#find_wiki(path)
 
     if idx == -1 && g:vimwiki_global_ext == 0
       return
@@ -76,7 +54,8 @@ function! s:setup_buffer_enter() "{{{
     " Else set g:vimwiki_current_idx to that wiki index.
     let path = expand('%:p:h')
     let ext = '.'.expand('%:e')
-    let idx = s:find_wiki(path)
+    " let idx = s:find_wiki(path)
+    let idx = vimwiki#find_wiki(path)
 
     " The buffer's file is not in the path and user do not want his wiki
     " extension to be global -- do not add new wiki.
@@ -126,6 +105,7 @@ endfunction "}}}
 " return value of option for current wiki or if second parameter exists for
 " wiki with a given index.
 function! VimwikiGet(option, ...) "{{{
+"  call Dfunc('VimwikiGet(option="'.a:option.'", '.join(a:000, ',').')')
   if a:0 == 0
     let idx = g:vimwiki_current_idx
   else
@@ -133,18 +113,27 @@ function! VimwikiGet(option, ...) "{{{
   endif
   if !has_key(g:vimwiki_list[idx], a:option) &&
         \ has_key(s:vimwiki_defaults, a:option)
+"    call Decho('1')
     if a:option == 'path_html'
+"      call Decho('2')
       let g:vimwiki_list[idx][a:option] =
             \VimwikiGet('path', idx)[:-2].'_html/'
     else
+"      call Decho('3')
       let g:vimwiki_list[idx][a:option] =
             \s:vimwiki_defaults[a:option]
     endif
+  elseif !has_key(g:vimwiki_list[idx], a:option) &&
+       \ !has_key(s:vimwiki_defaults, a:option)
+    " Set empty string for non-existent options
+"    call Decho('4')
+    let g:vimwiki_list[idx][a:option] = ''
   endif
 
   " if path's ending is not a / or \
   " then add it
   if a:option == 'path' || a:option == 'path_html'
+"    call Decho('5')
     let p = g:vimwiki_list[idx][a:option]
     " resolve doesn't work quite right with symlinks ended with / or \
     let p = substitute(p, '[/\\]\+$', '', '')
@@ -152,6 +141,7 @@ function! VimwikiGet(option, ...) "{{{
     let g:vimwiki_list[idx][a:option] = p.'/'
   endif
 
+"  call Dret('VimwikiGet')
   return g:vimwiki_list[idx][a:option]
 endfunction "}}}
 
@@ -282,12 +272,16 @@ let nup = low.oth
 let nlo = upp.oth
 let any = upp.nup
 
-let wword = '\C\<['.upp.']['.nlo.']*['.low.']['.nup.']*['.upp.']['.any.']*\>'
-let g:vimwiki_rxWikiWord = '!\@<!'.wword
-let g:vimwiki_rxNoWikiWord = '!'.wword
 
-let g:vimwiki_rxWikiLink1 = '\[\[[^\]]\+\]\]'
-let g:vimwiki_rxWikiLink2 = '\[\[[^\]]\+\]\[[^\]]\+\]\]'
+let g:prefix = '\([-.[:alnum:]_]\+\/\)\{0,1}'
+let wword = '\C\<['.upp.']['.nlo.']*['.low.']['.nup.']*['.upp.']['.any.']*\>'
+let interwword = g:prefix.wword
+let g:vimwiki_rxWikiWord = '!\@<!'.interwword
+let g:vimwiki_rxNoWikiWord = '!'.interwword
+
+let g:vimwiki_rxWikiLink1 = g:prefix.'\[\[[^\]]\+\]\]'
+let g:vimwiki_rxWikiLink2 = g:prefix.'\[\[[^\]]\+\]\[[^\]]\+\]\]'
+
 if g:vimwiki_camel_case
   let g:vimwiki_rxWikiLink = g:vimwiki_rxWikiWord.'\|'.
         \ g:vimwiki_rxWikiLink1.'\|'.g:vimwiki_rxWikiLink2

@@ -22,15 +22,49 @@ function! vimwiki#chomp_slash(str) "{{{
   return substitute(a:str, '[/\\]\+$', '', '')
 endfunction "}}}
 
+" return longest common prefix of 2 given strings.
+" 'Hello world', 'Hello worm' => 'Hello wor'
+function! s:str_common_pfx(str1, str2) "{{{
+"  call Dfunc('s:str_common_pfx(str1="'.a:str1.'", str2="'.a:str2.'")')
+  let idx = 0
+  let minlen = min([len(a:str1), len(a:str2)])
+  while (idx < minlen) && (a:str1[idx] ==? a:str2[idx])
+    let idx = idx + 1
+  endwhile
+"  call Decho(strpart(a:str1, 0, idx))
+"  call Dret('s:str_common_pfx')
+  return strpart(a:str1, 0, idx)
+endfunction "}}}
+
+function! vimwiki#find_wiki(path) "{{{
+"  call Dfunc('vimwiki#find_wiki(path="'.a:path.'"')
+  let idx = 0
+  while idx < len(g:vimwiki_list)
+    let path = vimwiki#chomp_slash(expand(VimwikiGet('path', idx)))
+    if s:str_common_pfx(path, a:path) == path
+"      call Decho('path: '.path.' idx: '.idx)
+"      call Dret('vimwiki#find_wiki')
+      return idx
+    endif
+    let idx += 1
+  endwhile
+"  call Decho('wiki not found')
+"  call Dret('vimwiki#find_wiki')
+  return -1
+endfunction "}}}
+
 function! vimwiki#mkdir(path) "{{{
+"  call Dfunc('vimwiki#mkdir(path="'.a:path.'")')
   let path = expand(a:path)
   if !isdirectory(path) && exists("*mkdir")
     let path = vimwiki#chomp_slash(path)
     if s:is_windows() && !empty(g:vimwiki_w32_dir_enc)
       let path = iconv(path, &enc, g:vimwiki_w32_dir_enc)
     endif
+"    call Decho('path: '.path)
     call mkdir(path, "p")
   endif
+"  call Dret('vimwiki#mkdir')
 endfunction
 " }}}
 
@@ -167,7 +201,10 @@ function! s:is_path_absolute(path) "{{{
 endfunction "}}}
 
 function! s:get_links(pat) "{{{
+  " TODO: if we have a path component, search in matching wikis. Otherwise
+  " just search in current dir.
   " search all wiki files in 'path' and its subdirs.
+  " XXX: doesn't seem to search in subdirs
   let subdir = vimwiki#current_subdir()
 
   " if current wiki is temporary -- was added by an arbitrary wiki file then do
@@ -661,6 +698,7 @@ endfunction
 " }}}
 
 function! vimwiki#follow_link(split) "{{{
+"  call Dfunc('vimwiki#follow_link(split="'.a:split.'")')
   if a:split == "split"
     let cmd = ":split "
   elseif a:split == "vsplit"
@@ -671,7 +709,10 @@ function! vimwiki#follow_link(split) "{{{
     let cmd = ":e "
   endif
 
+"  call Decho(g:vimwiki_rxWikiLink)
+"  call Decho(s:get_word_at_cursor(g:vimwiki_rxWikiLink))
   let link = s:strip_word(s:get_word_at_cursor(g:vimwiki_rxWikiLink))
+"  call Decho(link)
   if link == ""
     let weblink = s:strip_word(s:get_word_at_cursor(g:vimwiki_rxWeblink))
     if weblink != ""
@@ -679,12 +720,36 @@ function! vimwiki#follow_link(split) "{{{
     else
       execute "normal! \n"
     endif
+"    call Dret('vimwiki#follow_link')
     return
   endif
 
+  let prefix = matchstr(link, g:prefix)
+"  call Decho('prefix: '.prefix)
+  if prefix != ''
+    " This is an interwiki link
+    let short_link = link[len(prefix):]
+    let prefix = vimwiki#chomp_slash(prefix)
+    let idx = 1
+    for wiki in g:vimwiki_list
+      if has_key(wiki, 'name') && wiki.name == prefix
+"        call Decho('Matched wiki nr: '.idx)
+        let found = 1
+        call vimwiki#select(idx)
+        call vimwiki#open_link(cmd, short_link)
+"        call Dret('vimwiki#follow_link')
+        return
+      endif
+      let idx = idx + 1
+    endfor
+    " We don't have a wiki name, so we should try to match on path
+"    call Decho('TODO: guess wiki on path')
+  endif
   let subdir = vimwiki#current_subdir()
+"  call Decho('subdir: '.subdir.link)
   call vimwiki#open_link(cmd, subdir.link)
 
+"  call Dret('vimwiki#follow_link')
 endfunction " }}}
 
 function! vimwiki#go_back_link() "{{{
