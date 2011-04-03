@@ -23,9 +23,19 @@ function! vimwiki_gtimelog#log(index, from, ...) "{{{
   " @a:2 category for log line (if not given, use wiki name)
 "  call Dfunc('vimwiki_gtimelog#log(index="'.a:index.'", from="'.a:from.'")')
 
-  let saved_cursor = getpos(".")
-"  call Decho('saved_cursor = '.join(saved_cursor, ','))
-  call vimwiki#select(a:index) "Set g:vimwiki_current_idx
+  " TODO Use the right path seperator for the platform
+  " If a:from starts with a slash, assume it's an absolute path
+  if a:from[0] != '/'
+    let from = getcwd().'/'.a:from
+  else
+    let from = a:from
+  endif
+  let saved_X = getpos("'X")
+  call setpos("'X", getpos("."))
+"  call Decho('saved_X = '.join(saved_X, ','))
+"  call Decho('Wiki index passed: '.a:index)
+  " let start_wiki_idx = b:vimwiki_idx
+  " call vimwiki#select(a:index)
 
   " Create or find diary page
   let link = vimwiki_diary#make_date_link()
@@ -42,12 +52,15 @@ function! vimwiki_gtimelog#log(index, from, ...) "{{{
   endif
   if a:0 == 2
     let category = a:2
+"    call Decho("category: ".category)
   endif
-"  call Decho("category: ".category)
 
-  call s:add_logline(link, a:from, logline, category)
-"  call Decho('Returning to saved_cursor = '.join(saved_cursor,','))
-  call setpos('.', saved_cursor)
+  call s:add_logline(link, from, logline, category)
+"  call Decho('Returning to saved_X = '.join(saved_X,','))
+  normal 'X
+  call setpos("'X", saved_X)
+
+  " call vimwiki#select(start_wiki_idx)
 "  call Dret("vimwiki_gtimelog#log")
 endfunction "}}}
 
@@ -58,15 +71,17 @@ function! s:add_logline(link, from, logline, category) "{{{
   " If '*category: logline*' was the last thing logged, update that line
   " instead of adding. 
 
-  let [prefix, from_link] = s:prefix(a:from)
-"  call Decho('category = "'.prefix.'", from_link = "'.from_link.'"')
+  let [auto_category, from_link] = s:category(a:from)
+"  call Decho('category = "'.auto_category)
 
   if a:category != ''
     " If we were passed a category, override the computed category
     let category = a:category.": ".from_link
 "    call Decho('1. category = "'.category.': "')
-  elseif a:link != from_link
-    let category = prefix." ".from_link.": "
+  elseif g:vimwiki_current_idx != vimwiki#find_wiki(from)
+  "elseif 1 == 1
+    " Accept the computed category
+    let category = auto_category
 "    call Decho('2. category = "'.category.'"')
   else
     " If we're logging to the current page, there is no auto-category.
@@ -75,10 +90,11 @@ function! s:add_logline(link, from, logline, category) "{{{
   endif
 
   if a:logline != ''
-    " strip list prefix and whitespace from logline
+    " strip list prefix, whitespace and header ='s from logline
+    " TODO: strip header ='s
 "    call Decho('strip list prefix and whitespace from logline')
     let logline = substitute(a:logline, "^\\s\\{-}[#*-]\\( \\[.\\]\\)\\= \\(.\\{-}\\) *$", "\\2","")
-    let logline = category.logline
+    let logline = category.': '.logline
 "    call Decho('1. logline = "'.logline.'"')
   else
     " Usually this will just log the page we're on
@@ -99,34 +115,46 @@ function! s:add_logline(link, from, logline, category) "{{{
     call append(line("$"), logline)
   endif
 
-  " Go back to where we were
-"  call Decho('from="'.a:from.'", link="'.a:link.'")')
-  let [wikiname, from_link] = s:prefix(a:from)
-  call vimwiki#open_link(":edit ", from_link)
+  " This gets done in the outer function, using mark X
+  " " Go back to where we were
+"  " call Decho('from="'.a:from.'", link="'.a:link.'")')
+  " let [wikiname, from_link] = s:category(a:from)
+  " call vimwiki#open_link(":edit ", from_link)
 
 "  call Dret('s:add_logline')
 endfunction "}}}
 
-function! s:prefix(from) "{{{
-  " For .../path/link.ext return 'path, link.ext' (strip '.ext' if it is the
-  " wiki extension).
-"  call Dfunc('s:prefix(from="'.a:from.'")')
+function! s:category(from) "{{{
+  " Return absolute path unless we're in a wiki. Then return 'wiki/link'.
+  " If we don't have a wiki name, return 'parent/link'.
+"  call Dfunc('s:category(from="'.a:from.'")')
 
+  let wiki_name = VimwikiGet('name')
+
+  " TODO: platform-independent seperator (look at s:os_sep in
+  " autoload/vimwiki.vim)
   let last_slash_idx = strridx(a:from, '/')
   let wiki_ext_idx = strridx(a:from, VimwikiGet('ext'))
-  let category = a:from[strridx(a:from, '/', last_slash_idx-1)+1: last_slash_idx-1]
   if wiki_ext_idx > 1
     " Wiki extension was found
+    if wiki_name == ''
+      let parent = a:from[strridx(a:from, '/', last_slash_idx-1)+1: last_slash_idx-1]
+    else
+      let parent = wiki_name
+    endif
     let from_link = a:from[last_slash_idx+1 : wiki_ext_idx-1]
+    let category = parent.'/'.from_link
+  else
+    let category = a:from
   endif
-"  call Decho('category: "'.category.'", from_link: "'.from_link.'"')
-"  call Dret("s:prefix")
-  return [category, from_link]
+"  call Decho('category: "'.category.'", a:from: "'.a:from.'"')
+"  call Dret("s:category")
+  return [category, a:from]
 endfunction "}}}
 
 function! s:last_logged(logline) "{{{
   " Return the line number where this line was last logged
-  call Dfunc('s:last_logged(logline="'.a:logline.'")')
+"  call Dfunc('s:last_logged(logline="'.a:logline.'")')
 
   if match(a:logline, s:timestamp_pat) == 0
 "    call Decho('Matched timestamp')
@@ -138,20 +166,20 @@ function! s:last_logged(logline) "{{{
   let curpos = getpos(".")
   " Go to last line
   normal G$
-  call Decho('1. Searching for: '.s:timestamp_pat)
+"  call Decho('1. Searching for: '.s:timestamp_pat)
   let last_timestamp_line = search(s:timestamp_pat, "bcW")
-  call Decho('last_timestamp_line: '.last_timestamp_line)
+"  call Decho('last_timestamp_line: '.last_timestamp_line)
   normal G$
-  call Decho('2. Searching for: '.s:timestamp_pat.logline.'$')
+"  call Decho('2. Searching for: '.s:timestamp_pat.logline.'$')
   " Match '^<timestamp>.*<logline>.*', search backward
   let logged_at = search(s:timestamp_pat.logline.'$', "bcW")
-  call Decho('logged_at: '.logged_at)
+"  call Decho('logged_at: '.logged_at)
   if logged_at < last_timestamp_line
     let logged_at = 0
   endif
-  call Decho('logged_at: '.logged_at)
+"  call Decho('logged_at: '.logged_at)
   call setpos('.', curpos)
-  call Dret("s:last_logged")
+"  call Dret("s:last_logged")
   return logged_at
 endfunction "}}}
 

@@ -187,16 +187,16 @@ function! s:add_link(page, header, link) "{{{
 endfunction "}}}
 
 function! vimwiki_diary#make_date_link(...) "{{{
-  call Dfunc('vimwiki_diary#make_date_link')
+"  call Dfunc('vimwiki_diary#make_date_link')
   if a:0
     let link = a:1
   else
     let link = s:diary_date_link()
   endif
-  call Decho('link '.link)
+"  call Decho('link '.link)
   let header = VimwikiGet('diary_header')
   call s:add_link(s:diary_index(), header, link)
-  call Dret('vimwiki_diary#make_date_link')
+"  call Dret('vimwiki_diary#make_date_link')
   return VimwikiGet('diary_rel_path').link
 endfunction "}}}
 
