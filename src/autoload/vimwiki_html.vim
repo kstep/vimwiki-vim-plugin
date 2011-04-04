@@ -1357,6 +1357,8 @@ endfunction " }}}
 
 function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
 
+  let starttime = reltime()  " start the clock
+  echo 'Generating HTML ... '
   if !s:syntax_supported()
     echomsg 'vimwiki: Only vimwiki_default syntax supported!!!'
     return
@@ -1420,6 +1422,7 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
 
 
   if nohtml
+    echon "\r"."%nohtml placeholder found"
     return
   endif
 
@@ -1453,6 +1456,10 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
   "" make html file.
   let wwFileNameOnly = fnamemodify(wikifile, ":t:r")
   call writefile(html_lines, path.wwFileNameOnly.'.html')
+
+  " measure the elapsed time and cut away miliseconds and smaller
+  let elapsedtimestr = matchstr(reltimestr(reltime(starttime)),'\d\+\(\.\d\d\)\=')
+  echon "\r".wwFileNameOnly.'.html written (time: '.elapsedtimestr.'s)'
 endfunction "}}}
 
 function! vimwiki_html#WikiAll2HTML(path) "{{{

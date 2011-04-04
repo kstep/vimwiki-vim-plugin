@@ -249,6 +249,13 @@ if g:vimwiki_use_mouse
   nnoremap <silent><buffer> <RightMouse><LeftMouse> :VimwikiGoBackLink<CR>
 endif
 
+
+if !hasmapto('<Plug>Vimwiki2HTML')
+  nmap <buffer> <Leader>wh <Plug>Vimwiki2HTML
+endif
+nnoremap <script><buffer>
+      \ <Plug>Vimwiki2HTML :Vimwiki2HTML<CR>
+
 if !hasmapto('<Plug>VimwikiFollowLink')
   nmap <silent><buffer> <CR> <Plug>VimwikiFollowLink
 endif

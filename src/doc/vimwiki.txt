@@ -189,6 +189,12 @@ See also |:VimwikiTabMakeDiaryNote|
 3.2. Local mappings
 
 NORMAL MODE                                           *vimwiki-local-mappings*
+                        *vimwiki_<Leader>wh*
+<Leader>wh              Convert current wiki page to HTML.
+                        Maps to |:Vimwiki2HTML|
+                        To remap: >
+                        :map <Leader>wc <Plug>Vimwiki2HTML
+<
                         *vimwiki_<CR>*
 <CR>                    Follow wiki link (create target wiki page if needed).
                         Maps to |:VimwikiFollowLink|.
@@ -222,13 +228,13 @@ NORMAL MODE                                           *vimwiki-local-mappings*
                         :map <Leader>wb <Plug>VimwikiGoBackLink
 <
                         *vimwiki_<Tab>*
-<Tab>                   Find next wiki link.
+<Tab>                   Find next link on the current page.
                         Maps to |:VimwikiNextLink|.
                         To remap: >
                         :map <Leader>wn <Plug>VimwikiNextLink
 <
                         *vimwiki_<S-Tab>*
-<S-Tab>                 Find previous wiki link.
+<S-Tab>                 Find previous link on the current page.
                         Maps to |:VimwikiPrevLink|.
                         To remap: >
                         :map <Leader>wp <Plug>VimwikiPrevLink
@@ -318,16 +324,17 @@ INSERT MODE                                           *vimwiki-table-mappings*
 ------------------------------------------------------------------------------
 3.3. Text objects                                       *vimwiki-text-objects*
 
-ah                      A Header with leading empty lines.
-ih                      Inner Header without leading empty lines.
+ah                      A section segment (the area between two consecutive
+                        headings) including trailing empty lines.
+ih                      A section segment without trailing empty lines.
 
-You can 'vah' to select a header with its contents or 'dah' to delete it or
-'yah' to yank it or 'cah' to change it.
+You can 'vah' to select a section segment with its contents or 'dah' to delete
+it or 'yah' to yank it or 'cah' to change it.
 
 a\                      A cell in a table.
-i\                      Inner cell in a table.
+i\                      An inner cell in a table.
 ac                      A column in a table.
-ic                      Inner column in a table.
+ic                      An inner column in a table.
 
 
 ==============================================================================
@@ -374,10 +381,10 @@ ic                      Inner column in a table.
     Follow wiki link in a new tab (create target wiki page if needed).
 
 *:VimwikiNextLink*
-    Find next wiki link.
+    Find next link on the current page.
 
 *:VimwikiPrevLink*
-    Find previous wiki link.
+    Find previous link on the current page.
 
 *:VimwikiGoto*
     Goto link provided by an argument. For example: >
@@ -893,7 +900,7 @@ items:
   * [X] Add highlighting to list item boxes.
   * [X] Add [ ] to the next list item created using o, O or <CR>.
 
-Pressing <C-Space> on the third list item will toggle it and all of its
+Pressing <C-Space> on the third list item will toggle it and adjust all of its
 parent items:
 = Toggleable list of todo items =
   * [.] Toggle list item on/off.
@@ -905,8 +912,8 @@ parent items:
   * [ ] Add highlighting to list item boxes.
   * [ ] Add [ ] to the next list item created using o, O or <CR>.
 
-Parent items could be toggled by their child items. The symbol between [ ]
-depends on the percentage of toggled child items (see also
+Parent items could be changed when their child items change. The symbol
+between [ ] depends on the percentage of toggled child items (see also
 |g:vimwiki_listsyms|): >
     [ ] -- 0%
     [.] -- 1-33%
@@ -1181,7 +1188,6 @@ to that page.
 ------------------------------------------------------------------------------
 Key                 Default value~
 template_default    default
-template_ext        .html
 
 Description~
 Setup default template name (without extension).
@@ -1189,7 +1195,7 @@ Setup default template name (without extension).
 See |vimwiki-option-template_path| for details.
 
 
-*vimwiki-option-template_default*
+*vimwiki-option-template_ext*
 ------------------------------------------------------------------------------
 Key                 Default value~
 template_ext        .html
