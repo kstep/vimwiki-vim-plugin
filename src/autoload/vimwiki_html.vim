@@ -56,14 +56,14 @@ function! s:create_default_CSS(path) " {{{
     call vimwiki#mkdir(fnamemodify(css_full_name, ':p:h'))
     let lines = []
 
-    call add(lines, 'body {font-family: Tahoma, sans-serif; margin: 1em 2em 1em 2em; font-size: 100%; line-height: 130%;}')
-    call add(lines, 'h1, h2, h3, h4, h5, h6 {font-family: Trebuchet MS, serif; margin-top: 1.5em; margin-bottom: 0.5em;}')
-    call add(lines, 'h1 {font-size: 2.0em; color: #a77070;}')
-    call add(lines, 'h2 {font-size: 1.6em; color: #779977;}')
-    call add(lines, 'h3 {font-size: 1.3em; color: #555577;}')
-    call add(lines, 'h4 {font-size: 1.2em; color: #222244;}')
-    call add(lines, 'h5 {font-size: 1.1em; color: #222244;}')
-    call add(lines, 'h6 {font-size: 1.0em; color: #222244;}')
+    call add(lines, 'body {font-family: Tahoma, Geneva, sans-serif; margin: 1em 2em 1em 2em; font-size: 100%; line-height: 130%;}')
+    call add(lines, 'h1, h2, h3, h4, h5, h6 {font-family: Trebuchet MS, Helvetica, sans-serif; font-weight: bold; margin-top: 1.5em; margin-bottom: 0.5em; color: MediumOrchid;}')
+    call add(lines, 'h1 {font-size: 2.1em; color: Fuchsia;}')
+    call add(lines, 'h2 {font-size: 1.8em; color: Fuchsia;}')
+    call add(lines, 'h3 {font-size: 1.6em; color: MediumVioletRed;}')
+    call add(lines, 'h4 {font-size: 1.4em; color: MediumVioletRed;}')
+    call add(lines, 'h5 {font-size: 1.2em; color: DarkMagenta;}')
+    call add(lines, 'h6 {font-size: 1.1em; color: DarkMagenta;}')
     call add(lines, 'p, pre, blockquote, table, ul, ol, dl {margin-top: 1em; margin-bottom: 1em;}')
     call add(lines, 'ul ul, ul ol, ol ol, ol ul {margin-top: 0.5em; margin-bottom: 0.5em;}')
     call add(lines, 'li {margin: 0.3em auto;}')
@@ -82,9 +82,22 @@ function! s:create_default_CSS(path) " {{{
     call add(lines, '.justright {text-align: right;}')
     call add(lines, '.justcenter {text-align: center;}')
     call add(lines, '.center {margin-left: auto; margin-right: auto;}')
+    call add(lines, '/* classes for items of todo lists */')
+    call add(lines, '.done0:before {content: "\2592\2592\2592\2592"; color: SkyBlue;}')
+    call add(lines, '.done1:before {content: "\2588\2592\2592\2592"; color: SkyBlue;}')
+    call add(lines, '.done2:before {content: "\2588\2588\2592\2592"; color: SkyBlue;}')
+    call add(lines, '.done3:before {content: "\2588\2588\2588\2592"; color: SkyBlue;}')
+    call add(lines, '.done4:before {content: "\2588\2588\2588\2588"; color: SkyBlue;}')
+    call add(lines, '/* comment the next four or five lines out   *')
+    call add(lines, ' * if you do not want color-coded todo lists */ ')
+    call add(lines, '.done0 {color: #c00000;}')
+    call add(lines, '.done1 {color: #c08000;}')
+    call add(lines, '.done2 {color: #80a000;}')
+    call add(lines, '.done3 {color: #00c000;}')
+    call add(lines, '.done4 {color: #7f7f7f; text-decoration: line-through;}')
 
     call writefile(lines, css_full_name)
-    echomsg "Default style.css is created."
+    echomsg "Default style.css has been created."
   endif
 endfunction "}}}
 
@@ -134,13 +147,14 @@ function! s:get_html_template(subdir, wikifile, template) "{{{
 
   " if no VimwikiGet('html_template') set up or error while reading template
   " file -- use default one.
+  call add(lines, '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">')
   call add(lines, '<html>')
   call add(lines, '<head>')
   call add(lines, '<link rel="Stylesheet" type="text/css" href="'.
-        \ css_name.'" />')
+        \ css_name.'">')
   call add(lines, '<title>%title%</title>')
   call add(lines, '<meta http-equiv="Content-Type" content="text/html;'.
-        \ ' charset='.&enc.'" />')
+        \ ' charset='.&enc.'">')
   call add(lines, '</head>')
   call add(lines, '<body>')
   call add(lines, '%content%')
@@ -397,7 +411,7 @@ function! s:get_html_toc(toc_list) "{{{
 
     let toc_text = s:process_tags_remove_links(text)
     let toc_text = s:process_tags_typefaces(toc_text)
-    call add(toc, '<li><a href="#'.id.'">'.toc_text.'</a></li>')
+    call add(toc, '<li><a href="#'.id.'">'.toc_text.'</a>')
     let plevel = level
   endfor
   call s:close_list(toc, level, 0)
@@ -897,11 +911,15 @@ function! s:process_tag_list(line, lists) "{{{
 
     let chk = matchlist(a:line, a:rx_list)
     if len(chk) > 0
-      if chk[1] == g:vimwiki_listsyms[4]
-        let st_tag .= '<del><input type="checkbox" checked />'
-        let en_tag = '</del>'.a:en_tag
-      else
-        let st_tag .= '<input type="checkbox" />'
+      if len(chk[1])>0
+        "wildcard characters are difficult to match correctly
+        if chk[1] =~ '[.*\\^$~]'
+          let chk[1] ='\'.chk[1]
+        endif
+        let completion = match(g:vimwiki_listsyms, chk[1])
+        if completion >= 0 && completion <=4 
+          let st_tag = '<li class="done'.completion.'">'
+        endif
       endif
     endif
     return [st_tag, en_tag]
@@ -946,7 +964,7 @@ function! s:process_tag_list(line, lists) "{{{
 
     let checkbox = '\s*\[\(.\?\)\]\s*'
     let [st_tag, en_tag] = s:add_checkbox(line,
-          \ lstRegExp.checkbox, '<li>', '</li>')
+          \ lstRegExp.checkbox, '<li>', '')
 
     if !in_list
       call add(a:lists, [lstTagClose, indent])
