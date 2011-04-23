@@ -254,8 +254,8 @@ if has("win32")
 else
   call s:default('browsers',
         \ [
-        \  'opera',
         \  'firefox',
+        \  'opera',
         \  'konqueror',
         \ ])
 endif
