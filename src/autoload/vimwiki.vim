@@ -269,6 +269,9 @@ function! s:strip_word(word) "{{{
     endif
 
     let result = vimwiki#safe_link(w)
+  elseif strpart(a:word, 0, 1) == '"'
+    let w = split(a:word, '":', 2)[1]
+    let result = w "vimwiki#safe_link(w)
   endif
   return result
 endfunction
@@ -454,7 +457,7 @@ function! vimwiki#highlight_links() "{{{
     execute 'syntax match VimwikiLinkT /'.g:vimwiki_rxWikiLink2.'/ display contained'
   endif
 
-  execute 'syntax match VimwikiLink `'.g:vimwiki_rxWeblink.'` display contains=@NoSpell'
+  execute 'syntax match VimwikiLink `'.g:vimwiki_rxWeblink.'` display contains=VimwikiExtLinkChar,@NoSpell'
 endfunction "}}}
 
 function! s:highlight_existed_links() "{{{

@@ -30,6 +30,9 @@ syn match VimwikiNoLinkChar contained /\]\]/
 syn match VimwikiNoLinkChar contained /\[\[[^\[\]\|]\{-}|\ze.*]]/
 syn match VimwikiNoLinkChar contained /\[\[[^\[\]\|]\{-}]\[\ze.*]]/
 
+syn match VimwikiExtLinkChar contained /"/
+syn match VimwikiExtLinkChar contained /":.\+/
+
 execute 'syn match VimwikiBoldChar contained /'.g:vimwiki_char_bold.'/'
 execute 'syn match VimwikiItalicChar contained /'.g:vimwiki_char_italic.'/'
 execute 'syn match VimwikiBoldItalicChar contained /'.g:vimwiki_char_bolditalic.'/'
@@ -208,6 +211,7 @@ hi def link VimwikiCodeChar VimwikiIgnore
 hi def link VimwikiHeaderChar VimwikiIgnore
 hi def link VimwikiLinkChar VimwikiLink
 hi def link VimwikiNoLinkChar VimwikiNoExistsLink
+hi def link VimwikiExtLinkChar VimwikiLink
 
 hi def link VimwikiBoldCharT VimwikiIgnore
 hi def link VimwikiItalicCharT VimwikiIgnore
